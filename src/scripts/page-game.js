@@ -68,6 +68,7 @@ Game.pages['page-game'] = (function(gameModel, screens, graphics, input) {
 		if (!cancelNextRequest) {
 			requestAnimationFrame(gameLoop);
 		}
+		requestAnimationFrame(gameLoop);
 	}
 
 	function run() {

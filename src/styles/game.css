@@ -9,16 +9,17 @@ body {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	width: 800px;
-	height: 600px;
-	background-image: url("../images/main-menu-background.jpeg");
+	background-image: url("../images/background.png");
 	background-position: center;
 	background-repeat: no-repeat;
-	background-size: cover;
-	background-color: rgb(21, 21, 80);
+	background-size: contain;
 	font-size: 40px;
 	border-style: solid;
 	border-radius: 3px;
+}
+#page-game{
+	background-image: url("../images/background.png");
+
 }
 
 #game h1 {
@@ -39,7 +40,7 @@ body {
 }
 
 #page-mainmenu {
-	padding-top: 1em;
+	padding-top: 2em;
 	cursor: pointer;
 	font-size: 0.75em;
 }
@@ -62,8 +63,8 @@ ul.menu li button {
 	color: #CECEF6;
 	width: 10em;
 	height: 1.5em;
-	background: rgb(59, 3, 61);
-	border: 0.1em solid rgb(59, 3, 61);
+	background: rgb(6, 77, 18);
+	border: 0.1em solid rgb(6, 77, 18);
 	border-radius: 0.5em;
 	box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
 }
