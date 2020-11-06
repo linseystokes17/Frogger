@@ -17,7 +17,6 @@ Game.model = (function(components, graphics, input) {
 		internalRender,
 		keyboard = input.Keyboard(),
 		frog,
-		ball,
 		//particleSystem = ParticleSystem(graphics),
 		textGameOver = {
 			font: '128px Arial, sans-serif',
