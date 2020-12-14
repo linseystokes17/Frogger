@@ -1,4 +1,4 @@
-LunarLander.screens['settings'] = (function(game, input) {
+Frogger.screens['settings'] = (function(game, input) {
     'use strict';
     
     function initialize() {
@@ -18,4 +18,4 @@ LunarLander.screens['settings'] = (function(game, input) {
         initialize : initialize,
         run : run
     };
-}(LunarLander.game, LunarLander.input));
+}(Frogger.game, Frogger.input));

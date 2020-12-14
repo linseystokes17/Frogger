@@ -1,4 +1,11 @@
-LunarLander.input.Keyboard = function () {
+// --------------------------------------------------------------
+//
+// This system knows how to accept keyboard input and use that
+// to move an entity, based on the entities 'keyboard-controlled'
+// component settings.
+//
+// --------------------------------------------------------------
+Frogger.systems.keyboardInput = function () {
     let that = {
         keys: {},
         handlers: {}
@@ -25,6 +32,10 @@ LunarLander.input.Keyboard = function () {
     that.register = function (key, handler) {
         that.handlers[key] = handler;
     };
+
+    that.unregister = function(key, handler){
+        that.handlers[key] = null;
+    }
 
     window.addEventListener('keydown', keyPress);
     window.addEventListener('keyup', keyRelease);

@@ -5,7 +5,7 @@
 //
 // ------------------------------------------------------------------
 
-LunarLander.game = (function(screens) {
+Frogger.game = (function(screens) {
     'use strict';
     
     //------------------------------------------------------------------
@@ -34,9 +34,10 @@ LunarLander.game = (function(screens) {
     //
     //------------------------------------------------------------------
 	function initialize() {
-		let screen = null;
+        let screen = null;
+        console.log("initializing game");
 		//
-		// Go through each of the screens and tell them to initialize
+        // Go through each of the screens and tell them to initialize
 		for (screen in screens) {
 			if (screens.hasOwnProperty(screen)) {
 				screens[screen].initialize();
@@ -52,4 +53,4 @@ LunarLander.game = (function(screens) {
         initialize : initialize,
         showScreen : showScreen
     };
-}(LunarLander.screens));
+}(Frogger.screens));
