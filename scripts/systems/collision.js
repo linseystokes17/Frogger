@@ -66,7 +66,6 @@ Frogger.systems.collision = (function () {
 
         for (let id in entities) {
             let entity = entities[id];
-            console.log(entity);
             if (entity.components.collision && entity.components.position) {
                 let ePosition = entity.components.position;
                 if (aPosition.x === ePosition.x && aPosition.y === ePosition.y) {

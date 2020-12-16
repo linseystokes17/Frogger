@@ -154,7 +154,8 @@ Frogger.model = (function(components, graphics, assets) {
         console.log('initializing homes...');
         let hs = initializeHomes();
         for (var h = 0; h< length.hs; h++){
-            entites[h.id] = h;
+            let home = hs[h]
+            entites[home.id] = home;
         }
 
         console.log('initializing cars...');
