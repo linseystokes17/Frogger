@@ -1,4 +1,4 @@
-Frogger.screens['game-play'] = (function(graphics, components, model) {
+Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     'use strict';
     let lastTimeStamp = performance.now();
     let frameTimes = [];
@@ -8,11 +8,6 @@ Frogger.screens['game-play'] = (function(graphics, components, model) {
             fill : 'rgba(255, 255, 255, 1)',
             position : { x : 1.025, y : 0.00 }
         });
-    let myKeyboard = Frogger.systems.keyboardInput();
-
-    function processInput(elapsedTime) {
-        myKeyboard.update(elapsedTime);
-    }
 
     //------------------------------------------------------------------
     //
@@ -72,7 +67,6 @@ Frogger.screens['game-play'] = (function(graphics, components, model) {
 
         // This is the rendering to provide the game viewport, it has nothing to do
         // with the actual rendering of the game itself.
-        processInput(elapsedTime);
         render(elapsedTime);
         update(elapsedTime);
 
@@ -89,7 +83,6 @@ Frogger.screens['game-play'] = (function(graphics, components, model) {
     //
     //------------------------------------------------------------------
     function initialize() {
-    
         graphics.core.initialize();
 
         textFPS.height = graphics.core.measureTextHeight(textFPS);
@@ -97,17 +90,6 @@ Frogger.screens['game-play'] = (function(graphics, components, model) {
 
         model.initialize();
         model.cancelNextRequest = false;
-        //myKeyboard.register('ArrowUp', ); // TODO Error
-        myKeyboard.register('Escape', function() {
-            //
-            // Stop the game loop by canceling the request for the next animation frame
-            model.cancelNextRequest = true;
-            model.reset();
-            
-            //
-            // Then, return to the main menu
-            game.showScreen('main-menu');
-        });
 
         //
         // Get the gameloop started
@@ -126,4 +108,4 @@ Frogger.screens['game-play'] = (function(graphics, components, model) {
         run: run
     };
 
-}(Frogger.graphics, Frogger.components, Frogger.model));
+}(Frogger.graphics, Frogger.components, Frogger.model, Frogger.game));

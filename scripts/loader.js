@@ -29,7 +29,7 @@ Frogger.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/food', 'components/keyboard-controlled'],
+            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/keyboard-controlled'],
             message: 'Components loaded',
             onComplete: null
         }, {
@@ -41,7 +41,7 @@ Frogger.loader = (function() {
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/segmented'],
+            scripts: ['render/background', 'render/image'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
@@ -170,6 +170,8 @@ Frogger.loader = (function() {
                         window.URL.revokeObjectURL(asset.src);
                     };
                     asset.src = window.URL.createObjectURL(xhr.response);
+                    console.log(asset.src);
+
                     if (onSuccess) { onSuccess(asset); }
                 } else {
                     if (onError) { onError('Failed to retrieve: ' + source); }

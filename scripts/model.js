@@ -7,146 +7,113 @@ Frogger.model = (function(components, graphics, assets) {
     'use strict';
     let that = {};
 
-    const GRID_SIZE = 50;
-    const OBSTACLE_COUNT = 15;
+    const GRID_SIZE = 14;
+    const LOGS_COUNT = 5;
+    const ALLIGATORS_COUNT = 5;
+    const CARS_COUNT = 5;
+    const SEMIS_COUNT = 5;
+    const HOMES_COUNT = 5;
     const MOVE_INTERVAL = 150;
     let entities = {};  // key is 'id', value is an Entity
 
     // --------------------------------------------------------------
     //
-    // Defining the game border an entities that has position, collision,
+    // Defining the game home an entities that has position, collision,
     // and visual components.
     //
     // --------------------------------------------------------------
-    function initializeBorder() {
-        let border = Frogger.Entity.createEntity();
-        border.addComponent(Frogger.components.Appearance({ fillStart: { r: 255, g: 0, b: 0 }, fillEnd: { r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }, ));
-        border.addComponent(Frogger.components.Collision( { firstOnly: false }));
-        let segments = [];
+    function initializeHomes() {
+        let homes = {};
 
-        for (let position = 0; position < GRID_SIZE; position++) {
-            // Left border
-            segments.push({ x: 0, y: position });
-            // Right border
-            segments.push({ x: GRID_SIZE - 1, y: position });
-            // Top border
-            segments.push({ x: position, y: 0 });
-            // bottom border
-            segments.push({ x: position, y: GRID_SIZE - 1 });
+        function createHomeEntity(x, y) {
+            let home = Frogger.Entity.createEntity();
+            home.addComponent(components.Appearance({ fill: {r: 0, g: 200, b: 0 } }));
+            home.addComponent(components.Position({ x: x, y: y}));
+
+            return home;
         }
 
-        border.addComponent(Frogger.components.Position({segments: segments }));
+        let remaining = HOMES_COUNT;
+        while (remaining >= 0) {
+            let x = 1;
+            let y = 0;
+            let proposed = createHomeEntity(x, y);
+            if (!Frogger.systems.collision.collidesWithAny(proposed, homes)) {
+                homes[proposed.id] = proposed;
+                remaining--;
+            }
+            x+=2;
+        }
 
-        return border;
+        return homes;
     }
 
     // --------------------------------------------------------------
     //
-    // Defining each of the obstacles as entities that have position,
+    // Defining each of the cars as entities that have position,
     // collision, and visual components.
     //
     // --------------------------------------------------------------
-    function initializeObstacles() {
-        let obstacles = {};
+    function initializeCars() {
+        let cars = {};
 
-        function createObstacleEntity(x, y) {
-            let obstacle = Frogger.Entity.createEntity();
-            obstacle.addComponent(Frogger.components.Appearance({ fillStart: {r: 0, g: 255, b: 0 }, fillEnd: {r: 0, g: 255, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
-            obstacle.addComponent(Frogger.components.Position({ segments: [{ x: x, y: y }] }));
-            obstacle.addComponent(Frogger.components.Collision());
+        function createCarEntity(x, y) {
+            let car = Frogger.Entity.createEntity();
+            car.addComponent(components.Appearance({ fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            car.addComponent(components.Position({ x: x, y: y}));
 
-            return obstacle;
+            return car;
         }
 
-        let remaining = OBSTACLE_COUNT;
-        while (remaining > 0) {
-            let x = Random.nextRange(1, GRID_SIZE - 2);
-            let y = Random.nextRange(1, GRID_SIZE - 2);
-            let proposed = createObstacleEntity(x, y);
-            if (!Frogger.systems.collision.collidesWithAny(proposed, obstacles)) {
-                obstacles[proposed.id] = proposed;
+        let remaining = CARS_COUNT;
+        while (remaining >= 0) {
+            let x = Random.nextRange(GRID_SIZE/2, GRID_SIZE - 3);
+            let y = Random.nextRange(GRID_SIZE/2, GRID_SIZE - 3);
+            let proposed = createCarEntity(x, y);
+            if (!Frogger.systems.collision.collidesWithAny(proposed, cars)) {
+                cars[proposed.id] = proposed;
                 remaining--;
             }
         }
 
-        return obstacles;
+        return cars;
     }
 
     // --------------------------------------------------------------
     //
-    // Defining the snake as an entity that has position, direction,
+    // Defining the frog as an entity that has position, direction,
     // collision, visual, and input components.
     //
     // --------------------------------------------------------------
-    function initializeSnake() {
-        let snake = null;
+    function initializeFrog() {
+        let frog = null;
 
-        function createSnakeEntity(x, y) {
-            let snake = Frogger.Entity.createEntity();
-            snake.addComponent(Frogger.components.Appearance({ fillStart: { r: 255, g: 255, b: 255 }, fillEnd: {r: 0, g: 0, b: 255 }, stroke: 'rgb(0, 0, 0)' }));
-            snake.addComponent(Frogger.components.Position({ segments: [{ x: x, y: y }] }));
-            snake.addComponent(Frogger.components.Collision());
-            snake.addComponent(Frogger.components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: MOVE_INTERVAL }));
+        let x = (GRID_SIZE)/2;
+        let y = GRID_SIZE - 2;
+
+        function createFrogEntity(x, y) {
+            frog = Frogger.Entity.createEntity();
+            frog.addComponent(components.Appearance({ fill: { r: 0, g: 100, b: 0 }, stroke: 'rgb(0, 0, 0)'}));
+            frog.addComponent(components.Position({ x: x, y: y}));
+            frog.addComponent(components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: MOVE_INTERVAL }));
             let inputSpecification = { keys: {
                 'ArrowLeft': Frogger.enums.Direction.Left,
                 'ArrowRight': Frogger.enums.Direction.Right,
                 'ArrowUp': Frogger.enums.Direction.Up,
                 'ArrowDown': Frogger.enums.Direction.Down
             }};
-            snake.addComponent(Frogger.components.KeyboardControlled(inputSpecification));
-
-            return snake;
+            frog.addComponent(components.KeyboardControlled(inputSpecification));
+            // TODO Here
+            return frog;
         }
-
-        let done = false;
-        while (!done) {
-            let x = Random.nextRange(1, GRID_SIZE - 2);
-            let y = Random.nextRange(1, GRID_SIZE - 2);
-            //
-            // Create a proposed snake entity at this location and see if it collides with anything
-            let proposed = createSnakeEntity(x, y);
-            if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
-                snake = proposed;
-                done = true;
-            }
+        //
+        // Create a proposed frog entity at this location and see if it collides with anything
+        let proposed = createFrogEntity(x, y);
+        if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
+            frog = proposed;
         }
-
-        return snake;
-    }
-
-    // --------------------------------------------------------------
-    //
-    // Defining the food as an entity that has position, collision, 
-    // and visual components.
-    //
-    // --------------------------------------------------------------
-    function createFood() {
-        let food = null;
-
-        function createFoodEntity(x, y) {
-            let food = Frogger.Entity.createEntity();
-            food.addComponent(Frogger.components.Appearance({ fillStart: {r: 255, g: 128, b: 0 }, fillEnd: {r: 255, g: 128, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
-            food.addComponent(Frogger.components.Position({ segments: [{ x: x, y: y }] }));
-            food.addComponent(Frogger.components.Collision());
-            food.addComponent(Frogger.components.Food());
-
-            return food;
-        }
-
-        let done = false;
-        while (!done) {
-            let x = Random.nextRange(1, GRID_SIZE - 2);
-            let y = Random.nextRange(1, GRID_SIZE - 2);
-            //
-            // Create a proposed food entity at this location and see if it collides with anything
-            let proposed = createFoodEntity(x, y);
-            if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
-                food = proposed;
-                done = true;
-            }
-        }
-
-        return food;
+        
+        return frog;
     }
 
     // --------------------------------------------------------------
@@ -157,10 +124,7 @@ Frogger.model = (function(components, graphics, assets) {
     // --------------------------------------------------------------
     function reportEvent(info) {
         switch (info.type) {
-            case Frogger.enums.Event.ConsumeFood:
-                delete entities[info.entity.id];
-                let food = createFood();
-                entities[food.id] = food;
+            case Frogger.enums.Event.ReachHome:
                 break;
             case Frogger.enums.Event.HitSomething:
                 break;
@@ -185,20 +149,21 @@ Frogger.model = (function(components, graphics, assets) {
     //
     // ------------------------------------------------------------------
     that.initialize = function() {
-        console.log('initializing borders...');
-        let border = initializeBorder();
-        entities[border.id] = border;
 
-        console.log('initializing obstacles...');
-        mergeObjects(entities, initializeObstacles());
+        console.log(entities);
+        console.log('initializing homes...');
+        let hs = initializeHomes();
+        for (var h = 0; h< length.hs; h++){
+            entites[h.id] = h;
+        }
 
-        console.log('initialzing snake starting position...');
-        let snake = initializeSnake();
-        entities[snake.id] = snake;
+        console.log('initializing cars...');
+        mergeObjects(entities, initializeCars());
 
-        console.log('initialzing first food location...');
-        let food = createFood();
-        entities[food.id] = food;
+        console.log('initialzing frog starting position...');
+        let frog = initializeFrog();
+        entities[frog.id] = frog;
+
     };
 
     // ------------------------------------------------------------------
@@ -207,7 +172,7 @@ Frogger.model = (function(components, graphics, assets) {
     //
     // ------------------------------------------------------------------
     that.update = function(elapsedTime) {
-        Frogger.systems.keyboardInput.update;
+        Frogger.systems.keyboardInput.update(elapsedTime, entities);
         Frogger.systems.movement.update(elapsedTime, entities);
         Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
         Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);

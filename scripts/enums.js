@@ -9,7 +9,7 @@ Frogger.enums.Direction = Object.freeze({
 });
 
 Frogger.enums.Event = Object.freeze({
-    ConsumeFood: 'consume-food',
+    ReachHome: 'reach-home',
     HitSomething: 'hit-something'
 });
 

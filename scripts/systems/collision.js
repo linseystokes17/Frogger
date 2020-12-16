@@ -37,15 +37,15 @@ Frogger.systems.collision = (function () {
     function collides(a, b) {
 
         // If only the first segment needs to be tested, only test that segment
-        let lengthA = a.components.collision.firstOnly ? 1 : a.components.position.segments.length;
-        let lengthB = b.components.collision.firstOnly ? 1 : b.components.position.segments.length;
+        let lengthA = a.components.collision.firstOnly ? 1 : a.components.position.length;
+        let lengthB = b.components.collision.firstOnly ? 1 : b.components.position.length;
 
         // Double for loop looks bad, but it isn't because only 1 of these will ever have a length
         // greater than 1, and most of the time both are of length 1.
         for (let segmentA = 0; segmentA < lengthA; segmentA++) {
-            let positionA = a.components.position.segments[segmentA];
+            let positionA = a.components.position;
             for (let segmentB = 0; segmentB < lengthB; segmentB++) {
-                let positionB = b.components.position.segments[segmentB];
+                let positionB = b.components.position;
                 if (positionA.x == positionB.x && positionA.y == positionB.y) {
                     return true;
                 }
@@ -66,13 +66,11 @@ Frogger.systems.collision = (function () {
 
         for (let id in entities) {
             let entity = entities[id];
+            console.log(entity);
             if (entity.components.collision && entity.components.position) {
                 let ePosition = entity.components.position;
-
-                for (let segment = 0; segment < ePosition.segments.length; segment++) {
-                    if (aPosition.x === ePosition.segments[segment].x && aPosition.y === ePosition.segments[segment].y) {
-                        return true;
-                    }
+                if (aPosition.x === ePosition.x && aPosition.y === ePosition.y) {
+                    return true;
                 }
             }
         }
@@ -99,11 +97,11 @@ Frogger.systems.collision = (function () {
                     let entityMovable = movable[m];
                     if (collides(entity, entityMovable)) {
                         //
-                        // If food, that's okay
-                        if (entity.components.food) {
+                        // If home, that's okay
+                        if (entity.components.home) {
                             entityMovable.components.movable.segmentsToAdd = 3;
                             reportEvent({
-                                type: Frogger.enums.Event.ConsumeFood,
+                                type: Frogger.enums.Event.ReachHome,
                                 entity: entity
                             });
                         } else {    // If anything else, not okay

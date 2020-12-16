@@ -16,22 +16,13 @@ Frogger.systems.movement = (function () {
     function move(entity, xIncrement, yIncrement) {
         let position = entity.components.position;
         //
-        // Remember current front position, so it can be added back in as the move
-        let front = position.segments[0];
-
-        //
         // Remove the tail, but only if there aren't new segments to add
         if (entity.components.movable.segmentsToAdd === 0 && position.segments.length > 0) {
-            position.segments.length = position.segments.length - 1;
+            position.length = position.length - 1;
         }
         else {
             entity.components.movable.segmentsToAdd--;
         }
-
-        //
-        // Update the front of the entity with the segment moving into the new spot
-        let newFront = { x: front.x + xIncrement, y: front.y + yIncrement };
-        entity.components.position.segments.unshift(newFront);
     }
 
     // --------------------------------------------------------------

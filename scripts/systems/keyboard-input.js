@@ -5,40 +5,44 @@
 // component settings.
 //
 // --------------------------------------------------------------
-Frogger.systems.keyboardInput = function () {
-    let that = {
-        keys: {},
-        handlers: {}
-    };
+Frogger.systems.keyboardInput = (function (components) {
+    'use strict';
+    let keysDown = {};
 
     function keyPress(e) {
-        that.keys[e.key] = e.timeStamp;
+        keysDown[e.key] = e.timeStamp;
     }
-
+    
     function keyRelease(e) {
-        delete that.keys[e.key];
+        delete keysDown[e.key];
     }
 
-    that.update = function (elapsedTime) {
-        for (let key in that.keys) {
-            if (that.keys.hasOwnProperty(key)) {
-                if (that.handlers[key]) {
-                    that.handlers[key](elapsedTime);
+    // --------------------------------------------------------------
+    //
+    // Public interface used to update entities based on keyboard input.
+    //
+    // --------------------------------------------------------------
+    function update(elapsedTime, entities) {
+        for (let id in entities) {
+            let entity = entities[id];
+            if (entity.components[Frogger.enums.Input.KeyboardControlled]) {
+                let input = entity.components[Frogger.enums.Input.KeyboardControlled];
+                for (let key in input.keys) {
+                    if (keysDown[key]) {
+                        // Protect against turning back onto itself
+                        entity.components.movable.facing = input.keys[key];
+                    }
                 }
             }
         }
-    };
-
-    that.register = function (key, handler) {
-        that.handlers[key] = handler;
-    };
-
-    that.unregister = function(key, handler){
-        that.handlers[key] = null;
     }
 
     window.addEventListener('keydown', keyPress);
     window.addEventListener('keyup', keyRelease);
 
-    return that;
-};
+    let api = {
+        update: update
+    };
+
+    return api;
+}(Frogger.components));

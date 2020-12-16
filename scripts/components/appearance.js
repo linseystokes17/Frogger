@@ -3,9 +3,10 @@ Frogger.components.Appearance = function(spec) {
 
     let api = {
         get name() { return 'appearance'; },
-        get fillStart() { return spec.fillStart; },
-        get fillEnd() { return spec.fillEnd; },
-        get stroke() { return spec.stroke; }
+        get fill() { return spec.fill; },
+        get stroke() { return spec.stroke; },
+        get image() { return spec.image; },
+        get shape() { return spec.shape; },
     };
 
     return api;

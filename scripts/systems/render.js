@@ -17,9 +17,7 @@ Frogger.systems.render = (function (graphics) {
     function renderEntities(entities, gridSize) {
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.appearance && entity.components.position) {
-                Frogger.render.segmented(graphics, entity.components.appearance, entity.components.position, gridSize);
-            }
+            Frogger.render.image(graphics, entity.components.appearance, entity.components.position, gridSize);
         }
     } // Will probs be TODO
 

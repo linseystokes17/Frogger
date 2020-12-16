@@ -213,7 +213,7 @@ Frogger.graphics.core = (function() {
             radius * world.size,
             0, 2 * Math.PI);
         context.closePath();
-        context.fillSTyle = style;
+        context.fillStyle = style;
         context.fill();
     }
 
@@ -262,6 +262,7 @@ Frogger.graphics.core = (function() {
     //
     //------------------------------------------------------------------
     function drawImage() {
+        //console.log(arguments);
         let image = arguments[0],
             sx, sy,
             sWidth, sHeight,
@@ -340,6 +341,10 @@ Frogger.graphics.core = (function() {
         };
     }
 
+    function getWorldSize(){
+        return world.size;
+    }
+
     //------------------------------------------------------------------
     //
     // Create a clipping region for the area in which the rendering
@@ -374,7 +379,8 @@ Frogger.graphics.core = (function() {
         rotateCanvas: rotateCanvas,
         clientToWorld: clientToWorld,
         notifyResize: notifyResize,
-        clip: clip
+        clip: clip,
+        getWorldSize: getWorldSize,
     };
 
 }());

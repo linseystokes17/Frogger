@@ -7,13 +7,9 @@ body {
 #game {
     margin: auto;
     display: block;
-    width: 600px;
-    height: 600px;
-    border-style: solid;
+    /* width: 600px;
+    height: 600px; */
     border-width: 1px;
-    background-image: url("../assets/background.png");
-    background-repeat: no-repeat;
-    background-size: cover;
     font-size: 40px;
 }
 
