@@ -64,7 +64,6 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     //------------------------------------------------------------------
     function gameLoop(time) {
         // time, lastTimeStamp, elapsedTime
-        //console.log(time);
         let elapsedTime = (time/1000) - lastTimeStamp;
         lastTimeStamp = Math.floor(time/1000);
 

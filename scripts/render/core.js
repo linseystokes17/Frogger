@@ -262,7 +262,6 @@ Frogger.graphics.core = (function() {
     //
     //------------------------------------------------------------------
     function drawImage() {
-        //console.log(arguments);
         let image = arguments[0],
             sx, sy,
             sWidth, sHeight,

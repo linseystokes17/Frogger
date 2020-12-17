@@ -12,6 +12,28 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
     'use strict';
 
     let appearance = components.appearance
+    let direction = components.movable.facing;
+    let spritesheetIndex = 0;
+    let spriteSize = 40;
+
+    if (components.appearance.type == 'frog'){
+        if (direction == 'up'){
+            spritesheetIndex = 0;
+        }
+        if (direction == 'down'){
+            spritesheetIndex = 4;
+        }
+        if (direction == 'left'){
+            spritesheetIndex = 6;
+        }
+        if (direction == 'right'){
+            spritesheetIndex = 2;
+        }
+    }
+    if (components.appearance.type == 'car'){
+        spritesheetIndex = components.appearance.index;
+    }
+
     // image rendering
     // context.drawImage(
     //     image,
@@ -20,12 +42,10 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
     //     dx * world.size + world.left, dy * world.size + world.top,
     //     dWidth * world.size, dHeight * world.size);
 
-    //console.log(appearance.image);
-    //console.log(components);
     graphics.core.drawImage(
         appearance.image,
-        0, 0,
-        40, 40,// sWidth, sHeight
+        spritesheetIndex*spriteSize, 0,
+        spriteSize, spriteSize,// sWidth, sHeight
         position.x / gridSize, // dx
         position.y / gridSize, // dy
         1 / (gridSize), 1 / (gridSize)

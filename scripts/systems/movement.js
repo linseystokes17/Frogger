@@ -6,7 +6,7 @@
 // --------------------------------------------------------------
 Frogger.systems.movement = (function () {
     'use strict';
-    let totalTime = 0;
+    let lastMove = 0;
     let lastTimeStamp = 0;
 
     // --------------------------------------------------------------
@@ -16,22 +16,39 @@ Frogger.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement, gridSize) {
-        // need to make sure that the position won't be out of canvas range
-        // TODO
-        let position = entity.components.position;
-
         // want the frog to only move one grid square size
-        let xIncrSplit = xIncrement / (gridSize);
-        let yIncrSplit = yIncrement / (gridSize);
-        let i = 0;
+        // let xIncrSplit = xIncrement / (gridSize);
+        // let yIncrSplit = yIncrement / (gridSize);
+        // let i = 0;
 
-        while (i < gridSize){
-            entity.components.position.x += xIncrSplit;
-            entity.components.position.y += yIncrSplit;
-            i++;
-        }
+        // console.log('xIncrSplit: ', xIncrSplit);
+
+        // if (entity.components.position.x > gridSize-1){
+        //     entity.components.position.x = 0;
+        // }
+        // else if (entity.components.position.x < 0){
+        //     entity.components.position.x = gridSize-1;
+        // }
+
+        // while (i < gridSize){
+        //     entity.components.position.x += xIncrSplit;
+        //     entity.components.position.y += yIncrSplit;
+        //     i++;
+        // }
         
+        if (entity.components.position.x+xIncrement > gridSize-1){
+            entity.components.position.x = -1;
+        }
+        else if (entity.components.position.x+xIncrement < 0){
+            entity.components.position.x = gridSize;
+        }
 
+        entity.components.position.x += xIncrement;
+        entity.components.position.y += yIncrement;
+
+        
+        entity.components.position.x = Math.round(entity.components.position.x);
+        entity.components.position.y = Math.round(entity.components.position.y);
         //
         // move the frog a fixed number of pixels, the equivalent of grid square
         // perform an animation over fixed time period, .5 ?
@@ -46,13 +63,9 @@ Frogger.systems.movement = (function () {
     // --------------------------------------------------------------
     function moveEntity(entity, elapsedTime, totalTime, gridSize) {
         entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
-        //console.log('ElapsedTime: ', elapsedTime);
-        //console.log('TotalTime: ', totalTime);
 
         if (entity.components.collision.alive == true){
-            if(entity.components.keyboard.keyPressed == true && totalTime-lastTimeStamp > 300){ // if its the frog, then move on keypress
-                console.log('totalTime-lastTimeStamp: ', totalTime-lastTimeStamp);
-
+            if(entity.components.keyboard.keyPressed == true && totalTime-lastTimeStamp > 300){
                 lastTimeStamp = totalTime;
                 entity.components.keyboard.keyPressed = false;
                 switch (entity.components.movable.facing) {
@@ -75,20 +88,21 @@ Frogger.systems.movement = (function () {
 
             }
         }
-        else if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval && elapsedTime >= .99) {
+        else if (Math.abs(entity.components.movable.elapsedInterval - lastMove)/10 >= entity.components.movable.moveInterval) {
             entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
+            lastMove = entity.components.movable.elapsedInterval;
             switch (entity.components.movable.facing) {
                 case Frogger.enums.Direction.Up:
-                    move(entity, 0, -1);
+                    move(entity, 0, -1, gridSize);
                     break;
                 case Frogger.enums.Direction.Down:
-                    move(entity, 0, 1);
+                    move(entity, 0, 1, gridSize);
                     break;
                 case Frogger.enums.Direction.Left:
-                    move(entity, -1, 0);
+                    move(entity, -1, 0, gridSize);
                     break;
                 case Frogger.enums.Direction.Right:
-                    move(entity, 1, 0);
+                    move(entity, 1, 0, gridSize);
                     break;
             }
         }

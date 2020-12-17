@@ -33,7 +33,7 @@ Frogger.loader = (function() {
             message: 'Components loaded',
             onComplete: null
         }, {
-            scripts: ['components/text'],
+            scripts: ['components/text', 'components/animatedModel'],
             message: 'Text component loaded',
             onComplete: null
         }, {
@@ -76,6 +76,9 @@ Frogger.loader = (function() {
             }, {
                 key: 'frog',
                 source: 'assets/frog_sprites.png'
+            }, {
+                key: 'car1',
+                source: 'assets/car_sprites.png'
             }
         ];
 
