@@ -8,16 +8,30 @@ Math.lerp = (a, b, f) => { return a + f * (b - a); };
 // all of the segments it contains.
 //
 // --------------------------------------------------------------
-Frogger.render.image = function (graphics, appearance, position, gridSize) {
+Frogger.render.image = function (graphics, components, position, gridSize) {
     'use strict';
 
-    graphics.core.drawSquare({
-        x: position.x / gridSize,
-        y: position.y / gridSize
-    },
-        1.0 / gridSize,
-        appearance.fill,
-        appearance.stroke
+    let appearance = components.appearance
+    // image rendering
+    // context.drawImage(
+    //     image,
+    //     sx, sy,
+    //     sWidth, sHeight,
+    //     dx * world.size + world.left, dy * world.size + world.top,
+    //     dWidth * world.size, dHeight * world.size);
+
+    //console.log(appearance.image);
+    //console.log(components);
+    graphics.core.drawImage(
+        appearance.image,
+        0, 0,
+        40, 40,// sWidth, sHeight
+        position.x / gridSize, // dx
+        position.y / gridSize, // dy
+        1 / (gridSize), 1 / (gridSize)
+        //1.0 / gridSize, 1.0 / gridSize,  
     );
+
+    
 
 };

@@ -17,10 +17,9 @@ Frogger.systems.render = (function (graphics) {
     function renderEntities(entities, gridSize) {
         for (let id in entities) {
             let entity = entities[id];
-            //console.log(entity);
-            Frogger.render.image(graphics, entity.components.appearance, entity.components.position, gridSize);
+            Frogger.render.image(graphics, entity.components, entity.components.position, gridSize);
         }
-    } // Will probs be TODO
+    } 
 
     // --------------------------------------------------------------
     //
@@ -28,8 +27,7 @@ Frogger.systems.render = (function (graphics) {
     //
     // --------------------------------------------------------------
     function update(elapsedTime, entities, gridSize) {
-        // Something is wrong here, TODO
-        Frogger.render.background(graphics);
+        Frogger.render.background(graphics, gridSize);
         renderEntities(entities, gridSize);
     }
 

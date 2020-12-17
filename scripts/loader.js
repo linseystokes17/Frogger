@@ -73,6 +73,9 @@ Frogger.loader = (function() {
             {
                 key: 'background',
                 source: 'assets/background.png'
+            }, {
+                key: 'frog',
+                source: 'assets/frog_sprites.png'
             }
         ];
 
@@ -170,7 +173,6 @@ Frogger.loader = (function() {
                         window.URL.revokeObjectURL(asset.src);
                     };
                     asset.src = window.URL.createObjectURL(xhr.response);
-                    console.log(asset.src);
 
                     if (onSuccess) { onSuccess(asset); }
                 } else {

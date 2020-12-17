@@ -15,8 +15,8 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     // Update the simulation.
     //
     //------------------------------------------------------------------
-    function update(elapsedTime) {
-        model.update(elapsedTime);
+    function update(elapsedTime, totalTime) {
+        model.update(elapsedTime, totalTime);
         if (model.cancelNextRequest == true){
             //model.reset();
                         
@@ -63,14 +63,16 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     //
     //------------------------------------------------------------------
     function gameLoop(time) {
-        let elapsedTime = (time - lastTimeStamp);
-        lastTimeStamp = time;
+        // time, lastTimeStamp, elapsedTime
+        //console.log(time);
+        let elapsedTime = (time/1000) - lastTimeStamp;
+        lastTimeStamp = Math.floor(time/1000);
 
         // LL processInput
         // This is the rendering to provide the game viewport, it has nothing to do
         // with the actual rendering of the game itself.
         render(elapsedTime);
-        update(elapsedTime);
+        update(elapsedTime, time);
 
         if (!model.cancelNextRequest) {
             requestAnimationFrame(gameLoop);

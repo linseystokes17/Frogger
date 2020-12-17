@@ -248,8 +248,8 @@ Frogger.graphics.core = (function() {
     function drawRectangle(style, left, top, width, height) {
         //
         // 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
-        context.strokeStyle = style;
-        context.strokeRect(
+        context.fillStyle = style;
+        context.fillRect(
             0.5 + world.left + (left * world.size),
             0.5 + world.top + (top * world.size),
             width * world.size,
@@ -289,7 +289,8 @@ Frogger.graphics.core = (function() {
             dWidth = arguments[7];
             dHeight = arguments[8];
         }
-        //
+
+        
         // Convert from pixel to world coordinates on a few items
         context.drawImage(
             image,

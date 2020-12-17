@@ -13,7 +13,7 @@ Frogger.model = (function(components, graphics, assets) {
     const CARS_COUNT = 5;
     const SEMIS_COUNT = 5;
     const HOMES_COUNT = 5;
-    const MOVE_INTERVAL = 150;
+    const MOVE_INTERVAL = 1000;
     let entities = {};  // key is 'id', value is an Entity
 
     // --------------------------------------------------------------
@@ -95,7 +95,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createFrogEntity(x, y) {
             frog = Frogger.Entity.createEntity();
-            frog.addComponent(components.Appearance({ image: assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
+            frog.addComponent(components.Appearance({ image: Frogger.assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
             frog.addComponent(components.Position({ x: x, y: y}));
             frog.addComponent(components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: MOVE_INTERVAL }));
             frog.addComponent(components.Collision({alive: true}));
@@ -164,9 +164,9 @@ Frogger.model = (function(components, graphics, assets) {
     // This function is used to update the state of the demo model.
     //
     // ------------------------------------------------------------------
-    that.update = function(elapsedTime) {
+    that.update = function(elapsedTime, totalTime) {
         Frogger.systems.keyboardInput.update(elapsedTime, entities);
-        Frogger.systems.movement.update(elapsedTime, entities);
+        Frogger.systems.movement.update(elapsedTime,totalTime, entities, GRID_SIZE);
         Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
         Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);
     };

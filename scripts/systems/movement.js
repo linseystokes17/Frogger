@@ -6,6 +6,8 @@
 // --------------------------------------------------------------
 Frogger.systems.movement = (function () {
     'use strict';
+    let totalTime = 0;
+    let lastTimeStamp = 0;
 
     // --------------------------------------------------------------
     //
@@ -13,17 +15,27 @@ Frogger.systems.movement = (function () {
     // with adding segments as necessary during the move.
     //
     // --------------------------------------------------------------
-    function move(entity, xIncrement, yIncrement) {
+    function move(entity, xIncrement, yIncrement, gridSize) {
+        // need to make sure that the position won't be out of canvas range
+        // TODO
         let position = entity.components.position;
 
         // want the frog to only move one grid square size
-        let xIncrSplit = xIncrement / 5;
-        let yIncrSplit = yIncrement / 5;
+        let xIncrSplit = xIncrement / (gridSize);
+        let yIncrSplit = yIncrement / (gridSize);
+        let i = 0;
+
+        while (i < gridSize){
+            entity.components.position.x += xIncrSplit;
+            entity.components.position.y += yIncrSplit;
+            i++;
+        }
+        
+
         //
         // move the frog a fixed number of pixels, the equivalent of grid square
         // perform an animation over fixed time period, .5 ?
-        entity.components.position.x += xIncrSplit;
-        entity.components.position.y += yIncrSplit;
+        
     }
 
     // --------------------------------------------------------------
@@ -32,29 +44,38 @@ Frogger.systems.movement = (function () {
     // in the facing direction.
     //
     // --------------------------------------------------------------
-    function moveEntity(entity, elapsedTime) {
+    function moveEntity(entity, elapsedTime, totalTime, gridSize) {
         entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
+        //console.log('ElapsedTime: ', elapsedTime);
+        //console.log('TotalTime: ', totalTime);
+
         if (entity.components.collision.alive == true){
-            if(entity.components.keyboard.keyPressed == true){ // if its the frog, then move on keypress
+            if(entity.components.keyboard.keyPressed == true && totalTime-lastTimeStamp > 300){ // if its the frog, then move on keypress
+                console.log('totalTime-lastTimeStamp: ', totalTime-lastTimeStamp);
+
+                lastTimeStamp = totalTime;
                 entity.components.keyboard.keyPressed = false;
-                //console.log(entity.components.position);
                 switch (entity.components.movable.facing) {
                     case Frogger.enums.Direction.Up:
-                        move(entity, 0, -1);
+                        move(entity, 0, -1, gridSize);
                         break;
                     case Frogger.enums.Direction.Down:
-                        move(entity, 0, 1);
+                        move(entity, 0, 1, gridSize);
                         break;
                     case Frogger.enums.Direction.Left:
-                        move(entity, -1, 0);
+                        move(entity, -1, 0, gridSize);
                         break;
                     case Frogger.enums.Direction.Right:
-                        move(entity, 1, 0);
+                        move(entity, 1, 0, gridSize);
                         break;
-                }
+                };
+            }
+            else{
+                entity.components.keyboard.keyPressed = false;
+
             }
         }
-        else if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval) {
+        else if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval && elapsedTime >= .99) {
             entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
             switch (entity.components.movable.facing) {
                 case Frogger.enums.Direction.Up:
@@ -78,11 +99,11 @@ Frogger.systems.movement = (function () {
     // Grind through all the entities and move the ones that can move.
     //
     // --------------------------------------------------------------
-    function update(elapsedTime, entities) {
+    function update(elapsedTime, totalTime, entities, gridSize) {
         for (let id in entities) {
             let entity = entities[id];
             if (entity.components.position && entity.components.movable) {
-                moveEntity(entity, elapsedTime);
+                moveEntity(entity, elapsedTime, totalTime, gridSize);
             }
         }
     }
