@@ -16,7 +16,7 @@ Frogger.render.image = function (graphics, appearance, position, gridSize) {
         y: position.y / gridSize
     },
         1.0 / gridSize,
-        appearance.fillt,
+        appearance.fill,
         appearance.stroke
     );
 

@@ -29,7 +29,7 @@ Frogger.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/keyboard-controlled'],
+            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
             message: 'Components loaded',
             onComplete: null
         }, {

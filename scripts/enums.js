@@ -14,5 +14,5 @@ Frogger.enums.Event = Object.freeze({
 });
 
 Frogger.enums.Input = Object.freeze({
-    KeyboardControlled: 'keyboard-controlled'
+    Keyboard: 'keyboard'
 });

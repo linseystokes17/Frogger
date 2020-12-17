@@ -15,14 +15,15 @@ Frogger.systems.movement = (function () {
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement) {
         let position = entity.components.position;
+
+        // want the frog to only move one grid square size
+        let xIncrSplit = xIncrement / 5;
+        let yIncrSplit = yIncrement / 5;
         //
-        // Remove the tail, but only if there aren't new segments to add
-        if (entity.components.movable.segmentsToAdd === 0 && position.segments.length > 0) {
-            position.length = position.length - 1;
-        }
-        else {
-            entity.components.movable.segmentsToAdd--;
-        }
+        // move the frog a fixed number of pixels, the equivalent of grid square
+        // perform an animation over fixed time period, .5 ?
+        entity.components.position.x += xIncrSplit;
+        entity.components.position.y += yIncrSplit;
     }
 
     // --------------------------------------------------------------
@@ -33,7 +34,27 @@ Frogger.systems.movement = (function () {
     // --------------------------------------------------------------
     function moveEntity(entity, elapsedTime) {
         entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
-        if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval) {
+        if (entity.components.collision.alive == true){
+            if(entity.components.keyboard.keyPressed == true){ // if its the frog, then move on keypress
+                entity.components.keyboard.keyPressed = false;
+                //console.log(entity.components.position);
+                switch (entity.components.movable.facing) {
+                    case Frogger.enums.Direction.Up:
+                        move(entity, 0, -1);
+                        break;
+                    case Frogger.enums.Direction.Down:
+                        move(entity, 0, 1);
+                        break;
+                    case Frogger.enums.Direction.Left:
+                        move(entity, -1, 0);
+                        break;
+                    case Frogger.enums.Direction.Right:
+                        move(entity, 1, 0);
+                        break;
+                }
+            }
+        }
+        else if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval) {
             entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
             switch (entity.components.movable.facing) {
                 case Frogger.enums.Direction.Up:

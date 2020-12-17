@@ -8,6 +8,7 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
             fill : 'rgba(255, 255, 255, 1)',
             position : { x : 1.025, y : 0.00 }
         });
+    // LL keyboard / processInput
 
     //------------------------------------------------------------------
     //
@@ -65,6 +66,7 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         let elapsedTime = (time - lastTimeStamp);
         lastTimeStamp = time;
 
+        // LL processInput
         // This is the rendering to provide the game viewport, it has nothing to do
         // with the actual rendering of the game itself.
         render(elapsedTime);
@@ -83,6 +85,8 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     //
     //------------------------------------------------------------------
     function initialize() {
+        console.log('game initializing...');
+
         graphics.core.initialize();
 
         textFPS.height = graphics.core.measureTextHeight(textFPS);
@@ -90,6 +94,8 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
 
         model.initialize();
         model.cancelNextRequest = false;
+
+        // LL register keyboard
 
         //
         // Get the gameloop started

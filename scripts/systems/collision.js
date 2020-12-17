@@ -98,7 +98,7 @@ Frogger.systems.collision = (function () {
                         //
                         // If home, that's okay
                         if (entity.components.home) {
-                            entityMovable.components.movable.segmentsToAdd = 3;
+                            entityMovable.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.ReachHome,
                                 entity: entity

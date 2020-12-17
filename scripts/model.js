@@ -29,6 +29,7 @@ Frogger.model = (function(components, graphics, assets) {
             let home = Frogger.Entity.createEntity();
             home.addComponent(components.Appearance({ fill: {r: 0, g: 200, b: 0 } }));
             home.addComponent(components.Position({ x: x, y: y}));
+            home.addComponent(components.Collision({alive: false}));
 
             return home;
         }
@@ -61,6 +62,7 @@ Frogger.model = (function(components, graphics, assets) {
             let car = Frogger.Entity.createEntity();
             car.addComponent(components.Appearance({ fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             car.addComponent(components.Position({ x: x, y: y}));
+            car.addComponent(components.Collision({alive: false}));
 
             return car;
         }
@@ -89,20 +91,21 @@ Frogger.model = (function(components, graphics, assets) {
         let frog = null;
 
         let x = (GRID_SIZE)/2;
-        let y = GRID_SIZE - 2;
+        let y = GRID_SIZE - 1;
 
         function createFrogEntity(x, y) {
             frog = Frogger.Entity.createEntity();
-            frog.addComponent(components.Appearance({ fill: { r: 0, g: 100, b: 0 }, stroke: 'rgb(0, 0, 0)'}));
+            frog.addComponent(components.Appearance({ image: assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
             frog.addComponent(components.Position({ x: x, y: y}));
             frog.addComponent(components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: MOVE_INTERVAL }));
+            frog.addComponent(components.Collision({alive: true}));
             let inputSpecification = { keys: {
                 'ArrowLeft': Frogger.enums.Direction.Left,
                 'ArrowRight': Frogger.enums.Direction.Right,
                 'ArrowUp': Frogger.enums.Direction.Up,
                 'ArrowDown': Frogger.enums.Direction.Down
             }};
-            frog.addComponent(components.KeyboardControlled(inputSpecification));
+            frog.addComponent(components.Keyboard(inputSpecification));
             // TODO Here
             return frog;
         }
@@ -149,17 +152,6 @@ Frogger.model = (function(components, graphics, assets) {
     //
     // ------------------------------------------------------------------
     that.initialize = function() {
-
-        console.log(entities);
-        console.log('initializing homes...');
-        let hs = initializeHomes();
-        for (var h = 0; h< length.hs; h++){
-            let home = hs[h]
-            entites[home.id] = home;
-        }
-
-        console.log('initializing cars...');
-        mergeObjects(entities, initializeCars());
 
         console.log('initialzing frog starting position...');
         let frog = initializeFrog();
