@@ -16,26 +16,7 @@ Frogger.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement, gridSize) {
-        // want the frog to only move one grid square size
-        // let xIncrSplit = xIncrement / (gridSize);
-        // let yIncrSplit = yIncrement / (gridSize);
-        // let i = 0;
-
-        // console.log('xIncrSplit: ', xIncrSplit);
-
-        // if (entity.components.position.x > gridSize-1){
-        //     entity.components.position.x = 0;
-        // }
-        // else if (entity.components.position.x < 0){
-        //     entity.components.position.x = gridSize-1;
-        // }
-
-        // while (i < gridSize){
-        //     entity.components.position.x += xIncrSplit;
-        //     entity.components.position.y += yIncrSplit;
-        //     i++;
-        // }
-        
+       
         if (entity.components.position.x+xIncrement > gridSize-1){
             entity.components.position.x = -1;
         }

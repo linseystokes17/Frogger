@@ -77,8 +77,29 @@ Frogger.loader = (function() {
                 key: 'frog',
                 source: 'assets/frog_sprites.png'
             }, {
-                key: 'car1',
+                key: 'car',
                 source: 'assets/car_sprites.png'
+            }, {
+                key: 'truck',
+                source: 'assets/truck.png'
+            }, {
+                key: 'tree1',
+                source: 'assets/tree_1.png'
+            }, {
+                key: 'tree2',
+                source: 'assets/tree_2.png'
+            }, {
+                key: 'tree3',
+                source: 'assets/tree_3.png'
+            }, {
+                key: 'alligator',
+                source: 'assets/alligator_sprites.png'
+            }, {
+                key: 'turtle2',
+                source: 'assets/turtle_2_sprites.png'
+            }, {
+                key: 'turtle3',
+                source: 'assets/turtle_3_sprites.png'
             }
         ];
 
