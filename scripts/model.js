@@ -8,13 +8,12 @@ Frogger.model = (function(components, graphics, assets) {
     let that = {};
 
     const GRID_SIZE = 14;
-    const alligatorS_COUNT = 5;
     const ALLIGATORS_COUNT = 5;
     const HOMES_COUNT = 5;
-    const SECOND_INTERVAL = 1; // 1 = 1 second
-    const FROG_MOVE_INTERVAL = .5;
-    const CAR_MOVE_INTERVAL = SECOND_INTERVAL;
-    const SPEED_INC = .05;
+    const SECOND_INTERVAL = 1000; // 1 = 1 second
+    const FROG_MOVE_INTERVAL = 500;
+    const CAR_MOVE_INTERVAL = SECOND_INTERVAL/2;
+    const SPEED_INC = 75;
     let entities = {};  // key is 'id', value is an Entity
 
     // --------------------------------------------------------------
@@ -93,16 +92,6 @@ Frogger.model = (function(components, graphics, assets) {
          console.log('initialzing alligator4 starting position...');
          let alligator3 = initializeAlligator(4, 3, Frogger.enums.Direction.Right, 0, CAR_MOVE_INTERVAL-SPEED_INC*3);
          entities[alligator3.id] = alligator3;
-
-        // Fourth row of cars
-        console.log('initialzing alligator4 starting position...');
-        let alligator4 = initializeAlligator(GRID_SIZE-3, 2, Frogger.enums.Direction.Right, 0, CAR_MOVE_INTERVAL-SPEED_INC*2);
-        entities[alligator4.id] = alligator4;
-
-        // Fifth row of cars - fastest
-        console.log('initialzing alligator5 starting position...');
-        let alligator5 = initializeAlligator(2, 1, Frogger.enums.Direction.Right, 0, CAR_MOVE_INTERVAL-SPEED_INC*5);
-        entities[alligator5.id] = alligator5;
     }
 
     // --------------------------------------------------------------

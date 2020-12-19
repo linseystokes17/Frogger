@@ -6,8 +6,6 @@
 // --------------------------------------------------------------
 Frogger.systems.movement = (function () {
     'use strict';
-    let lastMove = 0;
-    let lastTimeStamp = 0;
 
     // --------------------------------------------------------------
     //
@@ -17,18 +15,18 @@ Frogger.systems.movement = (function () {
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement, gridSize) {
        
-        if (entity.components.position.x+xIncrement > gridSize-1){
-            entity.components.position.x = -1;
+        if (entity.components.position.x+xIncrement >= gridSize-1){
+            entity.components.position.x = 0;
         }
-        else if (entity.components.position.x+xIncrement < 0){
-            entity.components.position.x = gridSize;
+        else if (entity.components.position.x+xIncrement <= 0){
+            entity.components.position.x = gridSize-1;
         }
 
         entity.components.position.x += xIncrement;
         entity.components.position.y += yIncrement;
 
         
-        entity.components.position.x = Math.round(entity.components.position.x);
+        // entity.components.position.x = Math.round(entity.components.position.x);
         entity.components.position.y = Math.round(entity.components.position.y);
         //
         // move the frog a fixed number of pixels, the equivalent of grid square
@@ -42,12 +40,13 @@ Frogger.systems.movement = (function () {
     // in the facing direction.
     //
     // --------------------------------------------------------------
-    function moveEntity(entity, elapsedTime, totalTime, gridSize) {
+    function moveEntity(entity, elapsedTime, totalTime, gridSize) {        
         entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
 
         if (entity.components.collision.alive == true){
-            if(entity.components.keyboard.keyPressed == true && totalTime-lastTimeStamp > 300){
-                lastTimeStamp = totalTime;
+            if(entity.components.keyboard.keyPressed == true && entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
+                entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
+
                 entity.components.keyboard.keyPressed = false;
                 switch (entity.components.movable.facing) {
                     case Frogger.enums.Direction.Up:
@@ -69,21 +68,14 @@ Frogger.systems.movement = (function () {
 
             }
         }
-        else if (Math.abs(entity.components.movable.elapsedInterval - lastMove)/10 >= entity.components.movable.moveInterval) {
+        else if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval) {
             entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
-            lastMove = entity.components.movable.elapsedInterval;
             switch (entity.components.movable.facing) {
-                case Frogger.enums.Direction.Up:
-                    move(entity, 0, -1, gridSize);
-                    break;
-                case Frogger.enums.Direction.Down:
-                    move(entity, 0, 1, gridSize);
-                    break;
                 case Frogger.enums.Direction.Left:
-                    move(entity, -1, 0, gridSize);
+                    move(entity, -1/4, 0, gridSize);
                     break;
                 case Frogger.enums.Direction.Right:
-                    move(entity, 1, 0, gridSize);
+                    move(entity, 1/4, 0, gridSize);
                     break;
             }
         }

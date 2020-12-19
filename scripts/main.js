@@ -64,8 +64,8 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     //------------------------------------------------------------------
     function gameLoop(time) {
         // time, lastTimeStamp, elapsedTime
-        let elapsedTime = (time/1000) - lastTimeStamp;
-        lastTimeStamp = Math.floor(time/1000);
+        let elapsedTime = time - lastTimeStamp;
+        lastTimeStamp = time;
 
         // LL processInput
         // This is the rendering to provide the game viewport, it has nothing to do
