@@ -16,9 +16,10 @@ Frogger.systems.movement = (function () {
     function move(entity, xIncrement, yIncrement, gridSize) {
        
         if (entity.components.position.x+xIncrement >= gridSize-1){
-            entity.components.position.x = 0;
+            //entity.components.position.x = 0;
+            entity.components.position.x = -Math.round((entity.components.appearance.image.width/entity.components.appearance.numSprites)/40, 2);
         }
-        else if (entity.components.position.x+xIncrement <= 0){
+        if (entity.components.position.x+(xIncrement) <= -Math.round((entity.components.appearance.image.width/entity.components.appearance.numSprites)/40, 2)){
             entity.components.position.x = gridSize-1;
         }
 

@@ -25,7 +25,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createHomeEntity(x, y) {
             let home = Frogger.Entity.createEntity();
-            home.addComponent(components.Appearance({index: 2, type: 'home', image: Frogger.assets.bonus, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            home.addComponent(components.Appearance({numSprites: 4, index: 2, type: 'home', image: Frogger.assets.bonus, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             home.addComponent(components.Position({ x: x, y: y}));
             home.addComponent(components.Collision({alive: false}));
 
@@ -51,7 +51,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createAlligatorEntity(x, y) {
             let alligator = Frogger.Entity.createEntity();
-            alligator.addComponent(components.Appearance({ index: index, type: 'alligator', image: Frogger.assets.alligator, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            alligator.addComponent(components.Appearance({numSprites: 2, index: index, type: 'alligator', image: Frogger.assets.alligator, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             alligator.addComponent(components.Position({ x: x, y: y}));
             alligator.addComponent(components.Collision({alive: false}));
             alligator.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
@@ -72,7 +72,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createLogEntity(x, y) {
             let log = Frogger.Entity.createEntity();
-            log.addComponent(components.Appearance({ index: index, type: 'log', image: asset, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            log.addComponent(components.Appearance({numSprites: 1, index: index, type: 'log', image: asset, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             log.addComponent(components.Position({ x: x, y: y}));
             log.addComponent(components.Collision({alive: false}));
             log.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
@@ -99,7 +99,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         // Second row of river
         console.log('initialzing alligator3 starting position...');
-        let alligator2 = initializeAlligator(7, 4, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*4);
+        let alligator2 = initializeAlligator(4, 4, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*4);
         entities[alligator2.id] = alligator2;
 
         let logM = initializeLog(GRID_SIZE-2, 4, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*4, Frogger.assets.tree2);
@@ -133,7 +133,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createCarEntity(x, y) {
             let car = Frogger.Entity.createEntity();
-            car.addComponent(components.Appearance({ index: index, type: 'car', image: Frogger.assets.car, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            car.addComponent(components.Appearance({numSprites: 4, index: index, type: 'car', image: Frogger.assets.car, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             car.addComponent(components.Position({ x: x, y: y}));
             car.addComponent(components.Collision({alive: false}));
             car.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
@@ -154,7 +154,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createTruckEntity(x, y) {
             let truck = Frogger.Entity.createEntity();
-            truck.addComponent(components.Appearance({ index: index, type: 'truck', image: Frogger.assets.truck, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            truck.addComponent(components.Appearance({numSprites: 1, index: index, type: 'truck', image: Frogger.assets.truck, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             truck.addComponent(components.Position({ x: x, y: y}));
             truck.addComponent(components.Collision({alive: false}));
             truck.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
@@ -232,7 +232,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createFrogEntity(x, y) {
             frog = Frogger.Entity.createEntity();
-            frog.addComponent(components.Appearance({ index: 0, type: 'frog', image: Frogger.assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
+            frog.addComponent(components.Appearance({numSprites: 11,  index: 0, type: 'frog', image: Frogger.assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
             frog.addComponent(components.Position({ x: x, y: y}));
             frog.addComponent(components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: FROG_MOVE_INTERVAL }));
             frog.addComponent(components.Collision({alive: true}));

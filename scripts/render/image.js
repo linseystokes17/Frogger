@@ -13,11 +13,16 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
 
     let appearance = components.appearance;
     let spritesheetIndex = components.appearance.index;
-    let spriteWidth = 40;
+    let numSprites = components.appearance.numSprites;
+    let spriteWidth = Math.round(components.appearance.image.width / numSprites);
     let spriteHeight = 40;
     let diff = 0;
+    let newWidth = 0;
+    let type = components.appearance.type;
+    let spriteGridWidth = Math.round(spriteWidth / 40, 2);
+    let newGridWidth = 0;
 
-    if (components.appearance.type == 'frog'){
+    if (type == 'frog'){
         let direction = components.movable.facing;
         if (direction == 'up'){
             spritesheetIndex = 0;
@@ -33,32 +38,6 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
         }
     }
 
-    if (components.appearance.type == 'car'){
-        spritesheetIndex = components.appearance.index;
-    }
-
-    if (components.appearance.type == 'truck'){
-        spriteWidth = 61;
-    }
-
-    if (components.appearance.type == 'alligator'){
-        spritesheetIndex = components.appearance.index;
-        spriteWidth = 100;
-        if (position.x + (spriteWidth/40) > gridSize){
-            diff = (gridSize*40) - position.x + (spriteWidth/40)
-            spriteWidth -= diff;
-        }
-    }
-
-    if (components.appearance.type == 'log'){
-        spriteWidth = components.appearance.image.width;
-    }
-
-    if (components.appearance.type == 'bonus'){
-        spriteWidth = 40;
-        spritesheetIndex = 2;
-    }
-
     // image rendering
     // context.drawImage(
     //     image,
@@ -67,16 +46,57 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
     //     dx * world.size + world.left, dy * world.size + world.top,
     //     dWidth * world.size, dHeight * world.size);
 
-    graphics.core.drawImage(
-        appearance.image,
-        spritesheetIndex*spriteWidth, 0,
-        spriteWidth, spriteHeight,// sWidth, sHeight
-        position.x / gridSize, // dx
-        position.y / gridSize, // dy
-        (1 / (gridSize)) * (spriteWidth/40), 1 / (gridSize)
-        //1.0 / gridSize, 1.0 / gridSize,  
-    );
+    if (position.x + (spriteGridWidth) > gridSize){
+        diff = (gridSize) - ((position.x) + spriteGridWidth);
+        newGridWidth = spriteGridWidth+diff;
+        newWidth = newGridWidth * 40;
 
-    
+        // if (type == 'log'){
+        //     console.log('more newWidth: ', newWidth);
+        //     console.log('more spriteWidth: ', spriteWidth);
+        //     console.log('more diff: ', diff);
+        // }
 
+        graphics.core.drawImage(
+            appearance.image,
+            spritesheetIndex, 0,
+            newWidth, spriteHeight,// sWidth, sHeight
+            position.x / gridSize, // dx
+            position.y / gridSize, // dy
+            (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
+            //1.0 / gridSize, 1.0 / gridSize,  
+        );
+    } 
+    if (position.x < 0){
+        diff = position.x; // amount of overhang
+        newGridWidth = (spriteGridWidth)-diff; // width is the old width + (neg) overhang
+        newWidth = spriteWidth - diff * 40;
+
+        if (type == 'car'){
+            console.log('less newGridWidth: ', newGridWidth);
+            console.log('less newWidth: ', newWidth);
+            console.log('less diff: ', diff);
+        }
+
+        graphics.core.drawImage(
+            appearance.image,
+            spritesheetIndex-(diff*40), 0,
+            newWidth, spriteHeight,// sWidth, sHeight
+            (position.x-(diff)) / gridSize, // dx
+            position.y / gridSize, // dy
+            (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
+            //1.0 / gridSize, 1.0 / gridSize,  
+        );
+    }
+    else{
+        graphics.core.drawImage(
+            appearance.image,
+            spritesheetIndex*spriteWidth, 0,
+            spriteWidth, spriteHeight,// sWidth, sHeight
+            position.x / gridSize, // dx
+            position.y / gridSize, // dy
+            (1 / (gridSize)) * (spriteWidth/40), 1 / (gridSize)
+            //1.0 / gridSize, 1.0 / gridSize,  
+        );
+    }
 };

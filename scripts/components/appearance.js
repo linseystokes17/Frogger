@@ -10,6 +10,8 @@ Frogger.components.Appearance = function(spec) {
         set type(value) { spec.type = value;},
         get index() { return spec.index;},
         set index(value) {spec.index = value;},
+        get numSprites(){ return spec.numSprites;},
+        set numSprites(value){ spec.numSprites = value;},
     };
 
     return api;
