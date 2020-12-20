@@ -100,6 +100,9 @@ Frogger.loader = (function() {
             }, {
                 key: 'turtle3',
                 source: 'assets/turtle_3_sprites.png'
+            }, {
+                key: 'bonus',
+                source: 'assets/bonus_sprites.png'
             }
         ];
 

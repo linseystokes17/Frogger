@@ -11,13 +11,14 @@ Math.lerp = (a, b, f) => { return a + f * (b - a); };
 Frogger.render.image = function (graphics, components, position, gridSize) {
     'use strict';
 
-    let appearance = components.appearance
-    let direction = components.movable.facing;
-    let spritesheetIndex = 0;
+    let appearance = components.appearance;
+    let spritesheetIndex = components.appearance.index;
     let spriteWidth = 40;
     let spriteHeight = 40;
+    let diff = 0;
 
     if (components.appearance.type == 'frog'){
+        let direction = components.movable.facing;
         if (direction == 'up'){
             spritesheetIndex = 0;
         }
@@ -31,12 +32,31 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
             spritesheetIndex = 2;
         }
     }
+
     if (components.appearance.type == 'car'){
         spritesheetIndex = components.appearance.index;
     }
+
+    if (components.appearance.type == 'truck'){
+        spriteWidth = 61;
+    }
+
     if (components.appearance.type == 'alligator'){
         spritesheetIndex = components.appearance.index;
         spriteWidth = 100;
+        if (position.x + (spriteWidth/40) > gridSize){
+            diff = (gridSize*40) - position.x + (spriteWidth/40)
+            spriteWidth -= diff;
+        }
+    }
+
+    if (components.appearance.type == 'log'){
+        spriteWidth = components.appearance.image.width;
+    }
+
+    if (components.appearance.type == 'bonus'){
+        spriteWidth = 40;
+        spritesheetIndex = 2;
     }
 
     // image rendering

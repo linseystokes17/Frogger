@@ -42,11 +42,12 @@ Frogger.systems.movement = (function () {
     // --------------------------------------------------------------
     function moveEntity(entity, elapsedTime, totalTime, gridSize) {        
         entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
+        // console.log('elapsedInterval1: ', entity.components.movable.elapsedInterval);
 
-        if (entity.components.collision.alive == true){
-            if(entity.components.keyboard.keyPressed == true && entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
-                entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
+        if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
+            entity.components.movable.elapsedInterval = 0;
 
+            if (entity.components.collision.alive == true && entity.components.keyboard.keyPressed == true){
                 entity.components.keyboard.keyPressed = false;
                 switch (entity.components.movable.facing) {
                     case Frogger.enums.Direction.Up:
@@ -63,20 +64,17 @@ Frogger.systems.movement = (function () {
                         break;
                 };
             }
-            else{
+            else if (entity.components.collision.alive == false){
+                switch (entity.components.movable.facing) {
+                    case Frogger.enums.Direction.Left:
+                        move(entity, -1/4, 0, gridSize);
+                        break;
+                    case Frogger.enums.Direction.Right:
+                        move(entity, 1/4, 0, gridSize);
+                        break;
+                }
+            } else{
                 entity.components.keyboard.keyPressed = false;
-
-            }
-        }
-        else if (entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval) {
-            entity.components.movable.elapsedInterval -= entity.components.movable.moveInterval;
-            switch (entity.components.movable.facing) {
-                case Frogger.enums.Direction.Left:
-                    move(entity, -1/4, 0, gridSize);
-                    break;
-                case Frogger.enums.Direction.Right:
-                    move(entity, 1/4, 0, gridSize);
-                    break;
             }
         }
     }

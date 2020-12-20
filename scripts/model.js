@@ -8,11 +8,9 @@ Frogger.model = (function(components, graphics, assets) {
     let that = {};
 
     const GRID_SIZE = 14;
-    const ALLIGATORS_COUNT = 5;
-    const HOMES_COUNT = 5;
-    const SECOND_INTERVAL = 1000; // 1 = 1 second
-    const FROG_MOVE_INTERVAL = 500;
-    const CAR_MOVE_INTERVAL = SECOND_INTERVAL/2;
+    const FIVE_COUNT = 5;
+    const SECOND_INTERVAL = 500; // 1 = 1 second
+    const FROG_MOVE_INTERVAL = 250;
     const SPEED_INC = 75;
     let entities = {};  // key is 'id', value is an Entity
 
@@ -22,31 +20,24 @@ Frogger.model = (function(components, graphics, assets) {
     // and visual components.
     //
     // --------------------------------------------------------------
-    function initializeHomes() {
-        let homes = {};
+    function initializeHome(x, y) {
+        let home = null;
 
         function createHomeEntity(x, y) {
             let home = Frogger.Entity.createEntity();
-            home.addComponent(components.Appearance({ fill: {r: 0, g: 200, b: 0 } }));
+            home.addComponent(components.Appearance({index: 2, type: 'home', image: Frogger.assets.bonus, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             home.addComponent(components.Position({ x: x, y: y}));
             home.addComponent(components.Collision({alive: false}));
 
             return home;
         }
 
-        let remaining = HOMES_COUNT;
-        while (remaining >= 0) {
-            let x = 1;
-            let y = 0;
-            let proposed = createHomeEntity(x, y);
-            if (!Frogger.systems.collision.collidesWithAny(proposed, homes)) {
-                homes[proposed.id] = proposed;
-                remaining--;
-            }
-            x+=2;
+        let proposed = createHomeEntity(x, y);
+        if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
+            home = proposed;
         }
-
-        return homes;
+        
+        return home;
     }
 
     // --------------------------------------------------------------
@@ -76,22 +67,59 @@ Frogger.model = (function(components, graphics, assets) {
         return alligator;
     }
 
-    function initializeAlligators(){
-        // First row of alligators - slowest
+    function initializeLog(x, y, direction, index, interval, asset) {
+        let log = null;
+
+        function createLogEntity(x, y) {
+            let log = Frogger.Entity.createEntity();
+            log.addComponent(components.Appearance({ index: index, type: 'log', image: asset, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            log.addComponent(components.Position({ x: x, y: y}));
+            log.addComponent(components.Collision({alive: false}));
+            log.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
+
+            return log;
+        }
+
+        let proposed = createLogEntity(x, y);
+        if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
+            log = proposed;
+        }
+        
+        return log;
+    }
+
+    function initializeRiver(){
+        // First row of river - slowest
         console.log('initialzing alligator1 starting position...');
-        let alligator1 = initializeAlligator(2, 5, Frogger.enums.Direction.Right, 0, CAR_MOVE_INTERVAL);
-        console.log(alligator1);
+        let alligator1 = initializeAlligator(2, 5, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL);
         entities[alligator1.id] = alligator1;
 
-        // Second row of cars
+        let logS = initializeLog(GRID_SIZE-4, 5, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL, Frogger.assets.tree1);
+        entities[logS.id] = logS;
+
+        // Second row of river
         console.log('initialzing alligator3 starting position...');
-        let alligator2 = initializeAlligator(GRID_SIZE-2, 4, Frogger.enums.Direction.Right, 0, CAR_MOVE_INTERVAL-SPEED_INC*4);
+        let alligator2 = initializeAlligator(7, 4, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*4);
         entities[alligator2.id] = alligator2;
 
-         // Third row of cars
-         console.log('initialzing alligator4 starting position...');
-         let alligator3 = initializeAlligator(4, 3, Frogger.enums.Direction.Right, 0, CAR_MOVE_INTERVAL-SPEED_INC*3);
-         entities[alligator3.id] = alligator3;
+        let logM = initializeLog(GRID_SIZE-2, 4, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*4, Frogger.assets.tree2);
+        entities[logM.id] = logM;
+
+        // Third row of cars
+        console.log('initialzing alligator4 starting position...');
+        let alligator3 = initializeAlligator(1, 3, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*2);
+        entities[alligator3.id] = alligator3;
+
+        let logL = initializeLog(GRID_SIZE-6, 3, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*2, Frogger.assets.tree3);
+        entities[logL.id] = logL;
+
+        let y=0;
+        let x=2.5;
+        for (var i=0; i<5; i++){
+            let home = initializeHome(x, y);
+            entities[home.id] = home;
+            x+=2;
+        }
     }
 
     // --------------------------------------------------------------
@@ -121,51 +149,72 @@ Frogger.model = (function(components, graphics, assets) {
         return car;
     }
 
-    function initializeCars(){
+    function initializeTruck(x, y, direction, index, interval) {
+        let truck = null;
+
+        function createTruckEntity(x, y) {
+            let truck = Frogger.Entity.createEntity();
+            truck.addComponent(components.Appearance({ index: index, type: 'truck', image: Frogger.assets.truck, fill: {r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            truck.addComponent(components.Position({ x: x, y: y}));
+            truck.addComponent(components.Collision({alive: false}));
+            truck.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
+
+            return truck;
+        }
+
+        let proposed = createTruckEntity(x, y);
+        if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
+            truck = proposed;
+        }
+        
+        return truck;
+    }
+
+    function initializeRoad(){
 
         // First row of cars - slowest
         console.log('initialzing car1 starting position...');
-        let car1 = initializeCar(2, GRID_SIZE-2, Frogger.enums.Direction.Right, 2, CAR_MOVE_INTERVAL);
+        let car1 = initializeCar(9, GRID_SIZE-2, Frogger.enums.Direction.Right, 2, SECOND_INTERVAL);
         entities[car1.id] = car1;
 
-        console.log('initialzing car2 starting position...');
-        let car2 = initializeCar(9, GRID_SIZE-2, Frogger.enums.Direction.Right, 2, CAR_MOVE_INTERVAL);
-        entities[car2.id] = car2;
+        console.log('initialzing truck1 starting position...');
+        let truck1 = initializeTruck(2, GRID_SIZE-2, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL);
+        entities[truck1.id] = truck1;
 
         // Second row of cars
         console.log('initialzing car3 starting position...');
-        let car9 = initializeCar(GRID_SIZE-2, GRID_SIZE-3, Frogger.enums.Direction.Right, 2, CAR_MOVE_INTERVAL-SPEED_INC*4);
+        let car9 = initializeCar(GRID_SIZE-2, GRID_SIZE-3, Frogger.enums.Direction.Right, 2, SECOND_INTERVAL-SPEED_INC*4);
         entities[car9.id] = car9;
 
-        console.log('initialzing car4 starting position...');
-        let car10 = initializeCar(5, GRID_SIZE-3, Frogger.enums.Direction.Right, 2, CAR_MOVE_INTERVAL-SPEED_INC*4);
-        entities[car10.id] = car10;
+        console.log('initialzing truck2 starting position...');
+        let truck2 = initializeTruck(5, GRID_SIZE-3, Frogger.enums.Direction.Right, 0, SECOND_INTERVAL-SPEED_INC*4);
+        entities[truck2.id] = truck2;
 
          // Third row of cars
          console.log('initialzing car3 starting position...');
-         let car7 = initializeCar(GRID_SIZE-2, GRID_SIZE-4, Frogger.enums.Direction.Left, 1, CAR_MOVE_INTERVAL-SPEED_INC*3);
+         let car7 = initializeCar(GRID_SIZE-2, GRID_SIZE-4, Frogger.enums.Direction.Left, 1, SECOND_INTERVAL-SPEED_INC*3);
          entities[car7.id] = car7;
  
          console.log('initialzing car4 starting position...');
-         let car8 = initializeCar(4, GRID_SIZE-4, Frogger.enums.Direction.Left, 3, CAR_MOVE_INTERVAL-SPEED_INC*3);
+         let car8 = initializeCar(4, GRID_SIZE-4, Frogger.enums.Direction.Left, 3, SECOND_INTERVAL-SPEED_INC*3);
          entities[car8.id] = car8;
 
         // Fourth row of cars
         console.log('initialzing car3 starting position...');
-        let car3 = initializeCar(GRID_SIZE/2, GRID_SIZE-5, Frogger.enums.Direction.Left, 1, CAR_MOVE_INTERVAL-SPEED_INC*2);
+        let car3 = initializeCar(GRID_SIZE/2, GRID_SIZE-5, Frogger.enums.Direction.Left, 1, SECOND_INTERVAL-SPEED_INC*2);
         entities[car3.id] = car3;
 
         console.log('initialzing car4 starting position...');
-        let car4 = initializeCar(GRID_SIZE-3, GRID_SIZE-5, Frogger.enums.Direction.Left, 0, CAR_MOVE_INTERVAL-SPEED_INC*2);
+        let car4 = initializeCar(GRID_SIZE-3, GRID_SIZE-5, Frogger.enums.Direction.Left, 0, SECOND_INTERVAL-SPEED_INC*2);
         entities[car4.id] = car4;
 
         // Fifth row of cars - fastest
         console.log('initialzing car5 starting position...');
-        let car5 = initializeCar(2, GRID_SIZE-6, Frogger.enums.Direction.Left, 0, CAR_MOVE_INTERVAL-SPEED_INC*5);
+        let car5 = initializeCar(2, GRID_SIZE-6, Frogger.enums.Direction.Left, 0, SECOND_INTERVAL-SPEED_INC*5);
         entities[car5.id] = car5;
 
         console.log('initialzing car6 starting position...');
-        let car6 = initializeCar(GRID_SIZE-4, GRID_SIZE-6, Frogger.enums.Direction.Left, 3, CAR_MOVE_INTERVAL-SPEED_INC*5);
+        let car6 = initializeCar(GRID_SIZE-4, GRID_SIZE-6, Frogger.enums.Direction.Left, 3, SECOND_INTERVAL-SPEED_INC*5);
         entities[car6.id] = car6;
     }
 
@@ -183,7 +232,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         function createFrogEntity(x, y) {
             frog = Frogger.Entity.createEntity();
-            frog.addComponent(components.Appearance({ type: 'frog', image: Frogger.assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
+            frog.addComponent(components.Appearance({ index: 0, type: 'frog', image: Frogger.assets.frog, fill: 'rgb(0,200,0)', stroke: 'rgb(0, 0, 0)'}));
             frog.addComponent(components.Position({ x: x, y: y}));
             frog.addComponent(components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: FROG_MOVE_INTERVAL }));
             frog.addComponent(components.Collision({alive: true}));
@@ -248,8 +297,8 @@ Frogger.model = (function(components, graphics, assets) {
         // river between
             // y = [1, 6]
 
-        initializeCars();
-        initializeAlligators();
+        initializeRoad();
+        initializeRiver();
 
         console.log('initialzing frog starting position...');
         let frog = initializeFrog();
