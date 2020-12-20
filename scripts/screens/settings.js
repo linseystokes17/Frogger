@@ -7,6 +7,10 @@ Frogger.screens['settings'] = (function(game, input) {
         document.getElementById('id-settings-back').addEventListener(
             'click',
             function() { game.showScreen('main-menu'); });
+        
+        document.getElementById('id-settings-change').addEventListener(
+            'click',
+            function() { console.log('change setting'); });
     }
     
     function run() {

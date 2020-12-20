@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding-top: 1em;
     padding-bottom: 2em;
+    background-color: darkgrey;
 }
 
 #game {
@@ -34,12 +35,12 @@ body {
 #main-menu {
     padding-top: 1em;
     cursor: pointer;
-    font-size: 0.5em;
+    font-size: 0.7em;
 }
 
 ul.menu {
     text-align: center;
-    padding: 1em;
+    padding: .5em;
     margin: 0;
     list-style: none;
 }
@@ -54,14 +55,14 @@ ul.menu li button {
     color: #CECEF6;
     width: 10em;
     height: 1.5em;
-    background: #151552;
-    border: 0.1em solid rgb(90, 11, 57);
+    background: #095516;
+    border: 0.1em solid rgb(48, 153, 6);
     border-radius: 0.5em;
     box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
 }
 
 ul.menu li button:hover {
-    background: #2E2EFE;
+    background: #52b839;
 }
 
 ul.menu li button:active {
@@ -86,6 +87,14 @@ ul.menu li button:active {
 }
 
 #settings {
+    padding-top: 1em;
+    cursor: pointer;
+    font-size: 0.7em;
+}
+
+#about{
+    padding-top: 1em;
+    cursor: pointer;
+    font-size: 1em;
     text-align: center;
-    font-size: 0.8em;
 }
