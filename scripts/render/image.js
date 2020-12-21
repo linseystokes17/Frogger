@@ -46,22 +46,16 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
     //     dx * world.size + world.left, dy * world.size + world.top,
     //     dWidth * world.size, dHeight * world.size);
 
-    if (position.x + (spriteGridWidth) > gridSize){
-        diff = (gridSize) - ((position.x) + spriteGridWidth);
-        newGridWidth = spriteGridWidth+diff;
-        newWidth = newGridWidth * 40;
-
-        // if (type == 'log'){
-        //     console.log('more newWidth: ', newWidth);
-        //     console.log('more spriteWidth: ', spriteWidth);
-        //     console.log('more diff: ', diff);
-        // }
+    if (position.x + (spriteGridWidth) > gridSize-1){
+        diff = (gridSize) - ((position.x) + spriteGridWidth); // -x
+        newGridWidth = spriteGridWidth+diff; // 1-x
+        newWidth = newGridWidth * spriteWidth; // 
 
         graphics.core.drawImage(
             appearance.image,
             spritesheetIndex, 0,
             newWidth, spriteHeight,// sWidth, sHeight
-            position.x / gridSize, // dx
+            gridSize-1, // dx
             position.y / gridSize, // dy
             (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
             //1.0 / gridSize, 1.0 / gridSize,  
@@ -69,20 +63,14 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
     } 
     if (position.x < 0){
         diff = position.x; // amount of overhang
-        newGridWidth = (spriteGridWidth)-diff; // width is the old width + (neg) overhang
-        newWidth = spriteWidth - diff * 40;
-
-        if (type == 'car'){
-            console.log('less newGridWidth: ', newGridWidth);
-            console.log('less newWidth: ', newWidth);
-            console.log('less diff: ', diff);
-        }
+        newGridWidth = (spriteGridWidth)+diff; // width is the old width + (neg) overhang
+        newWidth = newGridWidth * spriteWidth;
 
         graphics.core.drawImage(
             appearance.image,
-            spritesheetIndex-(diff*40), 0,
+            spritesheetIndex*spriteWidth-diff*spriteWidth, 0,
             newWidth, spriteHeight,// sWidth, sHeight
-            (position.x-(diff)) / gridSize, // dx
+            0, // dx
             position.y / gridSize, // dy
             (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
             //1.0 / gridSize, 1.0 / gridSize,  

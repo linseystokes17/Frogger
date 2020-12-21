@@ -14,25 +14,22 @@ Frogger.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement, gridSize) {
+        let numSprites = entity.components.appearance.numSprites;
+        let width = entity.components.appearance.image.width;
+        let numGrids = -Math.round((width/numSprites)/40, 2)
        
-        if (entity.components.position.x+xIncrement >= gridSize-1){
-            //entity.components.position.x = 0;
-            entity.components.position.x = -Math.round((entity.components.appearance.image.width/entity.components.appearance.numSprites)/40, 2);
+        if (entity.components.position.x+xIncrement >= gridSize-numGrids){
+            entity.components.position.x = numGrids;
         }
-        if (entity.components.position.x+(xIncrement) <= -Math.round((entity.components.appearance.image.width/entity.components.appearance.numSprites)/40, 2)){
-            entity.components.position.x = gridSize-1;
+        if (entity.components.position.x+(xIncrement) <= numGrids){
+            entity.components.position.x = gridSize-numGrids;
         }
 
         entity.components.position.x += xIncrement;
         entity.components.position.y += yIncrement;
-
         
         // entity.components.position.x = Math.round(entity.components.position.x);
-        entity.components.position.y = Math.round(entity.components.position.y);
-        //
-        // move the frog a fixed number of pixels, the equivalent of grid square
-        // perform an animation over fixed time period, .5 ?
-        
+        entity.components.position.y = Math.round(entity.components.position.y);   
     }
 
     // --------------------------------------------------------------
