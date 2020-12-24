@@ -9,7 +9,7 @@ Frogger.model = (function(components, graphics, assets) {
 
     const GRID_SIZE = 14;
     const FIVE_COUNT = 5;
-    const SECOND_INTERVAL = 1000; // 1 = 1 second
+    const SECOND_INTERVAL = 500; // 1 = 1 second
     const FROG_MOVE_INTERVAL = 50;
     const SPEED_INC = 75;
     let entities = {};  // key is 'id', value is an Entity

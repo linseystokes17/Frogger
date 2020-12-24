@@ -46,22 +46,30 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
     //     dx * world.size + world.left, dy * world.size + world.top,
     //     dWidth * world.size, dHeight * world.size);
 
-    if (position.x + (spriteGridWidth) > gridSize-1){
-        diff = (gridSize) - ((position.x) + spriteGridWidth); // -x
-        newGridWidth = spriteGridWidth+diff; // 1-x
-        newWidth = newGridWidth * spriteWidth; // 
+    if (position.x >= gridSize-spriteGridWidth){ // if sprite is longer than game
+        diff = (gridSize) - (position.x+spriteGridWidth); // 
+        newGridWidth = (spriteGridWidth)+diff; // 
+        newWidth = newGridWidth * spriteWidth; // [40 0]
+
+        console.log('newWidth: ', newWidth);
+        console.log('newGridWidth: ', newGridWidth);
+        console.log('position: ', position.x);
+        
+        if (newWidth < 0){
+            newWidth = 0;
+        }
 
         graphics.core.drawImage(
             appearance.image,
-            spritesheetIndex, 0,
+            spritesheetIndex*spriteWidth, 0,
             newWidth, spriteHeight,// sWidth, sHeight
-            gridSize-1, // dx
+            position.x / gridSize, // dx
             position.y / gridSize, // dy
             (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
             //1.0 / gridSize, 1.0 / gridSize,  
         );
     } 
-    if (position.x < 0){
+    else if (position.x < 0){
         diff = position.x; // amount of overhang
         newGridWidth = (spriteGridWidth)+diff; // width is the old width + (neg) overhang
         newWidth = newGridWidth * spriteWidth;
