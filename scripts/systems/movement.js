@@ -16,7 +16,7 @@ Frogger.systems.movement = (function () {
     function move(entity, xIncrement, yIncrement, gridSize) {
         let numSprites = entity.components.appearance.numSprites;
         let width = entity.components.appearance.image.width;
-        let numGrids = -Math.round((width/numSprites)/40, 2)
+        let numGrids = -3 // 3 'block' buffer on each side
        
         if (entity.components.position.x+xIncrement >= gridSize-numGrids){
             entity.components.position.x = numGrids;
@@ -65,10 +65,10 @@ Frogger.systems.movement = (function () {
             else if (entity.components.collision.alive == false){
                 switch (entity.components.movable.facing) {
                     case Frogger.enums.Direction.Left:
-                        move(entity, -1/4, 0, gridSize);
+                        move(entity, -1/64, 0, gridSize);
                         break;
                     case Frogger.enums.Direction.Right:
-                        move(entity, 1/4, 0, gridSize);
+                        move(entity, 1/64, 0, gridSize);
                         break;
                 }
             } else{

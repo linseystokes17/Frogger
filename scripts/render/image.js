@@ -11,19 +11,24 @@ Math.lerp = (a, b, f) => { return a + f * (b - a); };
 Frogger.render.image = function (graphics, components, position, gridSize) {
     'use strict';
 
+    // console.log('spriteWidth: ', spriteWidth);
+
+    let worldSize = graphics.core.getWorldSize();
+    let block = worldSize / gridSize;
     let appearance = components.appearance;
     let spritesheetIndex = components.appearance.index;
     let numSprites = components.appearance.numSprites;
-    let spriteWidth = Math.round(components.appearance.image.width / numSprites);
-    let spriteHeight = 40;
-    let diff = 0;
-    let newWidth = 0;
+    let spriteWidth = components.appearance.image.width / numSprites;
+    let spriteHeight = components.appearance.image.height;
     let type = components.appearance.type;
-    let spriteGridWidth = Math.round(spriteWidth / 40, 2);
-    let newGridWidth = 0;
+    let direction = components.movable.facing;
+
+    let newWidth = 0;
+    let offsetRight = 0;
+    let offsetLeft = 0;
+
 
     if (type == 'frog'){
-        let direction = components.movable.facing;
         if (direction == 'up'){
             spritesheetIndex = 0;
         }
@@ -38,61 +43,25 @@ Frogger.render.image = function (graphics, components, position, gridSize) {
         }
     }
 
-    // image rendering
-    // context.drawImage(
-    //     image,
-    //     sx, sy,
-    //     sWidth, sHeight,
-    //     dx * world.size + world.left, dy * world.size + world.top,
-    //     dWidth * world.size, dHeight * world.size);
-
-    if (position.x >= gridSize-spriteGridWidth){ // if sprite is longer than game
-        diff = (gridSize) - (position.x+spriteGridWidth); // 
-        newGridWidth = (spriteGridWidth)+diff; // 
-        newWidth = newGridWidth * spriteWidth; // [40 0]
-
-        console.log('newWidth: ', newWidth);
-        console.log('newGridWidth: ', newGridWidth);
-        console.log('position: ', position.x);
-        
-        if (newWidth < 0){
-            newWidth = 0;
-        }
-
-        graphics.core.drawImage(
-            appearance.image,
-            spritesheetIndex*spriteWidth, 0,
-            newWidth, spriteHeight,// sWidth, sHeight
-            position.x / gridSize, // dx
-            position.y / gridSize, // dy
-            (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
-            //1.0 / gridSize, 1.0 / gridSize,  
-        );
-    } 
+    if (position.x*block+spriteWidth >= worldSize){ // if sprite is longer than game
+        offsetRight = (gridSize) - (position.x+(spriteWidth/block));
+        offsetLeft = 0;
+        //console.log('greater than world!');
+    }
     else if (position.x < 0){
-        diff = position.x; // amount of overhang
-        newGridWidth = (spriteGridWidth)+diff; // width is the old width + (neg) overhang
-        newWidth = newGridWidth * spriteWidth;
+        offsetLeft = position.x;
+        offsetRight = 0;
+        //console.log('less than world!');
+    }
 
-        graphics.core.drawImage(
-            appearance.image,
-            spritesheetIndex*spriteWidth-diff*spriteWidth, 0,
-            newWidth, spriteHeight,// sWidth, sHeight
-            0, // dx
-            position.y / gridSize, // dy
-            (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
-            //1.0 / gridSize, 1.0 / gridSize,  
-        );
-    }
-    else{
-        graphics.core.drawImage(
-            appearance.image,
-            spritesheetIndex*spriteWidth, 0,
-            spriteWidth, spriteHeight,// sWidth, sHeight
-            position.x / gridSize, // dx
-            position.y / gridSize, // dy
-            (1 / (gridSize)) * (spriteWidth/40), 1 / (gridSize)
-            //1.0 / gridSize, 1.0 / gridSize,  
-        );
-    }
+    graphics.core.drawImage(
+        appearance.image,
+        spritesheetIndex*spriteWidth, 0,
+        spriteWidth+(offsetRight), spriteHeight,// sWidth, sHeight
+        (offsetLeft + position.x) / gridSize, // dx
+        position.y / gridSize, // dy
+        (spriteWidth/worldSize), 1 / (gridSize)
+        //1.0 / gridSize, 1.0 / gridSize,  
+    );
+        
 };

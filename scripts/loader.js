@@ -33,7 +33,7 @@ Frogger.loader = (function() {
             message: 'Components loaded',
             onComplete: null
         }, {
-            scripts: ['components/text', 'components/animatedModel'],
+            scripts: ['components/text'],
             message: 'Text component loaded',
             onComplete: null
         }, {

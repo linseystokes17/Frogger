@@ -1,6 +1,6 @@
 // --------------------------------------------------------------
 //
-// This system handles collision detection for movable components
+// This system handles collision detection for dead components
 // against anything else in the game.  It also exposes a collision
 // detection function that allows the game model to test if a
 // proposed entity collides with any other (collidable) entity.
@@ -11,19 +11,19 @@ Frogger.systems.collision = (function () {
 
     // --------------------------------------------------------------
     //
-    // Returns a collection of all the movable entities.
+    // Returns a collection of all the dead entities.
     //
     // --------------------------------------------------------------
-    function findMovable(entities) {
-        let movable = [];
+    function findDead(entities) {
+        let dead = [];
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.movable && entity.components.position) {
-                movable.push(entity);
+            if (!entity.components.alive && entity.components.position) {
+                dead.push(entity);
             }
         }
 
-        return movable;
+        return dead;
     }
 
     // --------------------------------------------------------------
@@ -31,7 +31,7 @@ Frogger.systems.collision = (function () {
     // We know that only the snake is moving and that we only need
     // to check its head for collision with other entities.  Therefore,
     // don't need to look at all the segments in the position, with the
-    // exception of the movable itself...a movable can collide with itself.
+    // exception of the dead itself...a dead can collide with itself.
     //
     // --------------------------------------------------------------
     function collides(a, b) {
@@ -43,7 +43,6 @@ Frogger.systems.collision = (function () {
         // Double for loop looks bad, but it isn't because only 1 of these will ever have a length
         // greater than 1, and most of the time both are of length 1.
         for (let segmentA = 0; segmentA < lengthA; segmentA++) {
-            let positionA = a.components.position;
             for (let segmentB = 0; segmentB < lengthB; segmentB++) {
                 let positionB = b.components.position;
                 if (positionA.x == positionB.x && positionA.y == positionB.y) {
@@ -79,32 +78,32 @@ Frogger.systems.collision = (function () {
 
     // --------------------------------------------------------------
     //
-    // Check to see if any movable components collide with any other
+    // Check to see if any dead components collide with any other
     // collision components.
     //
-    // Step 1: find all movable components first
-    // Step 2: Test the movable components for collision with other (but not self) collision components
+    // Step 1: find all dead components first
+    // Step 2: Test the dead components for collision with other (but not self) collision components
     //
     // --------------------------------------------------------------
     function update(elapsedTime, entities, reportEvent) {
-        let movable = findMovable(entities);
+        let dead = findDead(entities);
 
         for (let id in entities) {
             let entity = entities[id];
             if (entity.components.collision && entity.components.position) {
-                for (let m = 0; m < movable.length; m++) {
-                    let entityMovable = movable[m];
-                    if (collides(entity, entityMovable)) {
+                for (let m = 0; m < dead.length; m++) {
+                    let entityDead = dead[m];
+                    if (collides(entity, entityDead)) {
                         //
                         // If home, that's okay
                         if (entity.components.home) {
-                            entityMovable.components.movable.facing = Frogger.enums.Direction.Stopped;
+                            entityDead.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.ReachHome,
                                 entity: entity
                             });
                         } else {    // If anything else, not okay
-                            entityMovable.components.movable.facing = Frogger.enums.Direction.Stopped;
+                            entityDead.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.HitSomething,
                                 entity: entity

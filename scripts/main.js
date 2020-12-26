@@ -16,8 +16,10 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     //
     //------------------------------------------------------------------
     function update(elapsedTime, totalTime) {
-        model.update(elapsedTime, totalTime);
-        if (model.cancelNextRequest == true){
+        if(model.cancelNextRequest == false){
+            model.update(elapsedTime, totalTime);
+        }
+        else if (model.cancelNextRequest == true){
             //model.reset();
                         
             //
@@ -94,7 +96,7 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         textFPS.width = graphics.core.measureTextWidth(textFPS);
 
         model.initialize();
-        model.cancelNextRequest = false;
+        //model.cancelNextRequest = false;
 
         // LL register keyboard
 
