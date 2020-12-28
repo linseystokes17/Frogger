@@ -24,7 +24,7 @@ Frogger.render.background = function (graphics, gridSize) {
     graphics.core.drawRectangle('rgb(0, 0, 0)', 0, 8 / gridSize, 1, 5 / gridSize); // gridsize = 8 + 5 + 1 = 14
     
     // River
-    graphics.core.drawRectangle('rgb(0, 50, 100)', 0,  1 / gridSize, 1, 5 / gridSize); // gridsize = 8 + 5 + 1 = 14
+    graphics.core.drawRectangle('rgb(0, 50, 100)', 0,  1 / gridSize, 1, 6 / gridSize); // gridsize = 8 + 5 + 1 = 14
 
     // drawRectangle(style, left, top, width, height
 };

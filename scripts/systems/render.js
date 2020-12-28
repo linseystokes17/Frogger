@@ -11,7 +11,22 @@ Frogger.systems.render = (function (graphics) {
     function renderEntities(entities) {
         for (let id in entities) {
             let entity = entities[id];
+            
             Frogger.graphics.Image.render(entity.components);
+            if (entity.components.frog){
+                if (entity.components.movable.facing == 'up'){
+                    entity.components.appearance.sprite = 0;
+                }
+                else if (entity.components.movable.facing == 'down'){
+                    entity.components.appearance.sprite = 4;
+                }
+                else if (entity.components.movable.facing == 'left'){
+                    entity.components.appearance.sprite = 6;
+                }
+                else if (entity.components.movable.facing == 'right'){
+                    entity.components.appearance.sprite = 2;
+                }
+            }
         }
     } 
 

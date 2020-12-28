@@ -33,9 +33,10 @@ Frogger.systems.keyboardInput = (function (components) {
                 let input = entity.components[Frogger.enums.Input.Keyboard];
                 for (let key in input.keys) {
                     if (keysDown[key] && pressed == true) {
+
                         // Protect against turning back onto itself
+                        entity.components.keyboard.keyPressed = pressed;
                         entity.components.movable.facing = input.keys[key];
-                        entity.components.keyboard.keyPressed = true;
                         // TODO Movement: I think that the frog 
                         // would do better doing all of it's updates here, 
                         // not in other locations
@@ -43,6 +44,7 @@ Frogger.systems.keyboardInput = (function (components) {
                             cancelNextRequest = true;
                         }
                     }
+                    entity.components.keyboard.keyPressed = pressed;
                 }
             }
         }
