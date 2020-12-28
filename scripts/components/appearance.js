@@ -3,15 +3,12 @@ Frogger.components.Appearance = function(spec) {
 
     let api = {
         get name() { return 'appearance'; },
-        get fill() { return spec.fill; },
-        get stroke() { return spec.stroke; },
-        get image() { return spec.image; },
-        get type() { return spec.type;},
-        set type(value) { spec.type = value;},
-        get index() { return spec.index;},
-        set index(value) {spec.index = value;},
-        get numSprites(){ return spec.numSprites;},
-        set numSprites(value){ spec.numSprites = value;},
+        get spriteSheet() { return spec.spriteSheet; },
+        get pixelWidth() { return spec.spriteSheet.width / spec.spriteCount; },
+        get pixelHeight() { return spec.spriteSheet.height; },
+        get width() { return spec.spriteSize.width; },
+        get height() { return spec.spriteSize.height; },
+        get sprite() { return spec.sprite; }
     };
 
     return api;

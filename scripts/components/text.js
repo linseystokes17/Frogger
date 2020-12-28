@@ -1,5 +1,4 @@
 //------------------------------------------------------------------
-//
 // Defines a text object.  The spec is defined as:
 //    {
 //        text: '',
@@ -7,7 +6,6 @@
 //        fill: '',
 //        position: { x: , y: }
 //    }
-//
 //------------------------------------------------------------------
 Frogger.components.Text = function(spec) {
     'use strict';

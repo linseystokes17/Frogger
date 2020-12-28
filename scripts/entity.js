@@ -30,6 +30,7 @@ Frogger.Entity = (function() {
 
     let api = {
         get nextId() { return nextId; },
+        set nextId(value) {nextId = value;},
         createEntity: createEntity,
     };
 

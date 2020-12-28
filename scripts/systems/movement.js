@@ -14,8 +14,6 @@ Frogger.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement, gridSize) {
-        let numSprites = entity.components.appearance.numSprites;
-        let width = entity.components.appearance.image.width;
         let numGrids = -3 // 3 'block' buffer on each side
        
         if (entity.components.position.x+xIncrement >= gridSize-numGrids){

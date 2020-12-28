@@ -289,7 +289,6 @@ Frogger.graphics.core = (function() {
             dHeight = arguments[8];
         }
 
-        
         // Convert from pixel to world coordinates on a few items
         context.drawImage(
             image,

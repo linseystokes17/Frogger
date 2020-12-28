@@ -37,6 +37,10 @@ Frogger.loader = (function() {
             message: 'Text component loaded',
             onComplete: null
         }, {
+            scripts: ['components/frog', 'components/car', 'components/log'],
+            message: 'Object components loaded',
+            onComplete: null
+        }, {
             scripts: ['render/core'],
             message: 'Rendering core loaded',
             onComplete: null

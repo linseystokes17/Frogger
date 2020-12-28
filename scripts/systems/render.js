@@ -8,27 +8,16 @@
 Frogger.systems.render = (function (graphics) {
     'use strict';
 
-    // --------------------------------------------------------------
-    //
-    // Find all the entities with both appearance and position components
-    // and render them as segmented.
-    //
-    // --------------------------------------------------------------
-    function renderEntities(entities, gridSize) {
+    function renderEntities(entities) {
         for (let id in entities) {
             let entity = entities[id];
-            Frogger.render.image(graphics, entity.components, entity.components.position, gridSize);
+            Frogger.graphics.Image.render(entity.components);
         }
     } 
 
-    // --------------------------------------------------------------
-    //
-    // Public interface used to get the whole game rendered.
-    //
-    // --------------------------------------------------------------
     function update(elapsedTime, entities, gridSize) {
         Frogger.render.background(graphics, gridSize);
-        renderEntities(entities, gridSize);
+        renderEntities(entities);
     }
 
     let api = {
