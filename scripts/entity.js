@@ -23,13 +23,15 @@ Frogger.Entity = (function() {
             id: nextId++,
             addComponent: addComponent,
             removeComponent: removeComponent,
-            get components() { return components; }
+            get components() { return components; },
+            set components(value){components = value;}
         };
     }
 
     let api = {
         get nextId() { return nextId; },
-        createEntity: createEntity
+        set nextId(value) {nextId = value;},
+        createEntity: createEntity,
     };
 
     return api;

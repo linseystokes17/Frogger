@@ -8,9 +8,21 @@ Frogger.screens['settings'] = (function(game, input) {
             'click',
             function() { game.showScreen('main-menu'); });
         
-        document.getElementById('id-settings-change').addEventListener(
+        document.getElementById('id-settings-forward').addEventListener(
             'click',
-            function() { console.log('change setting'); });
+            function() { console.log('change forward setting'); });
+        
+        document.getElementById('id-settings-backward').addEventListener(
+            'click',
+            function() { console.log('change backward setting'); });
+
+        document.getElementById('id-settings-right').addEventListener(
+            'click',
+            function() { console.log('change right setting'); });
+
+        document.getElementById('id-settings-left').addEventListener(
+            'click',
+            function() { console.log('change left setting'); });
     }
     
     function run() {

@@ -9,6 +9,7 @@ Frogger.systems.keyboardInput = (function (components) {
     'use strict';
     let keysDown = {};
     let pressed = false;
+    let cancelNextRequest = false;
 
     function keyPress(e) {
         keysDown[e.key] = e.timeStamp;
@@ -26,17 +27,24 @@ Frogger.systems.keyboardInput = (function (components) {
     //
     // --------------------------------------------------------------
     function update(elapsedTime, entities) {
-
         for (let id in entities) {
             let entity = entities[id];
             if (entity.components[Frogger.enums.Input.Keyboard]) {
                 let input = entity.components[Frogger.enums.Input.Keyboard];
                 for (let key in input.keys) {
                     if (keysDown[key] && pressed == true) {
+
                         // Protect against turning back onto itself
+                        entity.components.keyboard.keyPressed = pressed;
                         entity.components.movable.facing = input.keys[key];
-                        entity.components.keyboard.keyPressed = true;
+                        // TODO Movement: I think that the frog 
+                        // would do better doing all of it's updates here, 
+                        // not in other locations
+                        if(key == 'Escape'){
+                            cancelNextRequest = true;
+                        }
                     }
+                    entity.components.keyboard.keyPressed = pressed;
                 }
             }
         }
@@ -46,7 +54,9 @@ Frogger.systems.keyboardInput = (function (components) {
     window.addEventListener('keyup', keyRelease);
 
     let api = {
-        update: update
+        update: update,
+        get cancelNextRequest(){return cancelNextRequest;},
+        set cancelNextRequest(value){cancelNextRequest = value;}
     };
 
     return api;

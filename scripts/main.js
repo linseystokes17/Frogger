@@ -8,21 +8,22 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
             fill : 'rgba(255, 255, 255, 1)',
             position : { x : 1.025, y : 0.00 }
         });
-    // LL keyboard / processInput
 
+    
     //------------------------------------------------------------------
     //
     // Update the simulation.
     //
     //------------------------------------------------------------------
     function update(elapsedTime, totalTime) {
-        model.update(elapsedTime, totalTime);
-        if (model.cancelNextRequest == true){
-            //model.reset();
-                        
-            //
+        if(Frogger.systems.keyboardInput.cancelNextRequest == false){
+            model.update(elapsedTime, totalTime);
+        }
+        else if (Frogger.systems.keyboardInput.cancelNextRequest == true){      
             // Then, return to the main menu
             game.showScreen('main-menu');
+            model.reset();
+
         }
     }
 
@@ -73,8 +74,12 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         render(elapsedTime);
         update(elapsedTime, time);
 
-        if (!model.cancelNextRequest) {
+        if (!Frogger.systems.keyboardInput.cancelNextRequest) {
             requestAnimationFrame(gameLoop);
+        }
+        else{
+            game.showScreen('main-menu');
+            model.reset();
         }
     }
 
@@ -93,26 +98,23 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         textFPS.height = graphics.core.measureTextHeight(textFPS);
         textFPS.width = graphics.core.measureTextWidth(textFPS);
 
-        model.initialize();
-        model.cancelNextRequest = false;
-
-        // LL register keyboard
+        //model.initialize();
 
         //
         // Get the gameloop started
-        requestAnimationFrame(gameLoop);
+        //requestAnimationFrame(gameLoop);
     }
 
     function run() {
-        //model.initialize();
+        model.initialize();
         lastTimeStamp = performance.now();
-        model.cancelNextRequest = false;
+        Frogger.systems.keyboardInput.cancelNextRequest = false;
         requestAnimationFrame(gameLoop);
     }
 
     return {
         initialize: initialize,
-        run: run
+        run: run,
     };
 
 }(Frogger.graphics, Frogger.components, Frogger.model, Frogger.game));

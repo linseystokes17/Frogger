@@ -8,95 +8,20 @@ Math.lerp = (a, b, f) => { return a + f * (b - a); };
 // all of the segments it contains.
 //
 // --------------------------------------------------------------
-Frogger.render.image = function (graphics, components, position, gridSize) {
+Frogger.graphics.Image = (function (graphics) {
     'use strict';
+    let that = {};
 
-    let appearance = components.appearance;
-    let spritesheetIndex = components.appearance.index;
-    let numSprites = components.appearance.numSprites;
-    let spriteWidth = Math.round(components.appearance.image.width / numSprites);
-    let spriteHeight = 40;
-    let diff = 0;
-    let newWidth = 0;
-    let type = components.appearance.type;
-    let spriteGridWidth = Math.round(spriteWidth / 40, 2);
-    let newGridWidth = 0;
-
-    if (type == 'frog'){
-        let direction = components.movable.facing;
-        if (direction == 'up'){
-            spritesheetIndex = 0;
-        }
-        if (direction == 'down'){
-            spritesheetIndex = 4;
-        }
-        if (direction == 'left'){
-            spritesheetIndex = 6;
-        }
-        if (direction == 'right'){
-            spritesheetIndex = 2;
-        }
-    }
-
-    // image rendering
-    // context.drawImage(
-    //     image,
-    //     sx, sy,
-    //     sWidth, sHeight,
-    //     dx * world.size + world.left, dy * world.size + world.top,
-    //     dWidth * world.size, dHeight * world.size);
-
-    if (position.x + (spriteGridWidth) > gridSize){
-        diff = (gridSize) - ((position.x) + spriteGridWidth);
-        newGridWidth = spriteGridWidth+diff;
-        newWidth = newGridWidth * 40;
-
-        // if (type == 'log'){
-        //     console.log('more newWidth: ', newWidth);
-        //     console.log('more spriteWidth: ', spriteWidth);
-        //     console.log('more diff: ', diff);
-        // }
-
+    that.render = function(sprite) {
         graphics.core.drawImage(
-            appearance.image,
-            spritesheetIndex, 0,
-            newWidth, spriteHeight,// sWidth, sHeight
-            position.x / gridSize, // dx
-            position.y / gridSize, // dy
-            (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
-            //1.0 / gridSize, 1.0 / gridSize,  
-        );
-    } 
-    if (position.x < 0){
-        diff = position.x; // amount of overhang
-        newGridWidth = (spriteGridWidth)-diff; // width is the old width + (neg) overhang
-        newWidth = spriteWidth - diff * 40;
+            sprite.appearance.spriteSheet,
+            sprite.appearance.pixelWidth * sprite.appearance.sprite, 0,    // Which sprite to pick out
+            sprite.appearance.pixelWidth, sprite.appearance.pixelHeight,    // The size of the sprite in the sprite sheet
+            sprite.position.x/15,        // Where to draw the sprite
+            sprite.position.y/15,
+            sprite.appearance.width, sprite.appearance.height);
+    };
 
-        if (type == 'car'){
-            console.log('less newGridWidth: ', newGridWidth);
-            console.log('less newWidth: ', newWidth);
-            console.log('less diff: ', diff);
-        }
-
-        graphics.core.drawImage(
-            appearance.image,
-            spritesheetIndex-(diff*40), 0,
-            newWidth, spriteHeight,// sWidth, sHeight
-            (position.x-(diff)) / gridSize, // dx
-            position.y / gridSize, // dy
-            (1 / (gridSize)) * (newGridWidth), 1 / (gridSize)
-            //1.0 / gridSize, 1.0 / gridSize,  
-        );
-    }
-    else{
-        graphics.core.drawImage(
-            appearance.image,
-            spritesheetIndex*spriteWidth, 0,
-            spriteWidth, spriteHeight,// sWidth, sHeight
-            position.x / gridSize, // dx
-            position.y / gridSize, // dy
-            (1 / (gridSize)) * (spriteWidth/40), 1 / (gridSize)
-            //1.0 / gridSize, 1.0 / gridSize,  
-        );
-    }
-};
+    return that;
+        
+}(Frogger.graphics));
