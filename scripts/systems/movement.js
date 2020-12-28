@@ -6,6 +6,9 @@
 // --------------------------------------------------------------
 Frogger.systems.movement = (function () {
     'use strict';
+    let gator = 0;
+    let turtle = 0;
+    let turtleInc = 200;
 
     // --------------------------------------------------------------
     //
@@ -25,8 +28,6 @@ Frogger.systems.movement = (function () {
 
         entity.components.position.x += xIncrement;
         entity.components.position.y += yIncrement;
-        
-        entity.components.position.y = Math.round(entity.components.position.y);   
     }
 
     // --------------------------------------------------------------
@@ -39,6 +40,7 @@ Frogger.systems.movement = (function () {
         entity.components.movable.elapsedInterval += elapsedTime;
         if (entity.components.collision.alive == true && entity.components.keyboard.keyPressed == true){
             if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){                
+                entity.components.appearance.sprite = entity.components.appearance.sprite + 1;
                 switch (entity.components.movable.facing) {
                     case Frogger.enums.Direction.Up:
                         move(entity, 0, -1, gridSize);
@@ -55,14 +57,55 @@ Frogger.systems.movement = (function () {
                 };
                 entity.components.movable.elapsedInterval = 0;
             }
+
             if (entity.components.keyboard.keyPressed == false){
                 entity.components.movable.elapsedInterval = 0;
-                entity.components.keyboard.keyPressed = false;
             }
         }
         if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval && entity.components.collision.alive == false){
             entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
             entity.components.movable.elapsedInterval = 0;
+            if(entity.components.alligator){
+                if(gator < 20){
+                    entity.components.appearance.sprite = 1;
+                }
+                else if(gator < 100){
+                    entity.components.appearance.sprite = 0;
+                }
+                else{
+                    gator = 0;
+                }
+                gator++;
+            }
+
+            if (entity.components.turtle){
+                if(turtle < turtleInc){
+                    entity.components.appearance.sprite = 0;
+                }
+                else if(turtle>=turtleInc && turtle<turtleInc*2){
+                    entity.components.appearance.sprite = 1;
+                }
+                else if(turtle>=turtleInc*2 && turtle<turtleInc*3){
+                    entity.components.appearance.sprite = 2;
+                }
+                else if(turtle>=turtleInc*3 && turtle<turtleInc*5){
+                    entity.components.appearance.sprite = 3;
+                }
+                else if(turtle>=turtleInc*5 && turtle<turtleInc*6){
+                    entity.components.appearance.sprite = 2;
+                }
+                else if(turtle>=turtleInc*6 && turtle<turtleInc*7){
+                    entity.components.appearance.sprite = 1;
+                }
+                else if(turtle>=turtleInc*7 && turtle<turtleInc*10){
+                    entity.components.appearance.sprite = 0;
+                }
+                else{
+                    turtle = 0;
+                }
+                turtle++;
+            }
+
             switch (entity.components.movable.facing) {
                 case Frogger.enums.Direction.Left:
                     move(entity, -1/32, 0, gridSize);

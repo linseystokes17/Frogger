@@ -91,6 +91,7 @@ Frogger.model = (function(components, graphics, assets) {
         alligator.addComponent(components.Position({ x: x, y: y}));
         alligator.addComponent(components.Collision({alive: false}));
         alligator.addComponent(components.Movable({ facing: Frogger.enums.Direction.Right, moveInterval: interval }));
+        alligator.addComponent(components.Alligator());
 
         return alligator;
     }
@@ -114,6 +115,7 @@ Frogger.model = (function(components, graphics, assets) {
         turtle.addComponent(components.Position({ x: x, y: y}));
         turtle.addComponent(components.Collision({alive: false}));
         turtle.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
+        turtle.addComponent(components.Turtle());
 
         return turtle;
     }
