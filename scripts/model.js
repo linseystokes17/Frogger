@@ -42,9 +42,9 @@ Frogger.model = (function(components, graphics, assets) {
             spriteSize: size,            // Maintain the size on the sprite
             sprite: 2,
         }));
-
         home.addComponent(components.Position({ x: x, y: 1}));
         home.addComponent(components.Collision({alive: false}));
+        home.addComponent(components.Home());
 
         return home;
     }
@@ -68,6 +68,7 @@ Frogger.model = (function(components, graphics, assets) {
         log.addComponent(components.Position({ x: x, y: y, width: asset.width}));
         log.addComponent(components.Collision({alive: false}));
         log.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
+        log.addComponent(components.Log());
 
         return log;
     }
@@ -98,6 +99,14 @@ Frogger.model = (function(components, graphics, assets) {
 
     function createTurtleEntity(x, y, interval, direction, asset, width) {
         let turtle = Frogger.Entity.createEntity();
+        let chosen = Math.round(Math.random());
+        let chose = false;
+        if (chosen == 0){
+            chose = false;
+        }
+        else if(chosen == 1){
+            chose = true;
+        }
 
         let size = {
             width: width/15,
@@ -115,7 +124,7 @@ Frogger.model = (function(components, graphics, assets) {
         turtle.addComponent(components.Position({ x: x, y: y}));
         turtle.addComponent(components.Collision({alive: false}));
         turtle.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
-        turtle.addComponent(components.Turtle());
+        turtle.addComponent(components.Turtle({chosen: chose}));
 
         return turtle;
     }
@@ -137,6 +146,7 @@ Frogger.model = (function(components, graphics, assets) {
         car.addComponent(components.Position({ x: x, y: y}));
         car.addComponent(components.Collision({alive: false}));
         car.addComponent(components.Movable({ facing: direction, moveInterval: interval }));
+        car.addComponent(components.Car());
 
         return car;
     }
@@ -158,6 +168,7 @@ Frogger.model = (function(components, graphics, assets) {
         truck.addComponent(components.Position({ x: x, y: y}));
         truck.addComponent(components.Collision({alive: false}));
         truck.addComponent(components.Movable({ facing: Frogger.enums.Direction.Right, moveInterval: interval }));
+        truck.addComponent(components.Car());
 
         return truck;
     }
@@ -220,6 +231,9 @@ Frogger.model = (function(components, graphics, assets) {
     function reportEvent(info) {
         switch (info.type) {
             case Frogger.enums.Event.ReachHome:
+                delete entities[info.entity.id];
+                let frog = initializeFrog();
+                entities[frog.id] = frog;
                 break;
             case Frogger.enums.Event.HitSomething:
                 break;
@@ -302,7 +316,6 @@ Frogger.model = (function(components, graphics, assets) {
         frog = null;
         car = null;
         truck = null;
-
         home = null;
         logS = null;
         logM = null;

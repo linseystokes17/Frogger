@@ -78,7 +78,7 @@ Frogger.systems.movement = (function () {
                 gator++;
             }
 
-            if (entity.components.turtle){
+            if (entity.components.turtle && entity.components.turtle.chosen){
                 if(turtle < turtleInc){
                     entity.components.appearance.sprite = 0;
                 }

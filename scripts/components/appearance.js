@@ -9,7 +9,7 @@ Frogger.components.Appearance = function(spec) {
         get width() { return spec.spriteSize.width; },
         get height() { return spec.spriteSize.height; },
         get sprite() { return spec.sprite; },
-        set sprite(value){spec.sprite = value;}
+        set sprite(value){spec.sprite = value;},
     };
 
     return api;

@@ -18,7 +18,7 @@ Frogger.systems.collision = (function () {
         let dead = [];
         for (let id in entities) {
             let entity = entities[id];
-            if (!entity.components.alive && entity.components.position) {
+            if (!entity.components.collision.alive && entity.components.movable && entity.components.position) {
                 dead.push(entity);
             }
         }
@@ -37,21 +37,24 @@ Frogger.systems.collision = (function () {
     function collides(a, b) {
 
         // If only the first segment needs to be tested, only test that segment
-        let lengthA = a.components.collision.firstOnly ? 1 : a.components.position.length;
-        let lengthB = b.components.collision.firstOnly ? 1 : b.components.position.length;
+        let posA = a.components.position;
+        let posB = b.components.position;
 
-        // Double for loop looks bad, but it isn't because only 1 of these will ever have a length
-        // greater than 1, and most of the time both are of length 1.
-        for (let segmentA = 0; segmentA < lengthA; segmentA++) {
-            for (let segmentB = 0; segmentB < lengthB; segmentB++) {
-                let positionB = b.components.position;
-                if (positionA.x == positionB.x && positionA.y == positionB.y) {
-                    return true;
-                }
-            }
+        let widthA = a.components.appearance.width;
+        let widthB = b.components.appearance.width;
+
+        let heightB = b.components.appearance.height;
+        let heightA = a.components.appearance.height;
+
+
+        if(posA.x+widthA <= posB.x || posA.y >= posB.y+heightB || posA.x >= posB.x+widthB || posA.y+heightA <= posB.y){
+            return false;
         }
-
-        return false;
+        else{
+            return true;
+        }
+        // console.log('posA: ', posA);
+        // console.log('posB: ', posB);
     }
 
     // --------------------------------------------------------------
@@ -90,24 +93,25 @@ Frogger.systems.collision = (function () {
 
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.collision && entity.components.position) {
+            if (entity.components.collision && entity.components.position && entity.components.frog) {
                 for (let m = 0; m < dead.length; m++) {
                     let entityDead = dead[m];
                     if (collides(entity, entityDead)) {
-                        //
                         // If home, that's okay
-                        if (entity.components.home) {
-                            entityDead.components.movable.facing = Frogger.enums.Direction.Stopped;
+                        if (entityDead.components.home) {
+                            entity.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.ReachHome,
                                 entity: entity
                             });
-                        } else {    // If anything else, not okay
-                            entityDead.components.movable.facing = Frogger.enums.Direction.Stopped;
+                            console.log('Hit something rideable');
+                        } else if(entityDead.components.car){    // If anything else, not okay
+                            entity.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.HitSomething,
                                 entity: entity
                             });
+                            console.log('Something killed me!');
                         }
                     }
                 }
