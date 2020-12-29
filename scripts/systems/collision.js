@@ -18,7 +18,7 @@ Frogger.systems.collision = (function () {
         let dead = [];
         for (let id in entities) {
             let entity = entities[id];
-            if (!entity.components.collision.alive && entity.components.movable && entity.components.position) {
+            if (!entity.components.collision.alive && entity.components.position) {
                 dead.push(entity);
             }
         }
@@ -35,26 +35,30 @@ Frogger.systems.collision = (function () {
     //
     // --------------------------------------------------------------
     function collides(a, b) {
-
-        // If only the first segment needs to be tested, only test that segment
         let posA = a.components.position;
         let posB = b.components.position;
 
-        let widthA = a.components.appearance.width;
-        let widthB = b.components.appearance.width;
+        let widthA = a.components.appearance.width*15;
+        let widthB = b.components.appearance.width*15;
 
         let heightB = b.components.appearance.height;
         let heightA = a.components.appearance.height;
 
+        let posABotRight = {
+            x : posA.x + widthA,
+            y : posA.y + heightA
+        };
+        let posBBotRight = {
+            x : posB.x + widthB,
+            y : posB.y + heightB
+        };
 
-        if(posA.x+widthA <= posB.x || posA.y >= posB.y+heightB || posA.x >= posB.x+widthB || posA.y+heightA <= posB.y){
-            return false;
-        }
-        else{
+        // if A top left.x < B bottom right.x
+        // if A bottom right.x > B top left.x
+        if(posA.x <= posBBotRight.x && posABotRight.x >= posB.x && posA.y <= posBBotRight.y && posABotRight.y >= posB.y){
             return true;
         }
-        // console.log('posA: ', posA);
-        // console.log('posB: ', posB);
+        return false;
     }
 
     // --------------------------------------------------------------
@@ -64,15 +68,11 @@ Frogger.systems.collision = (function () {
     //
     // --------------------------------------------------------------
     function collidesWithAny(proposed, entities) {
-        let aPosition = proposed.components.position;
 
         for (let id in entities) {
             let entity = entities[id];
             if (entity.components.collision && entity.components.position) {
-                let ePosition = entity.components.position;
-                if (aPosition.x === ePosition.x && aPosition.y === ePosition.y) {
-                    return true;
-                }
+                collides(proposed, entity);
             }
         }
 
@@ -99,17 +99,24 @@ Frogger.systems.collision = (function () {
                     if (collides(entity, entityDead)) {
                         // If home, that's okay
                         if (entityDead.components.home) {
-                            entity.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.ReachHome,
-                                entity: entity
+                                entity: entity,
+                                hitEntity: entityDead
+                            });
+                            console.log('You\'re home!');
+                        } else if (entityDead.components.log || entityDead.components.turtle ||  entityDead.components.alligator) {
+                            reportEvent({
+                                type: Frogger.enums.Event.Ride,
+                                entity: entity,
+                                hitEntity: entityDead
                             });
                             console.log('Hit something rideable');
                         } else if(entityDead.components.car){    // If anything else, not okay
-                            entity.components.movable.facing = Frogger.enums.Direction.Stopped;
                             reportEvent({
                                 type: Frogger.enums.Event.HitSomething,
-                                entity: entity
+                                entity: entity,
+                                hitEntity: entityDead
                             });
                             console.log('Something killed me!');
                         }

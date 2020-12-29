@@ -61,6 +61,28 @@ ul.menu li button {
     box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
 }
 
+ul.settings-menu {
+    padding-left: 2em;
+    margin: 0;
+    list-style: none;
+}
+
+ul.settings-menu li {
+    margin: 1em 0;
+}
+
+ul.settings-menu li button {
+    font-family: Arial, sans-serif;
+    font-size: 0.8em;
+    color: #CECEF6;
+    width: 7em;
+    height: 1.5em;
+    background: #095516;
+    border: 0.1em solid rgb(48, 153, 6);
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+}
+
 ul.menu li button:hover {
     background: #52b839;
 }

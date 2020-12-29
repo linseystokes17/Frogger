@@ -23,6 +23,8 @@ Frogger.model = (function(components, graphics, assets) {
     let alligator = null;
     let turtle2 = null;
     let turtle3 = null;
+    let initPos = null;
+    let numLifes = 5;
 
     // --------------------------------------------------------------
     // Defining each of the entity as entities that have position,
@@ -40,7 +42,7 @@ Frogger.model = (function(components, graphics, assets) {
             spriteTime: [25, 25, 25, 25],
             animationScale: 1,
             spriteSize: size,            // Maintain the size on the sprite
-            sprite: 2,
+            sprite: 3,
         }));
         home.addComponent(components.Position({ x: x, y: 1}));
         home.addComponent(components.Collision({alive: false}));
@@ -183,6 +185,11 @@ Frogger.model = (function(components, graphics, assets) {
         let x = (GRID_SIZE)/2;
         let y = GRID_SIZE-2;
 
+        initPos = {
+            x: x,
+            y: y,
+        };
+
         function createFrogEntity(x, y) {
             frog = Frogger.Entity.createEntity();
             let size = {
@@ -231,11 +238,16 @@ Frogger.model = (function(components, graphics, assets) {
     function reportEvent(info) {
         switch (info.type) {
             case Frogger.enums.Event.ReachHome:
-                delete entities[info.entity.id];
-                let frog = initializeFrog();
-                entities[frog.id] = frog;
+                info.hitEntity.components.appearance.sprite = 2;
                 break;
             case Frogger.enums.Event.HitSomething:
+                info.entity.components.position.x = initPos.x;
+                info.entity.components.position.y = initPos.y;
+                // animate death
+                numLifes--;
+                break;
+            case Frogger.enums.Event.Ride:
+                info.entity.components.direction = info.hitEntity.components.facing;
                 break;
         }
     }
@@ -334,10 +346,15 @@ Frogger.model = (function(components, graphics, assets) {
     //
     // ------------------------------------------------------------------
     that.update = function(elapsedTime, totalTime) {
-        Frogger.systems.keyboardInput.update(elapsedTime, entities);
-        Frogger.systems.movement.update(elapsedTime,totalTime, entities, GRID_SIZE);
-        Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
-        Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);
+        if(numLifes > 0){
+            Frogger.systems.keyboardInput.update(elapsedTime, entities);
+            Frogger.systems.movement.update(elapsedTime,totalTime, entities, GRID_SIZE);
+            Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
+            Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);
+        }else{
+
+            Frogger.systems.keyboardInput.cancelNextRequest = true;
+        }
     };
 
     return that;

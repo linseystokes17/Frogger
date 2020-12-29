@@ -58,11 +58,29 @@ Frogger.systems.movement = (function () {
                 entity.components.movable.elapsedInterval = 0;
             }
 
+            if(entity.components.direction != entity.components.facing){
+                console.log(entity.components);
+                switch (entity.components.movable.direction) {
+                    case Frogger.enums.Direction.Up:
+                        move(entity, 0, -1/32, gridSize);
+                        break;
+                    case Frogger.enums.Direction.Down:
+                        move(entity, 0, 1/32, gridSize);
+                        break;
+                    case Frogger.enums.Direction.Left:
+                        move(entity, -1/32, 0, gridSize);
+                        break;
+                    case Frogger.enums.Direction.Right:
+                        move(entity, 1/32, 0, gridSize);
+                        break;
+                };
+            }
+
             if (entity.components.keyboard.keyPressed == false){
                 entity.components.movable.elapsedInterval = 0;
             }
         }
-        if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval && entity.components.collision.alive == false){
+        else if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval && entity.components.collision.alive == false){
             entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
             entity.components.movable.elapsedInterval = 0;
             if(entity.components.alligator){
@@ -114,7 +132,7 @@ Frogger.systems.movement = (function () {
                     move(entity, 1/32, 0, gridSize);
                     break;
             }
-        } 
+        }
     }
 
     // --------------------------------------------------------------

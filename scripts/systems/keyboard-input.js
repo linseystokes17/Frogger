@@ -36,7 +36,10 @@ Frogger.systems.keyboardInput = (function (components) {
 
                         // Protect against turning back onto itself
                         entity.components.keyboard.keyPressed = pressed;
+
                         entity.components.movable.facing = input.keys[key];
+                        //entity.components.movable.direction = input.keys[key];
+
                         // TODO Movement: I think that the frog 
                         // would do better doing all of it's updates here, 
                         // not in other locations
