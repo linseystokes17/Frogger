@@ -17,7 +17,10 @@ Frogger.components.Movable = function(spec) {
         get moveInterval() { return spec.moveInterval; },
         set moveInterval(value) { spec.moveInterval = value;},
         get elapsedInterval() { return elapsedInterval; },
-        set elapsedInterval(value) { elapsedInterval = value; }
+        set elapsedInterval(value) { elapsedInterval = value; },
+        get animationInterval() { return spec.animationInterval; },
+        set animationInterval(value) { spec.animationInterval = value; },
+        
     };
 
     return api;

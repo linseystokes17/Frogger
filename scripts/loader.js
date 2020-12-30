@@ -45,15 +45,15 @@ Frogger.loader = (function() {
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/image', 'render/frog', 'render/river'],
+            scripts: ['render/background', 'render/border', 'render/image', 'render/frog', 'render/river'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render', 'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
-            scripts: ['render/text'],
+            scripts: ['render/text', 'render/status'],
             message: 'Text rendering component loaded',
             onComplete: null
         }, {

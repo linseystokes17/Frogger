@@ -9,7 +9,7 @@ Frogger.screens['high-scores'] = (function(game) {
     }
 
     function displayScores() {
-		var highScores = Frogger.HighScores.get(),
+		var highScores = Frogger.systems.Highscores.get(),
 			highScoresHTML = document.getElementById('high-scores-list');
 
 		//

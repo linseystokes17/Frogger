@@ -38,11 +38,11 @@ Frogger.systems.collision = (function () {
         let posA = a.components.position;
         let posB = b.components.position;
 
-        let widthA = a.components.appearance.width*11;
-        let widthB = b.components.appearance.width*11;
+        let widthA = a.components.appearance.width*15;
+        let widthB = b.components.appearance.width*15;
 
-        let heightB = b.components.appearance.height*11;
-        let heightA = a.components.appearance.height*11;
+        let heightB = b.components.appearance.height*15;
+        let heightA = a.components.appearance.height*15;
 
         let posABotRight = {
             x : posA.x + widthA,
@@ -88,7 +88,7 @@ Frogger.systems.collision = (function () {
     // Step 2: Test the dead components for collision with other (but not self) collision components
     //
     // --------------------------------------------------------------
-    function update(elapsedTime, entities, reportEvent) {
+    function update(elapsedTime, totalTime, entities, reportEvent) {
         let dead = findDead(entities);
 
         for (let id in entities) {
@@ -102,10 +102,13 @@ Frogger.systems.collision = (function () {
                             reportEvent({
                                 type: Frogger.enums.Event.ReachHome,
                                 entity: entity,
-                                hitEntity: entityDead
+                                hitEntity: entityDead,
+                                totalTime: totalTime,
                             });
                             entity.components.collision.riding = false;
+                            entity.components.collision.objectRiding = null;
                             entity.components.collision.killed = false;
+                            entity.components.frog.totalTime = totalTime;
                             console.log('You\'re home!');
                         } 
 

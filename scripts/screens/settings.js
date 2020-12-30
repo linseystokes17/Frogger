@@ -1,9 +1,7 @@
-Frogger.screens['settings'] = (function(game, input) {
+Frogger.screens['settings'] = (function(game, keyboard) {
     'use strict';
     
     function initialize() {
-
-
         document.getElementById('id-settings-back').addEventListener(
             'click',
             function() { 
@@ -49,4 +47,4 @@ Frogger.screens['settings'] = (function(game, input) {
         initialize : initialize,
         run : run
     };
-}(Frogger.game, Frogger.input));
+}(Frogger.game, Frogger.components.Keyboard));

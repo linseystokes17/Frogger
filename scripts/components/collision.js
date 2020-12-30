@@ -3,6 +3,7 @@ Frogger.components.Collision = function(spec) {
 
     let numLives = 5;
     let killed = false;
+    let objectRiding = null;
     
     let api = {
         get name() { return 'collision'; },
@@ -16,6 +17,8 @@ Frogger.components.Collision = function(spec) {
         set riding(value){spec.riding = value; },
         get numLives(){ return numLives; },
         set numLives(value){numLives = value; },
+        get objectRiding(){return objectRiding;},
+        set objectRiding(value){objectRiding = value;}
     };
 
     return api;
