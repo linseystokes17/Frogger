@@ -32,19 +32,15 @@ Frogger.systems.keyboardInput = (function (components) {
             if (entity.components[Frogger.enums.Input.Keyboard]) {
                 let input = entity.components[Frogger.enums.Input.Keyboard];
                 for (let key in input.keys) {
+                    entity.components.keyboard.keyPressed = pressed;
                     if (keysDown[key] && pressed == true) {
-
                         // Protect against turning back onto itself
-                        entity.components.keyboard.keyPressed = pressed;
                         entity.components.movable.facing = input.keys[key];
-                        // TODO Movement: I think that the frog 
-                        // would do better doing all of it's updates here, 
-                        // not in other locations
+
                         if(key == 'Escape'){
                             cancelNextRequest = true;
                         }
                     }
-                    entity.components.keyboard.keyPressed = pressed;
                 }
             }
         }

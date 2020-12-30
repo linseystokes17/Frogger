@@ -3,6 +3,7 @@ Frogger.components.Appearance = function(spec) {
 
     let api = {
         get name() { return 'appearance'; },
+        get spriteCount() {return spec.spriteCount},
         get spriteSheet() { return spec.spriteSheet; },
         get pixelWidth() { return spec.spriteSheet.width / spec.spriteCount; },
         get pixelHeight() { return spec.spriteSheet.height; },

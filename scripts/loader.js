@@ -45,7 +45,7 @@ Frogger.loader = (function() {
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/image'],
+            scripts: ['render/background', 'render/image', 'render/frog', 'render/river'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
@@ -76,37 +76,55 @@ Frogger.loader = (function() {
         let assetOrder = [
             {
                 key: 'background',
-                source: 'assets/background.png'
+                source: 'assets/images/background.png'
             }, {
                 key: 'frog',
-                source: 'assets/frog_sprites.png'
+                source: 'assets/images/frog_sprites.png'
             }, {
                 key: 'car',
-                source: 'assets/car_sprites.png'
+                source: 'assets/images/car_sprites.png'
             }, {
                 key: 'truck',
-                source: 'assets/truck.png'
+                source: 'assets/images/truck.png'
             }, {
                 key: 'tree1',
-                source: 'assets/tree_1.png'
+                source: 'assets/images/tree_1.png'
             }, {
                 key: 'tree2',
-                source: 'assets/tree_2.png'
+                source: 'assets/images/tree_2.png'
             }, {
                 key: 'tree3',
-                source: 'assets/tree_3.png'
+                source: 'assets/images/tree_3.png'
             }, {
                 key: 'alligator',
-                source: 'assets/alligator_sprites.png'
+                source: 'assets/images/alligator_sprites.png'
             }, {
                 key: 'turtle2',
-                source: 'assets/turtle_2_sprites.png'
+                source: 'assets/images/turtle_2_sprites.png'
             }, {
                 key: 'turtle3',
-                source: 'assets/turtle_3_sprites.png'
+                source: 'assets/images/turtle_3_sprites.png'
             }, {
                 key: 'bonus',
-                source: 'assets/bonus_sprites.png'
+                source: 'assets/images/bonus_sprites.png'
+            }, {
+                key: 'hop',
+                source: 'assets/sounds/hop.wav'
+            }, {
+                key: 'plunk',
+                source: 'assets/sounds/plunk.wav'
+            }, {
+                key: 'squash',
+                source: 'assets/sounds/squash.wav'
+            }, {
+                key: 'music',
+                source: 'assets/sounds/frogger-music.mp3'
+            }, {
+                key: 'click',
+                source: 'assets/sounds/click.mp3'
+            }, {
+                key: 'extra',
+                source: 'assets/sounds/extra.wav'
             }
         ];
 
@@ -195,7 +213,7 @@ Frogger.loader = (function() {
                 if (xhr.status === 200) {
                     if (fileExtension === 'png' || fileExtension === 'jpg') {
                         asset = new Image();
-                    } else if (fileExtension === 'mp3') {
+                    } else if (fileExtension === 'mp3' || fileExtension === 'wav') {
                         asset = new Audio();
                     } else {
                         if (onError) { onError('Unknown file extension: ' + fileExtension); }
