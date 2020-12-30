@@ -16,8 +16,9 @@ Frogger.systems.movement = (function () {
     // with adding segments as necessary during the move.
     //
     // --------------------------------------------------------------
-    function move(entity, xIncrement, yIncrement, gridSize) {
+    function move(entity, xIncrement, yIncrement) {
         let numGrids = -2 // 3 'block' buffer on each side
+        let gridSize = 15;
        
         if (entity.components.position.x+xIncrement >= gridSize-numGrids){
             entity.components.position.x = numGrids;
@@ -36,52 +37,64 @@ Frogger.systems.movement = (function () {
     // in the facing direction.
     //
     // --------------------------------------------------------------
-    function moveEntity(entity, elapsedTime, totalTime, gridSize) { 
+    function moveFrog(entity, elapsedTime, gridSize){
+        let splitSize = 8;
         entity.components.movable.elapsedInterval += elapsedTime;
-        if (entity.components.collision.alive == true && entity.components.keyboard.keyPressed == true){
-            if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){                
-                entity.components.appearance.sprite = entity.components.appearance.sprite + 1;
-                switch (entity.components.movable.facing) {
-                    case Frogger.enums.Direction.Up:
-                        move(entity, 0, -1, gridSize);
-                        break;
-                    case Frogger.enums.Direction.Down:
-                        move(entity, 0, 1, gridSize);
-                        break;
-                    case Frogger.enums.Direction.Left:
-                        move(entity, -1, 0, gridSize);
-                        break;
-                    case Frogger.enums.Direction.Right:
-                        move(entity, 1, 0, gridSize);
-                        break;
-                };
-                entity.components.movable.elapsedInterval = 0;
-            }
 
-            if(entity.components.direction != entity.components.facing){
-                console.log(entity.components);
+        if (entity.components.keyboard.keyPressed && entity.components.movable.canMove && entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
+            Frogger.assets.hop.play();
+            entity.components.appearance.sprite = entity.components.appearance.sprite + 1;
+            switch (entity.components.movable.facing) {
+                case Frogger.enums.Direction.Up:
+                    move(entity, 0, -1);
+                    break;
+                case Frogger.enums.Direction.Down:
+                    move(entity, 0, 1);
+                    break;
+                case Frogger.enums.Direction.Left:
+                    move(entity, -1, 0);
+                    break;
+                case Frogger.enums.Direction.Right:
+                    move(entity, 1, 0);
+                    break;
+            };
+            entity.components.movable.elapsedInterval = 0;
+        }
+
+        if(entity.components.collision.riding){
+            entity.components.movable.directionElapsedInterval += elapsedTime;
+            if(entity.components.movable.directionElapsedInterval >= entity.components.movable.directionInterval){
+                splitSize = 32;
                 switch (entity.components.movable.direction) {
                     case Frogger.enums.Direction.Up:
-                        move(entity, 0, -1/32, gridSize);
+                        move(entity, 0, -1/splitSize);
                         break;
                     case Frogger.enums.Direction.Down:
-                        move(entity, 0, 1/32, gridSize);
+                        move(entity, 0, 1/splitSize);
                         break;
                     case Frogger.enums.Direction.Left:
-                        move(entity, -1/32, 0, gridSize);
+                        move(entity, -1/splitSize, 0);
                         break;
                     case Frogger.enums.Direction.Right:
-                        move(entity, 1/32, 0, gridSize);
+                        move(entity, 1/splitSize, 0,);
                         break;
                 };
-            }
-
-            if (entity.components.keyboard.keyPressed == false){
-                entity.components.movable.elapsedInterval = 0;
+            } 
+            if (entity.components.keyboard.keyPressed){
+                entity.components.collision.riding = false;
+                entity.components.movable.direction = Frogger.enums.Direction.Stopped;
+                entity.components.movable.directionInterval = 0;
+                entity.components.movable.directionElapsedInterval = 0;
             }
         }
-        else if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval && entity.components.collision.alive == false){
-            entity.components.movable.elapsedInterval = entity.components.movable.elapsedInterval + elapsedTime;
+        
+    }
+
+    function moveEntity(entity, elapsedTime, gridSize) { 
+        entity.components.movable.elapsedInterval += elapsedTime;
+        let splitSize = 32;
+        
+        if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
             entity.components.movable.elapsedInterval = 0;
             if(entity.components.alligator){
                 if(gator < 20){
@@ -126,10 +139,10 @@ Frogger.systems.movement = (function () {
 
             switch (entity.components.movable.facing) {
                 case Frogger.enums.Direction.Left:
-                    move(entity, -1/32, 0, gridSize);
+                    move(entity, -1/splitSize, 0);
                     break;
                 case Frogger.enums.Direction.Right:
-                    move(entity, 1/32, 0, gridSize);
+                    move(entity, 1/splitSize, 0);
                     break;
             }
         }
@@ -140,11 +153,14 @@ Frogger.systems.movement = (function () {
     // Grind through all the entities and move the ones that can move.
     //
     // --------------------------------------------------------------
-    function update(elapsedTime, totalTime, entities, gridSize) {
+    function update(elapsedTime, entities, gridSize) {
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.position && entity.components.movable) {
-                moveEntity(entity, elapsedTime, totalTime, gridSize);
+            if (entity.components.frog){
+                moveFrog(entity, elapsedTime, gridSize);
+            }
+            else if (entity.components.position && entity.components.movable) {
+                moveEntity(entity, elapsedTime, gridSize);
             }
         }
     }

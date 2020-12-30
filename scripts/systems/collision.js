@@ -38,11 +38,11 @@ Frogger.systems.collision = (function () {
         let posA = a.components.position;
         let posB = b.components.position;
 
-        let widthA = a.components.appearance.width*15;
-        let widthB = b.components.appearance.width*15;
+        let widthA = a.components.appearance.width*11;
+        let widthB = b.components.appearance.width*11;
 
-        let heightB = b.components.appearance.height;
-        let heightA = a.components.appearance.height;
+        let heightB = b.components.appearance.height*11;
+        let heightA = a.components.appearance.height*11;
 
         let posABotRight = {
             x : posA.x + widthA,
@@ -55,7 +55,7 @@ Frogger.systems.collision = (function () {
 
         // if A top left.x < B bottom right.x
         // if A bottom right.x > B top left.x
-        if(posA.x <= posBBotRight.x && posABotRight.x >= posB.x && posA.y <= posBBotRight.y && posABotRight.y >= posB.y){
+        if(posA.x < posBBotRight.x && posABotRight.x > posB.x && posA.y < posBBotRight.y && posABotRight.y > posB.y){   
             return true;
         }
         return false;
@@ -104,15 +104,12 @@ Frogger.systems.collision = (function () {
                                 entity: entity,
                                 hitEntity: entityDead
                             });
+                            entity.components.collision.riding = false;
+                            entity.components.collision.killed = false;
                             console.log('You\'re home!');
-                        } else if (entityDead.components.log || entityDead.components.turtle ||  entityDead.components.alligator) {
-                            reportEvent({
-                                type: Frogger.enums.Event.Ride,
-                                entity: entity,
-                                hitEntity: entityDead
-                            });
-                            console.log('Hit something rideable');
-                        } else if(entityDead.components.car){    // If anything else, not okay
+                        } 
+
+                        else if(entityDead.components.car){    // If anything else, not okay
                             reportEvent({
                                 type: Frogger.enums.Event.HitSomething,
                                 entity: entity,
@@ -120,7 +117,17 @@ Frogger.systems.collision = (function () {
                             });
                             console.log('Something killed me!');
                         }
-                    }
+                        
+                        else if (entityDead.components.log || entityDead.components.turtle ||  entityDead.components.alligator) {
+                            entity.components.collision.riding = true;
+                            reportEvent({
+                                type: Frogger.enums.Event.Ride,
+                                entity: entity,
+                                hitEntity: entityDead
+                            });
+                            console.log('Hit something rideable');
+                        } 
+                    } 
                 }
             }
         }

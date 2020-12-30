@@ -11,6 +11,7 @@ let mimeTypes = {
     '.png' : 'image/png',
     '.jpg' : 'image/jpeg',
     '.mp3' : 'audio/mpeg3',
+    '.wav' : 'audio/wav',
     '.ttf' : 'application/x-font-ttf',
     '.eot' : 'application/vnd.ms-fontobject'
 };

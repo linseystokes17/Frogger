@@ -72,12 +72,14 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         // This is the rendering to provide the game viewport, it has nothing to do
         // with the actual rendering of the game itself.
         render(elapsedTime);
-        update(elapsedTime, time);
+        update(elapsedTime);
 
         if (!Frogger.systems.keyboardInput.cancelNextRequest) {
+            Frogger.assets.music.play();
             requestAnimationFrame(gameLoop);
         }
         else{
+            Frogger.assets.music.pause();
             game.showScreen('main-menu');
             model.reset();
         }

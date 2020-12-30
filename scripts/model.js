@@ -11,7 +11,8 @@ Frogger.model = (function(components, graphics, assets) {
     const WORLD_SIZE =  graphics.core.getWorldSize();
     const BLOCK_SIZE = WORLD_SIZE / GRID_SIZE;
     const SECOND_INTERVAL = 20; // 1 = 1 second
-    const FROG_MOVE_INTERVAL = 300;
+    const FROG_MOVE_INTERVAL = 150;
+
     let entities = {};  // key is 'id', value is an Entity
     let frog = null;
     let car = null;
@@ -175,13 +176,7 @@ Frogger.model = (function(components, graphics, assets) {
         return truck;
     }
 
-    // --------------------------------------------------------------
-    // Defining the frog as an entity that has position, direction,
-    // collision, visual, and input components.
-    // --------------------------------------------------------------
-    function initializeFrog() {
-        frog = null;
-
+    function createFrogEntity() {
         let x = (GRID_SIZE)/2;
         let y = GRID_SIZE-2;
 
@@ -190,44 +185,42 @@ Frogger.model = (function(components, graphics, assets) {
             y: y,
         };
 
-        function createFrogEntity(x, y) {
-            frog = Frogger.Entity.createEntity();
-            let size = {
-                width: 1/15,
-                height: 1/15
-            };
-            
-            frog.addComponent(components.Appearance({
-                spriteSheet: Frogger.assets.frog,
-                spriteCount: 11,
-                spriteTime: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25],
-                animationScale: 1,
-                spriteSize: size,            // Maintain the size on the sprite
-                sprite: 0,
-            }));
-            frog.addComponent(components.Position({ x: x, y: y}));
-            frog.addComponent(components.Movable({ facing: Frogger.enums.Direction.Stopped, moveInterval: FROG_MOVE_INTERVAL }));
-            frog.addComponent(components.Collision({alive: true}));
-            frog.addComponent(components.Frog());
-
-            let inputSpecification = { keys: {
-                'ArrowLeft': Frogger.enums.Direction.Left,
-                'ArrowRight': Frogger.enums.Direction.Right,
-                'ArrowUp': Frogger.enums.Direction.Up,
-                'ArrowDown': Frogger.enums.Direction.Down,
-                'Escape': Frogger.enums.Direction.Stopped
-            }};
-            frog.addComponent(components.Keyboard(inputSpecification));
-
-            return frog;
-        }
+        frog = Frogger.Entity.createEntity();
+        let size = {
+            width: 1/15,
+            height: 1/15
+        };
         
-        // Create a proposed frog entity at this location and see if it collides with anything
-        let proposed = createFrogEntity(x, y);
-        if (!Frogger.systems.collision.collidesWithAny(proposed, entities)) {
-            frog = proposed;
-        }
-        
+        frog.addComponent(components.Appearance({
+            spriteSheet: Frogger.assets.frog,
+            spriteCount: 11,
+            spriteTime: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25],
+            animationScale: 1,
+            spriteSize: size,            // Maintain the size on the sprite
+            sprite: 0,
+            width: size.width,
+            height: size.height,
+        }));
+        frog.addComponent(components.Position({ x: x, y: y}));
+        frog.addComponent(components.Movable({     
+            canMove : true,
+            directionInterval : 0,
+            directionElapsedInterval : 0,
+            direction: Frogger.enums.Direction.Stopped, 
+            facing: Frogger.enums.Direction.Stopped, 
+            moveInterval: FROG_MOVE_INTERVAL }));
+        frog.addComponent(components.Collision({alive: true, killed: false,riding: false}));
+        frog.addComponent(components.Frog());
+
+        let inputSpecification = { keys: {
+            'ArrowLeft': Frogger.enums.Direction.Left,
+            'ArrowRight': Frogger.enums.Direction.Right,
+            'ArrowUp': Frogger.enums.Direction.Up,
+            'ArrowDown': Frogger.enums.Direction.Down,
+            'Escape': Frogger.enums.Direction.Stopped
+        }};
+        frog.addComponent(components.Keyboard(inputSpecification));
+
         return frog;
     }
 
@@ -239,15 +232,29 @@ Frogger.model = (function(components, graphics, assets) {
         switch (info.type) {
             case Frogger.enums.Event.ReachHome:
                 info.hitEntity.components.appearance.sprite = 2;
+                info.entity.components.collision.home = true;
                 break;
+
             case Frogger.enums.Event.HitSomething:
-                info.entity.components.position.x = initPos.x;
-                info.entity.components.position.y = initPos.y;
-                // animate death
-                numLifes--;
+                info.entity.components.collision.killed = true;
                 break;
+
             case Frogger.enums.Event.Ride:
-                info.entity.components.direction = info.hitEntity.components.facing;
+                info.entity.components.collision.riding = true;
+                info.entity.components.movable.direction = info.hitEntity.components.movable.facing;
+                info.entity.components.movable.directionInterval = info.hitEntity.components.movable.moveInterval;
+                info.entity.components.movable.directionElapsedInterval = info.hitEntity.components.movable.elapsedInterval;
+
+                if (info.hitEntity.components.turtle){
+                    if (info.hitEntity.components.sprite==3){
+                        info.entity.components.collision.killed = true;
+                    }
+                }
+                else if(info.hitEntity.components.alligator){
+                    if (info.hitEntity.components.sprite==1){
+                        info.entity.components.collision.killed = true;
+                    }
+                }
                 break;
         }
     }
@@ -319,7 +326,7 @@ Frogger.model = (function(components, graphics, assets) {
         }
 
         console.log('initializing frog starting position...');
-        frog = initializeFrog();
+        frog = createFrogEntity();
         entities[frog.id] = frog;
 
     };
@@ -338,6 +345,7 @@ Frogger.model = (function(components, graphics, assets) {
 
         entities = {};
         Frogger.Entity.nextId = 1;
+        this.initialize();
     }
 
     // ------------------------------------------------------------------
@@ -345,16 +353,11 @@ Frogger.model = (function(components, graphics, assets) {
     // This function is used to update the state of the demo model.
     //
     // ------------------------------------------------------------------
-    that.update = function(elapsedTime, totalTime) {
-        if(numLifes > 0){
-            Frogger.systems.keyboardInput.update(elapsedTime, entities);
-            Frogger.systems.movement.update(elapsedTime,totalTime, entities, GRID_SIZE);
-            Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
-            Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);
-        }else{
-
-            Frogger.systems.keyboardInput.cancelNextRequest = true;
-        }
+    that.update = function(elapsedTime) {
+        Frogger.systems.keyboardInput.update(elapsedTime, entities);
+        Frogger.systems.movement.update(elapsedTime, entities, GRID_SIZE);
+        Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
+        Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);
     };
 
     return that;
