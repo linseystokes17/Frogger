@@ -29,7 +29,7 @@ Frogger.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
+            scripts: ['components/appearance', 'components/particles', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
             message: 'Components loaded',
             onComplete: null
         }, {
@@ -49,11 +49,11 @@ Frogger.loader = (function() {
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render', 'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
-            scripts: ['render/text', 'render/status'],
+            scripts: ['render/text', 'render/status', 'render/particles'],
             message: 'Text rendering component loaded',
             onComplete: null
         }, {
@@ -107,6 +107,9 @@ Frogger.loader = (function() {
             }, {
                 key: 'bonus',
                 source: 'assets/images/bonus_sprites.png'
+            }, {
+                key: 'splash',
+                source: 'assets/images/splash.png'
             }, {
                 key: 'hop',
                 source: 'assets/sounds/hop.wav'

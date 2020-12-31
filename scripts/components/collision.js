@@ -13,6 +13,8 @@ Frogger.components.Collision = function(spec) {
         set home(value) {spec.home = value; },
         get killed(){ return killed;},
         set killed(value){ killed = value; },
+        get drown() {return spec.drown;},
+        set drown(value){spec.drown = value;},
         get riding(){return spec.riding},
         set riding(value){spec.riding = value; },
         get numLives(){ return numLives; },

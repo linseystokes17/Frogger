@@ -5,7 +5,7 @@
 //------------------------------------------------------------------
 Frogger.render.border = function (graphics, gridSize) {
     'use strict';
-    let borderWidth = 5/15;
+    let borderWidth = 10/15;
 
     for (var i = 0; i < gridSize+2; i++){
         // left side

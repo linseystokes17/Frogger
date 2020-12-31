@@ -4,6 +4,10 @@ Frogger.graphics.Frog = (function (graphics) {
     let index = 8;
 
     that.render = function(frog) {
+        if(frog.particles.active){
+            console.log('particles active!');
+        }
+
         if(frog.position.y > 6){
             frog.collision.riding = false;
             frog.collision.objectRiding = null;
@@ -13,30 +17,52 @@ Frogger.graphics.Frog = (function (graphics) {
         } else if (frog.position.y <= 6 && frog.position.y > 1){
             if(!frog.collision.riding && !frog.collision.home){
                 Frogger.assets.plunk.play();
+                frog.collision.drown = true;
                 frog.collision.killed = true;
+                frog.particles.active = true;
             }
         }
 
         if(frog.collision.killed){
             frog.movable.canMove = false;
-            if(index == 8){
-                Frogger.assets.squash.play();
-            }
-            frog.appearance.facing = Frogger.enums.Direction.Stopped;
-            frog.appearance.sprite = index;
-            if (frog.movable.elapsedInterval > 500){
-                index++;
-                frog.movable.elapsedInterval = 0;
-            }
+            if(!frog.collision.drown){
+                if(index == 8){
+                    Frogger.assets.squash.play();
+                }
+                frog.appearance.facing = Frogger.enums.Direction.Stopped;
+                frog.appearance.sprite = index;
+                if (frog.movable.elapsedInterval > 500){
+                    index++;
+                    frog.movable.elapsedInterval = 0;
+                }
 
-            if (index >= frog.appearance.spriteCount){
-                frog.collision.killed = false;
-                frog.position.x = 15/2;
-                frog.position.y = 13;
-                frog.appearance.sprite = 0;
-                index = 8;
-                frog.movable.canMove = true;
-                frog.collision.numLives--;
+                if (index >= frog.appearance.spriteCount){
+                    frog.collision.killed = false;
+                    frog.position.x = 15/2;
+                    frog.position.y = 13;
+                    frog.appearance.sprite = 0;
+                    index = 8;
+                    frog.movable.canMove = true;
+                    frog.collision.numLives--;
+                }
+            } else{
+                frog.appearance.facing = Frogger.enums.Direction.Stopped;
+
+                if (frog.movable.elapsedInterval > frog.particles.lifetime.mean){
+                    frog.particles.active = false;
+                    frog.movable.elapsedInterval = 0;
+                }
+
+                if (!frog.particles.active){
+                    frog.collision.killed = false;
+                    frog.collision.drown = false;
+                    frog.position.x = 15/2;
+                    frog.position.y = 13;
+                    frog.appearance.sprite = 0;
+                    index = 8;
+                    frog.movable.canMove = true;
+                    frog.collision.numLives--;
+                }
             }
         }
         

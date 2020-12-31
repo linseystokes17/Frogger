@@ -3,7 +3,7 @@
 // This namespace holds the rotate to point demo model.
 //
 // ------------------------------------------------------------------
-Frogger.model = (function(components, graphics, assets) {
+Frogger.model = (function(components, graphics, assets, systems) {
     'use strict';
     let that = {};
 
@@ -27,6 +27,8 @@ Frogger.model = (function(components, graphics, assets) {
     let initPos = null;
     let numLives = 5;
     let numHomes = 0;
+    
+    let inputSpecification = { keys: systems.keyboardInput.getKeys()};
 
     let score = 0;
     let totalScore = 0;
@@ -216,15 +218,20 @@ Frogger.model = (function(components, graphics, assets) {
             animationInterval: 500 }));
         frog.addComponent(components.Collision({alive: true, killed: false,riding: false}));
         frog.addComponent(components.Frog({totalTime: 0, numLives: 5}));
-
-        let inputSpecification = { keys: {
-            'ArrowLeft': Frogger.enums.Direction.Left,
-            'ArrowRight': Frogger.enums.Direction.Right,
-            'ArrowUp': Frogger.enums.Direction.Up,
-            'ArrowDown': Frogger.enums.Direction.Down,
-            'Escape': Frogger.enums.Direction.Stopped
-        }};
         frog.addComponent(components.Keyboard(inputSpecification));
+        frog.addComponent(components.Particles({
+            type: 'drown', 
+            fill: 'rgb(0, 0, 200)',
+            image: Frogger.assets.splash,
+            center: {x: frog.components.position.x, y: frog.components.position.y},
+            size: {mean: 5, stdev: 1},
+            speed: { mean: 0, stdev: 0.2},
+            lifetime: { mean: 1000, stdev: 250},
+            rotation: 15,
+            active: false,
+        }));
+
+        console.log(frog);
 
         return frog;
     }
@@ -272,6 +279,8 @@ Frogger.model = (function(components, graphics, assets) {
                 if (info.hitEntity.components.turtle){
                     if (info.hitEntity.components.appearance.sprite==3){
                         info.entity.components.collision.killed = true;
+                        info.entity.components.collision.drown = true;
+                        info.entity.components.collision.riding = false;
                     }
                 }
                 else if(info.hitEntity.components.alligator){
@@ -279,6 +288,8 @@ Frogger.model = (function(components, graphics, assets) {
                     let mouthPos = Math.round(info.hitEntity.components.position.x) + (info.hitEntity.components.appearance.width*15)/2;
                     if (info.hitEntity.components.appearance.sprite==1 && mouthPos == frogSquare){
                         info.entity.components.collision.killed = true;
+                        info.entity.components.collision.riding = false;
+
                     }
                 }
                 break;
@@ -405,6 +416,8 @@ Frogger.model = (function(components, graphics, assets) {
     //
     // ------------------------------------------------------------------
     that.update = function(elapsedTime, totalTime) {
+        inputSpecification = { keys: systems.keyboardInput.getKeys()};
+        console.log('inputSpec: ', inputSpecification);
         Frogger.systems.keyboardInput.update(elapsedTime, entities);
         Frogger.systems.movement.update(elapsedTime, entities, GRID_SIZE);
         Frogger.systems.collision.update(elapsedTime, totalTime, entities, reportEvent);
@@ -413,4 +426,4 @@ Frogger.model = (function(components, graphics, assets) {
 
     return that;
 
-}(Frogger.components, Frogger.graphics, Frogger.assets));
+}(Frogger.components, Frogger.graphics, Frogger.assets, Frogger.systems));

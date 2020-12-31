@@ -9,13 +9,16 @@ Frogger.systems.render = (function (graphics, render) {
     'use strict';
     let numLives = 5;
 
-    function renderEntities(entities, totalTime) {
+    function renderEntities(entities, totalTime, elapsedTime) {
         for (let id in entities) {
             let entity = entities[id];
             
             if (entity.components.frog){
                 numLives = entity.components.collision.numLives;
                 graphics.Frog.render(entity.components);
+                if(entity.components.collision.drown){
+                    graphics.Particles.render(entity.components, elapsedTime);
+                }
             }
             if (entity.components.home && entity.components.appearance.sprite!=2){
                 let time = Math.round(totalTime/1000)%15;
@@ -37,9 +40,10 @@ Frogger.systems.render = (function (graphics, render) {
     function update(elapsedTime, totalScore, totalTime, entities, gridSize) {
         render.background(graphics, gridSize);
         graphics.River.render(gridSize);
-        renderEntities(entities, totalTime);
+        renderEntities(entities, totalTime, elapsedTime);
         render.border(graphics, gridSize);
         graphics.Status.render(elapsedTime, totalScore, totalTime, numLives);
+
     }
 
     let api = {

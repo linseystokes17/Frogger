@@ -109,7 +109,7 @@ Frogger.systems.collision = (function () {
                             entity.components.collision.objectRiding = null;
                             entity.components.collision.killed = false;
                             entity.components.frog.totalTime = totalTime;
-                            console.log('You\'re home!');
+                            //console.log('You\'re home!');
                         } 
 
                         else if(entityDead.components.car){    // If anything else, not okay
@@ -118,7 +118,7 @@ Frogger.systems.collision = (function () {
                                 entity: entity,
                                 hitEntity: entityDead
                             });
-                            console.log('Something killed me!');
+                            //console.log('Something killed me!');
                         }
                         
                         else if (entityDead.components.log || entityDead.components.turtle ||  entityDead.components.alligator) {
@@ -128,7 +128,7 @@ Frogger.systems.collision = (function () {
                                 entity: entity,
                                 hitEntity: entityDead
                             });
-                            console.log('Hit something rideable');
+                            //console.log('Hit something rideable');
                         } 
                     } 
                 }
