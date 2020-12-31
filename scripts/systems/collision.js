@@ -18,7 +18,7 @@ Midterm.systems.collision = (function () {
         let dead = [];
         for (let id in entities) {
             let entity = entities[id];
-            if (!entity.components.collision.alive && entity.components.position) {
+            if (!entity.components.collision.alive && entity.components.image) {
                 dead.push(entity);
             }
         }
@@ -35,14 +35,14 @@ Midterm.systems.collision = (function () {
     //
     // --------------------------------------------------------------
     function collides(a, b) {
-        let posA = a.components.position;
-        let posB = b.components.position;
+        let posA = a.components.image;
+        let posB = b.components.image;
 
-        let widthA = a.components.appearance.width;
-        let widthB = b.components.appearance.width;
+        let widthA = a.components.image.width;
+        let widthB = b.components.image.width;
 
-        let heightB = b.components.appearance.height;
-        let heightA = a.components.appearance.height;
+        let heightB = b.components.image.height;
+        let heightA = a.components.image.height;
 
         let posABotRight = {
             x : posA.x + widthA,
@@ -71,7 +71,7 @@ Midterm.systems.collision = (function () {
 
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.collision && entity.components.position) {
+            if (entity.components.collision && entity.components.image) {
                 collides(proposed, entity);
             }
         }

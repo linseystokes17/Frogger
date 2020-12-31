@@ -4,32 +4,28 @@ Midterm.screens['main-menu'] = (function(game) {
     function initialize() {
         //
         // Setup each of menu events for the screens
-        document.getElementById('id-new-game').addEventListener(
+        document.getElementById('id-easy-game').addEventListener(
             'click',
             function() {
-                game.showScreen('game-play');
-                Midterm.assets.click.play(); 
+                game.showGameScreen('game-play', 'easy');
+            });
+
+        document.getElementById('id-hard-game').addEventListener(
+            'click',
+            function() {
+                game.showGameScreen('game-play', 'hard');
             });
         
         document.getElementById('id-high-scores').addEventListener(
             'click',
             function() { 
                 game.showScreen('high-scores'); 
-                Midterm.assets.click.play();    
-            });
-        
-        document.getElementById('id-settings').addEventListener(
-            'click',
-            function() { 
-                game.showScreen('settings'); 
-                Midterm.assets.click.play();    
             });
         
         document.getElementById('id-about').addEventListener(
             'click',
             function() { 
                 game.showScreen('about');                 
-                Midterm.assets.click.play();    
             });
     }
     

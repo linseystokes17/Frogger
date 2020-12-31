@@ -23,8 +23,8 @@ Midterm.graphics.Particles = (function (graphics, spec) {
 
         that.draw = function(spec) {
             //graphics.drawRectangle(spec);
-            spec.particles.center.x = spec.position.x + spec.appearance.width/2;
-            spec.particles.center.y = spec.position.y + spec.appearance.height/2;
+            spec.particles.center.x = spec.image.x + spec.image.width/2;
+            spec.particles.center.y = spec.image.y + spec.image.height/2;
 
             graphics.core.drawTexture(spec.particles.image, spec.particles.center, spec.particles.rotation, spec.particles.size);
         };

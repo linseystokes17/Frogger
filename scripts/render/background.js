@@ -6,7 +6,6 @@
 Midterm.render.background = function (graphics,) {
     'use strict';
 
-    // Large Green
     graphics.core.drawSquare({ x: 0, y: 0 }, 1, 'rgb(0, 0, 0)'); 
     
 };

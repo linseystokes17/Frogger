@@ -7,47 +7,43 @@ Midterm.model = (function(components, graphics, assets) {
     'use strict';
     let that = {};
     let entities = {};  // key is 'id', value is an Entity
-    let player = null;
+    let totalMoves = 0;
+    let tile = null;
+    let inputSpec = { keys: {
+        'ArrowLeft': Midterm.enums.Direction.Left,
+        'ArrowRight': Midterm.enums.Direction.Right,
+        'ArrowUp': Midterm.enums.Direction.Up,
+        'ArrowDown': Midterm.enums.Direction.Down,
+        'Escape': Midterm.enums.Direction.Stopped
+    }};
 
-    // ------------------------------------------------------------------
-    // Define Objects (with components)
-    // ------------------------------------------------------------------
-    function createPlayerEntity(){
-        let x = 1/15;
-        let y = 1/15;
+    const MOVE_INTERVAL = 500; // half second to move
 
-        player = Midterm.Entity.createEntity();
-        let size = {
-            width : 1/15,
-            height : 1/15
-        };
+    function createTileEntity(index, tiles, numTiles, count) {
+        let curr = Midterm.assets[tiles.key];
+
+        let x = (count % numTiles);
+        let y = Math.floor(count / numTiles);
+        tile = Midterm.Entity.createEntity();
         
-        player.addComponent(components.Appearance({
-            spriteSheet: Midterm.assets.player,
-            spriteCount: 1,
-            spriteTime: [25],
-            animationScale: 1,
-            spriteSize: size,            // Maintain the size on the sprite
-            sprite: 0,
-            width: size.width,
-            height: size.height,
-        }));
-        player.addComponent(components.Position({ x: x, y: y}));
-        player.addComponent(components.Movable({     
+        // image, width, height, x, y, direction, moveInterval, elapsedInterval
+        tile.addComponent(components.Image({
+            image: curr,
+            spriteWidth: curr.width,
+            spriteHeight: curr.height,
+            width: 1/numTiles,
+            height: 1/numTiles,
+            x: x/numTiles, 
+            y: y/numTiles,
             direction: Midterm.enums.Direction.Stopped, 
-            facing: Midterm.enums.Direction.Stopped, 
-            moveInterval: 100, }));
-        player.addComponent(components.Collision());
-        let inputSpecification = { keys: {
-            'ArrowLeft': Midterm.enums.Direction.Left,
-            'ArrowRight': Midterm.enums.Direction.Right,
-            'ArrowUp': Midterm.enums.Direction.Up,
-            'ArrowDown': Midterm.enums.Direction.Down,
-            'Escape': Midterm.enums.Direction.Stopped
-        }};
-        player.addComponent(components.Keyboard(inputSpecification));
+            moveInterval: MOVE_INTERVAL,
+            elapsedInterval: 0, 
+        }))
+        // blankAdjacent
+        tile.addComponent(components.Collision({blankAdjacent: false}));
+        tile.addComponent(components.mouseInput(inputSpec));
         
-        return player;
+        return tile;
     }
     
     // ------------------------------------------------------------------
@@ -60,14 +56,38 @@ Midterm.model = (function(components, graphics, assets) {
         }
     }
 
-    that.initialize = function() {
-        console.log('init model');
+    function shuffle(sourceArray) {
+        for (var i = 0; i < sourceArray.length - 1; i++) {
+            var j = i + Math.floor(Math.random() * (sourceArray.length - i));
+    
+            var temp = sourceArray[j];
+            sourceArray[j] = sourceArray[i];
+            sourceArray[i] = temp;
+        }
+        return sourceArray;
+    }
 
-        console.log('initializing player starting position...');
-        player = createPlayerEntity();
-        entities[player.id] = player;
+    that.initialize = function(type) {
+        let count = 0;
+        if (type == 'easy'){
+            let numTiles = 15;
+            while(count < numTiles){
+                let keys = shuffle(Object.keys(Midterm.assets128));
+                let key = keys[count];
 
-        console.log('player: ', player);
+                tile = createTileEntity(keys[count], Midterm.assets128[key], 4, count)
+                entities[tile.id] = tile;
+                count++;
+            }
+            
+            // an easy game is tile128 image array, randomized with bottom right empty
+        }
+        else if(type == 'hard'){
+            Object.keys(Midterm.assets64).forEach(key => {
+                tile = createTileEntity(key, Midterm.assets64[key], 8)
+                entities[tile.id] = tile;
+            });
+        }
     };
 
     that.reset = function(){
@@ -78,10 +98,10 @@ Midterm.model = (function(components, graphics, assets) {
     // This function is used to update the state of the demo model.
     // ------------------------------------------------------------------
     that.update = function(elapsedTime, totalTime) {
-        Midterm.systems.keyboardInput.update(elapsedTime, entities);
+        Midterm.systems.mouseInput.update(elapsedTime, entities);
         Midterm.systems.movement.update(elapsedTime, entities);
         Midterm.systems.collision.update(elapsedTime, totalTime, entities, reportEvent);
-        Midterm.systems.render.update(elapsedTime, totalTime, entities);
+        Midterm.systems.render.update(elapsedTime, totalTime, entities, totalMoves);
     };
 
     return that;

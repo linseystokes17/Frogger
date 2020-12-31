@@ -13,13 +13,21 @@ Midterm.graphics.Image = (function (graphics) {
     let that = {};
 
     that.render = function(sprite) {
+        console.log('sprite: ', sprite);
+        
         graphics.core.drawImage(
-            sprite.appearance.spriteSheet,
-            sprite.appearance.pixelWidth * sprite.appearance.sprite, 0,    // Which sprite to pick out
-            sprite.appearance.pixelWidth, sprite.appearance.pixelHeight,    // The size of the sprite in the sprite sheet
-            sprite.position.x,        // Where to draw the sprite
-            sprite.position.y,
-            sprite.appearance.width, sprite.appearance.height);
+            sprite.image.image,
+            0, 0,    // Which sprite to pick out
+            sprite.image.spriteWidth, sprite.image.spriteHeight,    // The size of the sprite in the sprite sheet
+            sprite.image.x,        // Where to draw the sprite
+            sprite.image.y,
+            sprite.image.width, sprite.image.height);
+        graphics.core.drawSquare(
+            {x: sprite.image.x, y: sprite.image.y},
+            sprite.image.width,
+            'rgb(0,0,0,0)',
+            'rgb(255,255,255)'
+        );
     };
 
     return that;

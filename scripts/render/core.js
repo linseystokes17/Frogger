@@ -26,7 +26,6 @@ Midterm.graphics.core = (function() {
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
         //
         // Have to figure out where the upper left corner of the unit world is
         // based on whether the width or height is the largest dimension.

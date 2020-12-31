@@ -28,6 +28,21 @@ Midterm.game = (function(screens) {
         document.getElementById(id).classList.add('active');
     }
 
+    function showGameScreen(id, type) {
+        //
+        // Remove the active state from all screens.  There should only be one...
+        let active = document.getElementsByClassName('active');
+        for (let screen = 0; screen < active.length; screen++) {
+            active[screen].classList.remove('active');
+        }
+        //
+        // Tell the screen to start actively running
+        screens[id].run(type);
+        //
+        // Then, set the new screen to be active
+        document.getElementById(id).classList.add('active');
+    }
+
     //------------------------------------------------------------------
     //
     // This function performs the one-time game initialization.
@@ -51,6 +66,7 @@ Midterm.game = (function(screens) {
     
     return {
         initialize : initialize,
-        showScreen : showScreen
+        showScreen : showScreen,
+        showGameScreen: showGameScreen,
     };
 }(Midterm.screens));

@@ -3,10 +3,12 @@ let Midterm = {
     systems: {},
     render: {},
     graphics: {},
-    assets: {},
+    assets64: {},
+    assets128: {},
     enums: {},
     screens: {},
     game: {},
+    assets: {},
 };
 
 //------------------------------------------------------------------
@@ -29,7 +31,7 @@ Midterm.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/appearance', 'components/particles', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
+            scripts: ['components/image', 'components/particles', 'components/collision', 'components/mouse'],
             message: 'Components loaded',
             onComplete: null
         }, {
@@ -45,7 +47,7 @@ Midterm.loader = (function() {
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/mouse-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
@@ -57,7 +59,7 @@ Midterm.loader = (function() {
             message: 'Game loaded',
             onComplete: null
         }, {
-            scripts: ['screens/about', 'screens/highscores', 'screens/mainmenu', 'screens/settings'],
+            scripts: ['screens/about', 'screens/highscores', 'screens/mainmenu'],
             message: 'Screens loaded',
             onComplete: null
         }, {
@@ -69,63 +71,63 @@ Midterm.loader = (function() {
             message: 'Main loaded',
             onComplete: null
         }];
-        let assetOrder = [
-            {
-                key: 'background',
-                source: 'assets/images/background.png'
-            }, {
-                key: 'player',
-                source: 'assets/images/player.png'
-            }, {
-                key: 'car',
-                source: 'assets/images/car_sprites.png'
-            }, {
-                key: 'truck',
-                source: 'assets/images/truck.png'
-            }, {
-                key: 'tree1',
-                source: 'assets/images/tree_1.png'
-            }, {
-                key: 'tree2',
-                source: 'assets/images/tree_2.png'
-            }, {
-                key: 'tree3',
-                source: 'assets/images/tree_3.png'
-            }, {
-                key: 'alligator',
-                source: 'assets/images/alligator_sprites.png'
-            }, {
-                key: 'turtle2',
-                source: 'assets/images/turtle_2_sprites.png'
-            }, {
-                key: 'turtle3',
-                source: 'assets/images/turtle_3_sprites.png'
-            }, {
-                key: 'bonus',
-                source: 'assets/images/bonus_sprites.png'
-            }, {
-                key: 'splash',
-                source: 'assets/images/splash.png'
-            }, {
-                key: 'hop',
-                source: 'assets/sounds/hop.wav'
-            }, {
-                key: 'plunk',
-                source: 'assets/sounds/plunk.wav'
-            }, {
-                key: 'squash',
-                source: 'assets/sounds/squash.wav'
-            }, {
-                key: 'music',
-                source: 'assets/sounds/frogger-music.mp3'
-            }, {
-                key: 'click',
-                source: 'assets/sounds/click.mp3'
-            }, {
-                key: 'extra',
-                source: 'assets/sounds/extra.wav'
-            }
-        ];
+    let assetOrder = [
+        {
+            key: 'whole',
+            source: 'assets/images/OldMainFire.png'
+        }, {
+            key: 'tile128-0',
+            source: 'assets/images/tile128-0.png'
+        }, {
+            key: 'tile128-1',
+            source: 'assets/images/tile128-1.png'
+        }, {
+            key: 'tile128-2',
+            source: 'assets/images/tile128-2.png'
+        }, {
+            key: 'tile128-3',
+            source: 'assets/images/tile128-3.png'
+        }, {
+            key: 'tile128-4',
+            source: 'assets/images/tile128-4.png'
+        }, {
+            key: 'tile128-5',
+            source: 'assets/images/tile128-5.png'
+        }, {
+            key: 'tile128-6',
+            source: 'assets/images/tile128-6.png'
+        }, {
+            key: 'tile128-7',
+            source: 'assets/images/tile128-7.png'
+        }, {
+            key: 'tile128-8',
+            source: 'assets/images/tile128-8.png'
+        }, {
+            key: 'tile128-9',
+            source: 'assets/images/tile128-9.png'
+        }, {
+            key: 'tile128-10',
+            source: 'assets/images/tile128-10.png'
+        }, {
+            key: 'tile128-11',
+            source: 'assets/images/tile128-11.png'
+        }, {
+            key: 'tile128-12',
+            source: 'assets/images/tile128-12.png'
+        }, {
+            key: 'tile128-13',
+            source: 'assets/images/tile128-13.png'
+        }, {
+            key: 'tile128-14',
+            source: 'assets/images/tile128-14.png'
+        }, {
+            key: 'tile128-1',
+            source: 'assets/images/tile128-1.png'
+        }, {
+            key: 'tile128-1',
+            source: 'assets/images/tile128-1.png'
+        }
+    ];
 
     //------------------------------------------------------------------
     //
@@ -203,6 +205,14 @@ Midterm.loader = (function() {
         let xhr = new XMLHttpRequest();
         let asset = null;
         let fileExtension = source.substr(source.lastIndexOf('.') + 1);    // Source: http://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
+        
+        let endGroup = source.lastIndexOf('-');
+        let startGroup = source.lastIndexOf('/')+1
+        let endIndex = source.lastIndexOf('.');
+        let startIndex = source.lastIndexOf('-')+1
+        
+        let tileGroup = source.substr(startGroup, endGroup-startGroup);
+        let tileIndex = source.substr(startIndex, endIndex-startIndex);
 
         if (fileExtension) {
             xhr.open('GET', source, true);
@@ -217,11 +227,14 @@ Midterm.loader = (function() {
                     } else {
                         if (onError) { onError('Unknown file extension: ' + fileExtension); }
                     }
+
                     asset.onload = function() {
                         window.URL.revokeObjectURL(asset.src);
                     };
+                    asset.id = tileIndex;
+                    asset.alt = tileGroup;
                     asset.src = window.URL.createObjectURL(xhr.response);
-
+                    
                     if (onSuccess) { onSuccess(asset); }
                 } else {
                     if (onError) { onError('Failed to retrieve: ' + source); }
@@ -249,6 +262,9 @@ Midterm.loader = (function() {
     console.log('Starting to dynamically load project assets');
     loadAssets(assetOrder,
         function(source, asset) {    // Store it on success
+            if(asset.alt == 'tile128'){
+                Midterm.assets128[asset.id] = source;
+            }
             Midterm.assets[source.key] = asset;
         },
         function(error) {

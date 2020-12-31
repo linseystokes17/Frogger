@@ -2,6 +2,8 @@ Midterm.graphics.Status = (function (graphics, components) {
     'use strict';
     let that = {};
     let frameTimes = [];
+
+    // Status will display the elapsed time and the number of moves
     let textFPS = components.Text({
         text : 'FPS',
         font : '16px Arial, sans-serif',
@@ -16,12 +18,22 @@ Midterm.graphics.Status = (function (graphics, components) {
         position : { x : 1.025, y : 0.05 }
     });
 
-    that.render = function(elapsedTime, totalTime, numLives) {
+    let textMoves = components.Text({
+        text : 'Moves',
+        font : '16px Arial, sans-serif',
+        fill : 'rgba(255, 255, 255, 1)',
+        position : { x : 1.025, y : 0.1 }
+    });
+
+    that.render = function(elapsedTime, totalTime, totalMoves) {
         textFPS.height = graphics.core.measureTextHeight(textFPS);
         textFPS.width = graphics.core.measureTextWidth(textFPS);
 
         textTime.height = graphics.core.measureTextHeight(textTime);
         textTime.width = graphics.core.measureTextWidth(textTime);
+
+        textMoves.height = graphics.core.measureTextHeight(textMoves);
+        textMoves.width = graphics.core.measureTextWidth(textMoves);
 
         // Show FPS over last several frames
         frameTimes.push(elapsedTime);
@@ -36,7 +48,9 @@ Midterm.graphics.Status = (function (graphics, components) {
             textFPS.text = 'FPS: ' + fps;
             graphics.Text.render(textFPS);
         }
-        textTime.text = 'time: ' + Math.round(totalTime/100);
+        textTime.text = 'Time: ' + Math.round(totalTime/100);
+        textMoves.text = 'Moves: ' + totalMoves;
+
         
         graphics.Text.render(textTime);
 

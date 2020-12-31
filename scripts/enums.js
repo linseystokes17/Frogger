@@ -3,9 +3,9 @@
 Midterm.enums.Direction = Object.freeze({
     Stopped: 'stopped',
     Up: 'up',
-    Down: 'down',
     Left: 'left',
-    Right: 'right'
+    Right: 'right',
+    Down: 'down',
 });
 
 Midterm.enums.Event = Object.freeze({
@@ -13,5 +13,5 @@ Midterm.enums.Event = Object.freeze({
 });
 
 Midterm.enums.Input = Object.freeze({
-    Keyboard: 'keyboard'
+    Mouse: 'mouse'
 });

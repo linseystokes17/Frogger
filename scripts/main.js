@@ -8,10 +8,10 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
     //
     //------------------------------------------------------------------
     function update(elapsedTime, totalTime) {
-        if(!Midterm.systems.keyboardInput.cancelNextRequest){
+        if(!Midterm.systems.mouseInput.cancelNextRequest){
             model.update(elapsedTime, totalTime);
         }
-        else if (Midterm.systems.keyboardInput.cancelNextRequest){
+        else if (Midterm.systems.mouseInput.cancelNextRequest){
             model.update(elapsedTime, 0);
             // Then, return to the main menu
             game.showScreen('main-menu');
@@ -47,7 +47,7 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
         render(elapsedTime, time);
         update(elapsedTime, time);
 
-        if (!Midterm.systems.keyboardInput.cancelNextRequest) {
+        if (!Midterm.systems.mouseInput.cancelNextRequest) {
             requestAnimationFrame(gameLoop);
         }
         else{
@@ -63,15 +63,13 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
     // canvas for rendering, finally starting the animation loop.
     //------------------------------------------------------------------
     function initialize() {
-        console.log('game initializing...');
-
         graphics.core.initialize();
     }
 
-    function run() {
-        model.initialize();
+    function run(type) {
+        model.initialize(type);
         lastTimeStamp = performance.now();
-        Midterm.systems.keyboardInput.cancelNextRequest = false;
+        Midterm.systems.mouseInput.cancelNextRequest = false;
         requestAnimationFrame(gameLoop);
     }
 

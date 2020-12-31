@@ -1,7 +1,7 @@
 // --------------------------------------------------------------
 //
 // This system is responsible for handling the movement of any
-// entity with a movable component.
+// entity with a image component.
 //
 // --------------------------------------------------------------
 Midterm.systems.movement = (function () {
@@ -14,24 +14,16 @@ Midterm.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement) {
-        entity.components.position.x += xIncrement;
-        entity.components.position.y += yIncrement;
+        entity.components.image.x += xIncrement;
+        entity.components.image.y += yIncrement;
     }
 
+
     function moveEntity(entity, elapsedTime) { 
-        entity.components.movable.elapsedInterval += elapsedTime;
-        
-        if(entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
-            entity.components.movable.elapsedInterval = 0;
-            switch (entity.components.movable.facing) {
-                case Midterm.enums.Direction.Left:
-                    move(entity, -1, 0);
-                    break;
-                case Midterm.enums.Direction.Right:
-                    move(entity, 1, 0);
-                    break;
-            }
-        }
+        entity.components.image.elapsedInterval += elapsedTime;
+        // move the entity in the direction of empty square, 
+        // if square is not empty (aka collision), do nothing
+        //move(entity, 0, 1);
     }
 
     // --------------------------------------------------------------
@@ -40,7 +32,7 @@ Midterm.systems.movement = (function () {
     function update(elapsedTime, entities) {
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.position && entity.components.movable) {
+            if (entity.components.image) {
                 moveEntity(entity, elapsedTime);
             }
         }
