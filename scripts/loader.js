@@ -74,8 +74,8 @@ Midterm.loader = (function() {
                 key: 'background',
                 source: 'assets/images/background.png'
             }, {
-                key: 'frog',
-                source: 'assets/images/frog_sprites.png'
+                key: 'player',
+                source: 'assets/images/player.png'
             }, {
                 key: 'car',
                 source: 'assets/images/car_sprites.png'
