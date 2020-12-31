@@ -40,7 +40,7 @@ Midterm.graphics.core = (function() {
             world.top = Math.floor(canvas.height * 0.05);
             world.left = (canvas.width - world.size) / 2;
         }
-
+        
         //
         // Notify interested parties of the canvas resize event.
         for (handler in resizeHandlers) {
@@ -356,7 +356,7 @@ Midterm.graphics.core = (function() {
     }
 
     function getWorldSize(){
-        return world.size;
+        return world;
     }
 
     //------------------------------------------------------------------

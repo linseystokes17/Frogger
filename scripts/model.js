@@ -9,6 +9,7 @@ Midterm.model = (function(components, graphics, assets) {
     let entities = {};  // key is 'id', value is an Entity
     let totalMoves = 0;
     let tile = null;
+    let world = graphics.core.getWorldSize();
     let inputSpec = { keys: {
         'ArrowLeft': Midterm.enums.Direction.Left,
         'ArrowRight': Midterm.enums.Direction.Right,
@@ -46,7 +47,35 @@ Midterm.model = (function(components, graphics, assets) {
         
         return tile;
     }
-    
+
+    function getTile(x, y){
+        let currTileId = 0;
+        world = graphics.core.getWorldSize();
+        Object.keys(entities).forEach(key => {
+            let entity = entities[key].components.image;
+            let ent = entities[key];
+            let xRange = [entity.x * world.size + world.left, entity.x * world.size + world.left + entity.spriteWidth];
+            let yRange = [entity.y * world.size+world.top, entity.y * world.size + entity.spriteHeight+world.top];
+
+            if (x < xRange[1] && x > xRange[0] && y < yRange[1] && y > yRange[0]){
+                console.log('clicked on: ', ent.id);
+                currTileId = ent.id
+            }
+        });
+
+        return currTileId;
+    }
+
+    that.moveTile = function(x, y){
+        let currTileId = getTile(x, y);
+        let clickedEntity = entities[currTileId];
+        
+        console.log('moveTile: ', clickedEntity);
+
+        // empty square does not report a clicked on
+
+    }
+
     // ------------------------------------------------------------------
     // Setup model & report events
     // ------------------------------------------------------------------
@@ -108,7 +137,7 @@ Midterm.model = (function(components, graphics, assets) {
     // This function is used to update the state of the demo model.
     // ------------------------------------------------------------------
     that.update = function(elapsedTime, totalTime) {
-        Midterm.systems.mouseInput.update(elapsedTime, entities);
+        //Midterm.systems.mouseInput.update(elapsedTime, entities);
         Midterm.systems.movement.update(elapsedTime, entities);
         Midterm.systems.collision.update(elapsedTime, totalTime, entities, reportEvent);
         Midterm.systems.render.update(elapsedTime, totalTime, entities, totalMoves);

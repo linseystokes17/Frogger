@@ -1,4 +1,4 @@
-Midterm.systems.mouseInput = (function() {
+Midterm.systems.mouseInput = function() {
     'use strict';
     let eventMouseDown = [];
     let eventMouseUp = [];
@@ -73,7 +73,6 @@ Midterm.systems.mouseInput = (function() {
     //
     // ------------------------------------------------------------------
     function mouseDown(event) {
-        console.log('mouseDown: ', event);
         mouseCapture = true;
         eventMouseDown.push(event);
     }
@@ -153,4 +152,4 @@ Midterm.systems.mouseInput = (function() {
     window.addEventListener('mousemove', mouseMove);
 
     return that;
-}());
+}

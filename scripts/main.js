@@ -1,7 +1,12 @@
-Midterm.screens['game-play'] = (function(graphics, components, model, game) {
+Midterm.screens['game-play'] = (function(graphics, components, model, game, systems) {
     'use strict';
     let lastTimeStamp = performance.now();
+    let myMouse = systems.mouseInput();
     
+    function processInput(elapsedTime) {
+        myMouse.update(elapsedTime);
+    }
+
     //------------------------------------------------------------------
     //
     // Update the simulation.
@@ -10,6 +15,7 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
     function update(elapsedTime, totalTime) {
         if(!Midterm.systems.mouseInput.cancelNextRequest){
             model.update(elapsedTime, totalTime);
+            myMouse.update(elapsedTime)
         }
         else if (Midterm.systems.mouseInput.cancelNextRequest){
             model.update(elapsedTime, 0);
@@ -44,10 +50,12 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
         // LL processInput
         // This is the rendering to provide the game viewport, it has nothing to do
         // with the actual rendering of the game itself.
+        processInput(elapsedTime);
+
         render(elapsedTime, time);
         update(elapsedTime, time);
 
-        if (!Midterm.systems.mouseInput.cancelNextRequest) {
+        if (!systems.mouseInput.cancelNextRequest) {
             requestAnimationFrame(gameLoop);
         }
         else{
@@ -64,6 +72,14 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
     //------------------------------------------------------------------
     function initialize() {
         graphics.core.initialize();
+
+        myMouse.registerHandler(function(event) {
+            let pressedX = event.clientX;
+            let pressedY = event.clientY
+            model.moveTile(pressedX, pressedY);
+        },
+        myMouse.EventMouseDown
+    );
     }
 
     function run(type) {
@@ -78,4 +94,4 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game) {
         run: run,
     };
 
-}(Midterm.graphics, Midterm.components, Midterm.model, Midterm.game));
+}(Midterm.graphics, Midterm.components, Midterm.model, Midterm.game, Midterm.systems));

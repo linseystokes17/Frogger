@@ -48,7 +48,7 @@ Midterm.graphics.Status = (function (graphics, components) {
             textFPS.text = 'FPS: ' + fps;
             graphics.Text.render(textFPS);
         }
-        textTime.text = 'Time: ' + Math.round(totalTime/100);
+        textTime.text = 'Time: ' + Math.round(totalTime/1000);
         textMoves.text = 'Moves: ' + totalMoves;
 
         
