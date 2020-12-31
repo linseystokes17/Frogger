@@ -3,7 +3,7 @@
 // This namespace provides the core rendering code for the demo.
 //
 // ------------------------------------------------------------------
-Frogger.graphics.core = (function() {
+Midterm.graphics.core = (function() {
     'use strict';
     let canvas = null;
     let context = null;
@@ -217,6 +217,22 @@ Frogger.graphics.core = (function() {
         context.fill();
     }
 
+    function drawTexture(image, center, rotation, size) {
+        context.save();
+
+        context.translate(center.x, center.y);
+        context.rotate(rotation);
+        context.translate(-center.x, -center.y);
+
+        context.drawImage(
+            image,
+            center.x - size.x / 2,
+            center.y - size.y / 2,
+            size.x, size.y);
+
+        context.restore();
+    }
+
     //------------------------------------------------------------------
     //
     // Draw a square (with an optional border) into the local canvas coordinate system.
@@ -380,6 +396,7 @@ Frogger.graphics.core = (function() {
         notifyResize: notifyResize,
         clip: clip,
         getWorldSize: getWorldSize,
+        drawTexture: drawTexture,
     };
 
 }());

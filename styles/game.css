@@ -55,10 +55,10 @@ ul.menu li button {
     color: #CECEF6;
     width: 10em;
     height: 1.5em;
-    background: #095516;
-    border: 0.1em solid rgb(48, 153, 6);
+    background: #1d0653;
+    border: 0.1em solid rgb(55, 46, 136);
     border-radius: 0.5em;
-    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+    box-shadow: 0.2em 0.2em 0.3em rgb(51, 3, 83);
 }
 
 ul.settings-menu {
@@ -77,19 +77,23 @@ ul.settings-menu li button {
     color: #CECEF6;
     width: 7em;
     height: 1.5em;
-    background: #095516;
-    border: 0.1em solid rgb(48, 153, 6);
+    background:#1d0653;
+    border: 0.1em solid rgb(55, 46, 136);
     border-radius: 0.5em;
-    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+    box-shadow: 0.2em 0.2em 0.3em rgb(51, 3, 83);
+}
+
+ul.settings-menu li button:hover {
+    background: #0f5583;
 }
 
 ul.menu li button:hover {
-    background: #52b839;
+    background: #0f5583;
 }
 
 ul.menu li button:active {
     color: #CECEF6;
-    background: rgb(0, 0, 0);
+    background: rgb(10, 94, 119);
 }
 
 #game div h1 {

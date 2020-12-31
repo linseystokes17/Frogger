@@ -1,4 +1,4 @@
-let Frogger = {
+let Midterm = {
     components: {},
     systems: {},
     render: {},
@@ -17,7 +17,7 @@ let Frogger = {
 // loaded.
 //
 //------------------------------------------------------------------
-Frogger.loader = (function() {
+Midterm.loader = (function() {
     'use strict';
     let scriptOrder = [
         {
@@ -29,7 +29,7 @@ Frogger.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
+            scripts: ['components/appearance', 'components/particles', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
             message: 'Components loaded',
             onComplete: null
         }, {
@@ -37,23 +37,19 @@ Frogger.loader = (function() {
             message: 'Text component loaded',
             onComplete: null
         }, {
-            scripts: ['components/frog', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
-            message: 'Object components loaded',
-            onComplete: null
-        }, {
             scripts: ['render/core'],
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/border', 'render/image', 'render/frog', 'render/river'],
+            scripts: ['render/background', 'render/border', 'render/image'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render', 'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
-            scripts: ['render/text', 'render/status'],
+            scripts: ['render/text', 'render/status', 'render/particles'],
             message: 'Text rendering component loaded',
             onComplete: null
         }, {
@@ -107,6 +103,9 @@ Frogger.loader = (function() {
             }, {
                 key: 'bonus',
                 source: 'assets/images/bonus_sprites.png'
+            }, {
+                key: 'splash',
+                source: 'assets/images/splash.png'
             }, {
                 key: 'hop',
                 source: 'assets/sounds/hop.wav'
@@ -242,7 +241,7 @@ Frogger.loader = (function() {
     //------------------------------------------------------------------
     function mainComplete() {
         console.log('it is all loaded up');
-        Frogger.game.initialize();
+        Midterm.game.initialize();
     }
 
     //
@@ -250,7 +249,7 @@ Frogger.loader = (function() {
     console.log('Starting to dynamically load project assets');
     loadAssets(assetOrder,
         function(source, asset) {    // Store it on success
-            Frogger.assets[source.key] = asset;
+            Midterm.assets[source.key] = asset;
         },
         function(error) {
             console.log(error);

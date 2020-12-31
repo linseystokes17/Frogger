@@ -5,7 +5,7 @@
 //
 // ------------------------------------------------------------------
 
-Frogger.game = (function(screens) {
+Midterm.game = (function(screens) {
     'use strict';
     
     //------------------------------------------------------------------
@@ -53,4 +53,4 @@ Frogger.game = (function(screens) {
         initialize : initialize,
         showScreen : showScreen
     };
-}(Frogger.screens));
+}(Midterm.screens));

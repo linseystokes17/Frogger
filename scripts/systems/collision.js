@@ -6,7 +6,7 @@
 // proposed entity collides with any other (collidable) entity.
 //
 // --------------------------------------------------------------
-Frogger.systems.collision = (function () {
+Midterm.systems.collision = (function () {
     'use strict';
 
     // --------------------------------------------------------------
@@ -38,11 +38,11 @@ Frogger.systems.collision = (function () {
         let posA = a.components.position;
         let posB = b.components.position;
 
-        let widthA = a.components.appearance.width*15;
-        let widthB = b.components.appearance.width*15;
+        let widthA = a.components.appearance.width;
+        let widthB = b.components.appearance.width;
 
-        let heightB = b.components.appearance.height*15;
-        let heightA = a.components.appearance.height*15;
+        let heightB = b.components.appearance.height;
+        let heightA = a.components.appearance.height;
 
         let posABotRight = {
             x : posA.x + widthA,
@@ -93,43 +93,16 @@ Frogger.systems.collision = (function () {
 
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components.collision && entity.components.position && entity.components.frog) {
+            if (entity.components.player) {
                 for (let m = 0; m < dead.length; m++) {
                     let entityDead = dead[m];
                     if (collides(entity, entityDead)) {
                         // If home, that's okay
-                        if (entityDead.components.home) {
-                            reportEvent({
-                                type: Frogger.enums.Event.ReachHome,
-                                entity: entity,
-                                hitEntity: entityDead,
-                                totalTime: totalTime,
-                            });
-                            entity.components.collision.riding = false;
-                            entity.components.collision.objectRiding = null;
-                            entity.components.collision.killed = false;
-                            entity.components.frog.totalTime = totalTime;
-                            console.log('You\'re home!');
-                        } 
-
-                        else if(entityDead.components.car){    // If anything else, not okay
-                            reportEvent({
-                                type: Frogger.enums.Event.HitSomething,
-                                entity: entity,
-                                hitEntity: entityDead
-                            });
-                            console.log('Something killed me!');
-                        }
-                        
-                        else if (entityDead.components.log || entityDead.components.turtle ||  entityDead.components.alligator) {
-                            entity.components.collision.riding = true;
-                            reportEvent({
-                                type: Frogger.enums.Event.Ride,
-                                entity: entity,
-                                hitEntity: entityDead
-                            });
-                            console.log('Hit something rideable');
-                        } 
+                        reportEvent({
+                            type: Midterm.enums.Event.ReachHome,
+                            entity: entity,
+                            hitEntity: entityDead
+                        });
                     } 
                 }
             }

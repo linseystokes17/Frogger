@@ -1,4 +1,4 @@
-Frogger.graphics.Status = (function (graphics, components) {
+Midterm.graphics.Status = (function (graphics, components) {
     'use strict';
     let that = {};
     let frameTimes = [];
@@ -16,21 +16,7 @@ Frogger.graphics.Status = (function (graphics, components) {
         position : { x : 1.025, y : 0.05 }
     });
 
-    let textScore = components.Text({
-        text : 'Score',
-        font : '16px Arial, sans-serif',
-        fill : 'rgba(255, 255, 255, 1)',
-        position : { x : 1.025, y : 0.1 }
-    });
-
-    let textLives = components.Text({
-        text : 'Score',
-        font : '16px Arial, sans-serif',
-        fill : 'rgba(255, 255, 255, 1)',
-        position : { x : 1.025, y : 0.15 }
-    });
-
-    that.render = function(elapsedTime, totalScore, totalTime, numLives) {
+    that.render = function(elapsedTime, totalTime, numLives) {
         textFPS.height = graphics.core.measureTextHeight(textFPS);
         textFPS.width = graphics.core.measureTextWidth(textFPS);
 
@@ -51,15 +37,11 @@ Frogger.graphics.Status = (function (graphics, components) {
             graphics.Text.render(textFPS);
         }
         textTime.text = 'time: ' + Math.round(totalTime/100);
-        textScore.text = 'score: ' + Math.round(totalScore/100);
-        textLives.text = 'lifes: ' + numLives;
-
+        
         graphics.Text.render(textTime);
-        graphics.Text.render(textScore);
-        graphics.Text.render(textLives);
 
     };
 
     return that;
         
-}(Frogger.graphics, Frogger.components));
+}(Midterm.graphics, Midterm.components));

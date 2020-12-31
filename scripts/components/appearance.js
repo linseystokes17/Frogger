@@ -1,4 +1,4 @@
-Frogger.components.Appearance = function(spec) {
+Midterm.components.Appearance = function(spec) {
     'use strict';
 
     let api = {

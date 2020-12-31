@@ -1,4 +1,4 @@
-Frogger.screens['main-menu'] = (function(game) {
+Midterm.screens['main-menu'] = (function(game) {
     'use strict';
     
     function initialize() {
@@ -8,28 +8,28 @@ Frogger.screens['main-menu'] = (function(game) {
             'click',
             function() {
                 game.showScreen('game-play');
-                Frogger.assets.click.play(); 
+                Midterm.assets.click.play(); 
             });
         
         document.getElementById('id-high-scores').addEventListener(
             'click',
             function() { 
                 game.showScreen('high-scores'); 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
         
         document.getElementById('id-settings').addEventListener(
             'click',
             function() { 
                 game.showScreen('settings'); 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
         
         document.getElementById('id-about').addEventListener(
             'click',
             function() { 
                 game.showScreen('about');                 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
     }
     
@@ -42,4 +42,4 @@ Frogger.screens['main-menu'] = (function(game) {
         initialize : initialize,
         run : run
     };
-}(Frogger.game));
+}(Midterm.game));

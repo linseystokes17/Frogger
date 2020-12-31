@@ -1,4 +1,4 @@
-Frogger.screens['settings'] = (function(game, keyboard) {
+Midterm.screens['settings'] = (function(game, keyboard) {
     'use strict';
     
     function initialize() {
@@ -6,35 +6,35 @@ Frogger.screens['settings'] = (function(game, keyboard) {
             'click',
             function() { 
                 game.showScreen('main-menu'); 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
         
         document.getElementById('id-settings-forward').addEventListener(
             'click',
             function() { 
-                console.log('change forward setting'); 
-                Frogger.assets.click.play();    
+                console.log('change forward setting', Midterm); 
+                Midterm.assets.click.play();    
             });
         
         document.getElementById('id-settings-backward').addEventListener(
             'click',
             function() { 
                 console.log('change backward setting'); 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
 
         document.getElementById('id-settings-right').addEventListener(
             'click',
             function() { 
                 console.log('change right setting'); 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
 
         document.getElementById('id-settings-left').addEventListener(
             'click',
             function() { 
                 console.log('change left setting'); 
-                Frogger.assets.click.play();    
+                Midterm.assets.click.play();    
             });
     }
     
@@ -47,4 +47,4 @@ Frogger.screens['settings'] = (function(game, keyboard) {
         initialize : initialize,
         run : run
     };
-}(Frogger.game, Frogger.components.Keyboard));
+}(Midterm.game, Midterm.components.Keyboard));

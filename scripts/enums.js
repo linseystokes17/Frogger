@@ -1,6 +1,6 @@
 'use strict';
 
-Frogger.enums.Direction = Object.freeze({
+Midterm.enums.Direction = Object.freeze({
     Stopped: 'stopped',
     Up: 'up',
     Down: 'down',
@@ -8,12 +8,10 @@ Frogger.enums.Direction = Object.freeze({
     Right: 'right'
 });
 
-Frogger.enums.Event = Object.freeze({
+Midterm.enums.Event = Object.freeze({
     ReachHome: 'reach-home',
-    HitSomething: 'hit-something',
-    Ride: 'ride',
 });
 
-Frogger.enums.Input = Object.freeze({
+Midterm.enums.Input = Object.freeze({
     Keyboard: 'keyboard'
 });

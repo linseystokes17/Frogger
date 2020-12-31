@@ -5,7 +5,7 @@
 // component settings.
 //
 // --------------------------------------------------------------
-Frogger.systems.keyboardInput = (function (components) {
+Midterm.systems.keyboardInput = (function (components) {
     'use strict';
     let keysDown = {};
     let pressed = false;
@@ -21,6 +21,16 @@ Frogger.systems.keyboardInput = (function (components) {
         pressed = false;
     }
 
+    function getKeys(){
+        return { keys: {
+            'ArrowLeft': Midterm.enums.Direction.Left,
+            'ArrowRight': Midterm.enums.Direction.Right,
+            'ArrowUp': Midterm.enums.Direction.Up,
+            'ArrowDown': Midterm.enums.Direction.Down,
+            'Escape': Midterm.enums.Direction.Stopped
+        }}
+    }
+
     // --------------------------------------------------------------
     //
     // Public interface used to update entities based on keyboard input.
@@ -29,8 +39,8 @@ Frogger.systems.keyboardInput = (function (components) {
     function update(elapsedTime, entities) {
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components[Frogger.enums.Input.Keyboard]) {
-                let input = entity.components[Frogger.enums.Input.Keyboard];
+            if (entity.components[Midterm.enums.Input.Keyboard]) {
+                let input = entity.components[Midterm.enums.Input.Keyboard];
                 for (let key in input.keys) {
                     entity.components.keyboard.keyPressed = pressed;
                     if (keysDown[key] && pressed == true) {
@@ -51,9 +61,10 @@ Frogger.systems.keyboardInput = (function (components) {
 
     let api = {
         update: update,
+        getKeys: getKeys,
         get cancelNextRequest(){return cancelNextRequest;},
         set cancelNextRequest(value){cancelNextRequest = value;}
     };
 
     return api;
-}(Frogger.components));
+}(Midterm.components));

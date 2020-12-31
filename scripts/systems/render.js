@@ -5,41 +5,23 @@
 // and position components.
 //
 // --------------------------------------------------------------
-Frogger.systems.render = (function (graphics, render) {
+Midterm.systems.render = (function (graphics, render) {
     'use strict';
     let numLives = 5;
 
-    function renderEntities(entities, totalTime) {
+    function renderEntities(entities, totalTime, elapsedTime) {
         for (let id in entities) {
             let entity = entities[id];
-            
-            if (entity.components.frog){
-                numLives = entity.components.collision.numLives;
-                graphics.Frog.render(entity.components);
-            }
-            if (entity.components.home && entity.components.appearance.sprite!=2){
-                let time = Math.round(totalTime/1000)%15;
-                
-                if(time == entity.components.home.changeInterval){
-                    entity.components.appearance.sprite = 1;
-                }
-                else if(time == 15-entity.components.home.changeInterval+1){
-                    entity.components.appearance.sprite = 0;
-                }
-                else{
-                    entity.components.appearance.sprite = 3;
-                }
-            }
             graphics.Image.render(entity.components);
         }
     } 
 
-    function update(elapsedTime, totalScore, totalTime, entities, gridSize) {
-        render.background(graphics, gridSize);
-        graphics.River.render(gridSize);
-        renderEntities(entities, totalTime);
-        render.border(graphics, gridSize);
-        graphics.Status.render(elapsedTime, totalScore, totalTime, numLives);
+    function update(elapsedTime, totalTime, entities) {
+        render.background(graphics);
+        renderEntities(entities, totalTime, elapsedTime);
+        render.border(graphics);
+        graphics.Status.render(elapsedTime, totalTime, numLives);
+
     }
 
     let api = {
@@ -47,4 +29,4 @@ Frogger.systems.render = (function (graphics, render) {
     };
 
     return api;
-}(Frogger.graphics, Frogger.render));
+}(Midterm.graphics, Midterm.render));

@@ -7,7 +7,7 @@
 //        position: { x: , y: }
 //    }
 //------------------------------------------------------------------
-Frogger.components.Text = function(spec) {
+Midterm.components.Text = function(spec) {
     'use strict';
     let that = {
         get text() { return spec.text; },

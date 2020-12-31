@@ -3,7 +3,7 @@
 // Rendering function for a /components/text object.
 //
 // ------------------------------------------------------------------
-Frogger.graphics.Text = (function(graphics) {
+Midterm.graphics.Text = (function(graphics) {
     'use strict';
     let that = {};
 
@@ -12,4 +12,4 @@ Frogger.graphics.Text = (function(graphics) {
     };
 
     return that;
-}(Frogger.graphics));
+}(Midterm.graphics));

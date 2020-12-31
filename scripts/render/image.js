@@ -8,7 +8,7 @@ Math.lerp = (a, b, f) => { return a + f * (b - a); };
 // all of the segments it contains.
 //
 // --------------------------------------------------------------
-Frogger.graphics.Image = (function (graphics) {
+Midterm.graphics.Image = (function (graphics) {
     'use strict';
     let that = {};
 
@@ -17,11 +17,11 @@ Frogger.graphics.Image = (function (graphics) {
             sprite.appearance.spriteSheet,
             sprite.appearance.pixelWidth * sprite.appearance.sprite, 0,    // Which sprite to pick out
             sprite.appearance.pixelWidth, sprite.appearance.pixelHeight,    // The size of the sprite in the sprite sheet
-            sprite.position.x/15,        // Where to draw the sprite
-            sprite.position.y/15,
+            sprite.position.x,        // Where to draw the sprite
+            sprite.position.y,
             sprite.appearance.width, sprite.appearance.height);
     };
 
     return that;
         
-}(Frogger.graphics));
+}(Midterm.graphics));

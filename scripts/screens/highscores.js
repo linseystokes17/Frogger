@@ -1,4 +1,4 @@
-Frogger.screens['high-scores'] = (function(game) {
+Midterm.screens['high-scores'] = (function(game) {
     'use strict';
     
     function initialize() {
@@ -9,7 +9,7 @@ Frogger.screens['high-scores'] = (function(game) {
     }
 
     function displayScores() {
-		var highScores = Frogger.systems.Highscores.get(),
+		var highScores = Midterm.systems.Highscores.get(),
 			highScoresHTML = document.getElementById('high-scores-list');
 
 		//
@@ -32,4 +32,4 @@ Frogger.screens['high-scores'] = (function(game) {
         initialize : initialize,
         run : run
     };
-}(Frogger.game));
+}(Midterm.game));

@@ -4,12 +4,12 @@
 // used for client-side persistence.
 //
 // ------------------------------------------------------------------
-Frogger.systems.Highscores = (function() {
+Midterm.systems.Highscores = (function() {
 	'use strict';
 
 	var Constants = {
 		get MinScores() { return 5; },
-		get StorageName() { return 'Frogger.systems.highScores'; }
+		get StorageName() { return 'Midterm.systems.highScores'; }
 	};
 
 	var scores = [],

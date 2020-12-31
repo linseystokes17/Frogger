@@ -4,7 +4,7 @@
 // a collection of components.
 //
 // --------------------------------------------------------------
-Frogger.Entity = (function() {
+Midterm.Entity = (function() {
     'use strict';
     let nextId = 1;
 

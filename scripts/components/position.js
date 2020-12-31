@@ -1,4 +1,4 @@
-Frogger.components.Position = function(spec) {
+Midterm.components.Position = function(spec) {
     'use strict';
 
     let api = {

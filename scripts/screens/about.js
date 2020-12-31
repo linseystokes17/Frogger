@@ -1,4 +1,4 @@
-Frogger.screens['about'] = (function(game) {
+Midterm.screens['about'] = (function(game) {
     'use strict';
     
     function initialize() {
@@ -16,4 +16,4 @@ Frogger.screens['about'] = (function(game) {
         initialize : initialize,
         run : run
     };
-}(Frogger.game));
+}(Midterm.game));

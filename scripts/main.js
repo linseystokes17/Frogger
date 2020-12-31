@@ -1,4 +1,4 @@
-Frogger.screens['game-play'] = (function(graphics, components, model, game) {
+Midterm.screens['game-play'] = (function(graphics, components, model, game) {
     'use strict';
     let lastTimeStamp = performance.now();
     
@@ -8,10 +8,10 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     //
     //------------------------------------------------------------------
     function update(elapsedTime, totalTime) {
-        if(!Frogger.systems.keyboardInput.cancelNextRequest){
+        if(!Midterm.systems.keyboardInput.cancelNextRequest){
             model.update(elapsedTime, totalTime);
         }
-        else if (Frogger.systems.keyboardInput.cancelNextRequest){
+        else if (Midterm.systems.keyboardInput.cancelNextRequest){
             model.update(elapsedTime, 0);
             // Then, return to the main menu
             game.showScreen('main-menu');
@@ -47,14 +47,12 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         render(elapsedTime, time);
         update(elapsedTime, time);
 
-        if (!Frogger.systems.keyboardInput.cancelNextRequest) {
-            Frogger.assets.music.play();
+        if (!Midterm.systems.keyboardInput.cancelNextRequest) {
             requestAnimationFrame(gameLoop);
         }
         else{
             model.update(elapsedTime, 0);
             model.reset();
-            Frogger.assets.music.pause();
             game.showScreen('main-menu');
         }
     }
@@ -73,7 +71,7 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
     function run() {
         model.initialize();
         lastTimeStamp = performance.now();
-        Frogger.systems.keyboardInput.cancelNextRequest = false;
+        Midterm.systems.keyboardInput.cancelNextRequest = false;
         requestAnimationFrame(gameLoop);
     }
 
@@ -82,4 +80,4 @@ Frogger.screens['game-play'] = (function(graphics, components, model, game) {
         run: run,
     };
 
-}(Frogger.graphics, Frogger.components, Frogger.model, Frogger.game));
+}(Midterm.graphics, Midterm.components, Midterm.model, Midterm.game));
