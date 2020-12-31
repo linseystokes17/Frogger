@@ -12,9 +12,7 @@ Midterm.graphics.Image = (function (graphics) {
     'use strict';
     let that = {};
 
-    that.render = function(sprite) {
-        console.log('sprite: ', sprite);
-        
+    that.render = function(sprite) {        
         graphics.core.drawImage(
             sprite.image.image,
             0, 0,    // Which sprite to pick out

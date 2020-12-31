@@ -21,10 +21,11 @@ Midterm.model = (function(components, graphics, assets) {
 
     function createTileEntity(index, tiles, numTiles, count) {
         let curr = Midterm.assets[tiles.key];
+        let id = curr.id;
 
         let x = (count % numTiles);
         let y = Math.floor(count / numTiles);
-        tile = Midterm.Entity.createEntity();
+        tile = Midterm.Entity.createEntity(id);
         
         // image, width, height, x, y, direction, moveInterval, elapsedInterval
         tile.addComponent(components.Image({
@@ -62,24 +63,33 @@ Midterm.model = (function(components, graphics, assets) {
     
             var temp = sourceArray[j];
             sourceArray[j] = sourceArray[i];
-            sourceArray[i] = temp;
+
+            while (sourceArray.includes(temp) && sourceArray[i] != temp){
+                sourceArray[j] = temp;
+                j = i + Math.floor(Math.random() * (sourceArray.length - i));
+                temp = sourceArray[j];
+                sourceArray[j] = sourceArray[i];
+            }
+
+            sourceArray[i] = temp;            
         }
         return sourceArray;
     }
+    
 
     that.initialize = function(type) {
         let count = 0;
+
         if (type == 'easy'){
+            let keys = shuffle(Object.keys(Midterm.assets128));
             let numTiles = 15;
             while(count < numTiles){
-                let keys = shuffle(Object.keys(Midterm.assets128));
                 let key = keys[count];
 
-                tile = createTileEntity(keys[count], Midterm.assets128[key], 4, count)
+                tile = createTileEntity(key, Midterm.assets128[key], 4, count)
                 entities[tile.id] = tile;
                 count++;
             }
-            
             // an easy game is tile128 image array, randomized with bottom right empty
         }
         else if(type == 'hard'){
