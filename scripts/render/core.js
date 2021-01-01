@@ -217,21 +217,21 @@ Frogger.graphics.core = (function() {
         context.fill();
     }
 
-    function drawTexture(image, center, rotation, size) {
-        context.save();
+    // function drawTexture(image, center, rotation, size) {
+    //     context.save();
 
-        context.translate(center.x, center.y);
-        context.rotate(rotation);
-        context.translate(-center.x, -center.y);
+    //     context.translate(center.x, center.y);
+    //     context.rotate(rotation);
+    //     context.translate(-center.x, -center.y);
 
-        context.drawImage(
-            image,
-            center.x - size.x / 2,
-            center.y - size.y / 2,
-            size.x, size.y);
+    //     drawImage(
+    //         image,
+    //         center.x - size.x / 2,
+    //         center.y - size.y / 2,
+    //         size.x, size.y);
 
-        context.restore();
-    }
+    //     context.restore();
+    // }
 
     //------------------------------------------------------------------
     //
@@ -396,7 +396,7 @@ Frogger.graphics.core = (function() {
         notifyResize: notifyResize,
         clip: clip,
         getWorldSize: getWorldSize,
-        drawTexture: drawTexture,
+        // drawTexture: drawTexture,
     };
 
 }());

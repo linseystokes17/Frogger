@@ -29,7 +29,7 @@ Frogger.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/appearance', 'components/particles', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
+            scripts: ['components/appearance', 'components/position', 'components/movable', 'components/collision', 'components/keyboard'],
             message: 'Components loaded',
             onComplete: null
         }, {
@@ -37,7 +37,7 @@ Frogger.loader = (function() {
             message: 'Text component loaded',
             onComplete: null
         }, {
-            scripts: ['components/frog', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
+            scripts: ['components/frog', 'components/particlesystem', 'components/effectexplosion', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
             message: 'Object components loaded',
             onComplete: null
         }, {
@@ -45,15 +45,15 @@ Frogger.loader = (function() {
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/border', 'render/image', 'render/frog', 'render/river'],
+            scripts: ['render/background', 'render/particlesystem',  'render/border', 'render/image', 'render/frog', 'render/river'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render',  'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
-            scripts: ['render/text', 'render/status', 'render/particles'],
+            scripts: ['render/text', 'render/status'],
             message: 'Text rendering component loaded',
             onComplete: null
         }, {
@@ -119,6 +119,9 @@ Frogger.loader = (function() {
             }, {
                 key: 'squash',
                 source: 'assets/sounds/squash.wav'
+            }, {
+                key: 'splat',
+                source: 'assets/images/splat.png'
             }, {
                 key: 'music',
                 source: 'assets/sounds/frogger-music.mp3'

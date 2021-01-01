@@ -38,7 +38,6 @@ Frogger.systems.keyboardInput = (function (components) {
         KEYS[newKey] = newConfig;
         //KEYS.oldKey = newKey;
         delete KEYS[oldKey];
-        console.log('KEYS: ', KEYS);
     }
 
     // --------------------------------------------------------------

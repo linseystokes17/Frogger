@@ -5,20 +5,20 @@
 // and position components.
 //
 // --------------------------------------------------------------
-Frogger.systems.render = (function (graphics, render) {
+Frogger.systems.render = (function (graphics, render, systems) {
     'use strict';
     let numLives = 5;
+    let frog = null;
 
     function renderEntities(entities, totalTime, elapsedTime) {
         for (let id in entities) {
             let entity = entities[id];
             
             if (entity.components.frog){
+                frog = entity.components;
                 numLives = entity.components.collision.numLives;
-                graphics.Frog.render(entity.components);
-                if(entity.components.collision.drown){
-                    graphics.Particles.render(entity.components, elapsedTime);
-                }
+                graphics.Frog.render(frog);
+                graphics.ParticleSystem.render(Frogger.components.ParticleSystem);
             }
             if (entity.components.home && entity.components.appearance.sprite!=2){
                 let time = Math.round(totalTime/1000)%15;
@@ -34,6 +34,7 @@ Frogger.systems.render = (function (graphics, render) {
                 }
             }
             graphics.Image.render(entity.components);
+            
         }
     } 
 
@@ -43,7 +44,6 @@ Frogger.systems.render = (function (graphics, render) {
         renderEntities(entities, totalTime, elapsedTime);
         render.border(graphics, gridSize);
         graphics.Status.render(elapsedTime, totalScore, totalTime, numLives);
-
     }
 
     let api = {
@@ -51,4 +51,4 @@ Frogger.systems.render = (function (graphics, render) {
     };
 
     return api;
-}(Frogger.graphics, Frogger.render));
+}(Frogger.graphics, Frogger.render, Frogger.systems));
