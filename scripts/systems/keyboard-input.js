@@ -42,48 +42,23 @@ Midterm.systems.keyboardInput = (function (components) {
     //
     // --------------------------------------------------------------
     function update(elapsedTime, entities) {
-        let event = 0;
-        let handlerId = 0;
-        let entry = null;
+        for (let id in entities) {
+            let entity = entities[id];
+            if (entity.components[Midterm.enums.Input.Keyboard]) {
+                let input = entity.components[Midterm.enums.Input.Keyboard];
+                for (let key in input.keys) {
+                    entity.components.keyboard.keyPressed = pressed;
+                    if (keysDown[key] && pressed == true) {
+                        // Protect against turning back onto itself
+                        entity.components.movable.facing = input.keys[key];
 
-        //
-        // Process the mouse events for each of the different kinds of handlers
-        for (event = 0; event < eventMouseDown.length; event += 1) {
-            for (handlerId in handlersDown) {
-                if (handlersDown.hasOwnProperty(handlerId)) {
-                    handlersDown[handlerId].handler(eventMouseDown[event], elapsedTime);
-                }
-            }
-        }
-
-        for (event = 0; event < eventMouseUp.length; event += 1) {
-            for (handlerId in handlersUp) {
-                if (handlersUp.hasOwnProperty(handlerId)) {
-                    handlersUp[handlerId].handler(eventMouseUp[event], elapsedTime);
-                }
-            }
-        }
-
-        for (event = 0; event < eventMouseMove.length; event += 1) {
-            for (handlerId in handlersMove) {
-                if (handlersMove.hasOwnProperty(handlerId)) {
-                    entry = handlersMove[handlerId];
-                    //
-                    // Mouse capture is unique to the move events, check for it before invoking the handler
-                    if (entry.requireCapture && mouseCapture === true) {
-                        entry.handler(eventMouseMove[event], elapsedTime);
-                    } else if (entry.requireCapture === false) {
-                        entry.handler(eventMouseMove[event], elapsedTime);
+                        if(key == 'Escape'){
+                            cancelNextRequest = true;
+                        }
                     }
                 }
             }
         }
-
-        //
-        // Now that we have processed all the inputs, reset everything back to the empty state
-        eventMouseDown.length = 0;
-        eventMouseUp.length = 0;
-        eventMouseMove.length = 0;
     }
 
     window.addEventListener('keydown', keyPress);

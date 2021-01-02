@@ -50,9 +50,10 @@ Midterm.graphics.Status = (function (graphics, components) {
         }
         textTime.text = 'Time: ' + Math.round(totalTime/1000);
         textMoves.text = 'Moves: ' + totalMoves;
-
         
         graphics.Text.render(textTime);
+        graphics.Text.render(textMoves);
+
 
     };
 

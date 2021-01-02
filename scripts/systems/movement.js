@@ -14,16 +14,50 @@ Midterm.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement) {
-        entity.components.image.x += xIncrement;
-        entity.components.image.y += yIncrement;
+        let split = 16;
+        let count = 0;
+
+        // movement animation (it slides)
+        setInterval(function(){ 
+            if(count == split){
+                clearInterval();
+            } 
+            else{
+                entity.image.x += xIncrement/split;
+                entity.image.y += yIncrement/split;
+                count++;
+            }
+        }, 1000/split);
+
+        entity.image.direction = Midterm.enums.Direction.Stopped;
     }
 
 
     function moveEntity(entity, elapsedTime) { 
-        entity.components.image.elapsedInterval += elapsedTime;
+        entity.image.elapsedInterval += elapsedTime;
         // move the entity in the direction of empty square, 
         // if square is not empty (aka collision), do nothing
-        //move(entity, 0, 1);
+        switch (entity.image.direction){
+            case Midterm.enums.Direction.Right:
+                move(entity, entity.image.width, 0);
+                entity.image.elapsedInterval = 0;
+                break;
+
+            case Midterm.enums.Direction.Left:
+                move(entity, -entity.image.width, 0);
+                entity.image.elapsedInterval = 0;
+                break;
+
+            case Midterm.enums.Direction.Up:
+                move(entity, 0, -entity.image.height);
+                entity.image.elapsedInterval = 0;
+                break;
+
+            case Midterm.enums.Direction.Down:
+                move(entity, 0, entity.image.height);
+                entity.image.elapsedInterval = 0;
+                break;
+        }
     }
 
     // --------------------------------------------------------------
@@ -33,13 +67,13 @@ Midterm.systems.movement = (function () {
         for (let id in entities) {
             let entity = entities[id];
             if (entity.components.image) {
-                moveEntity(entity, elapsedTime);
+                moveEntity(entity.components, elapsedTime);
             }
         }
     }
 
     let api = {
-        update: update
+        update: update,
     };
 
     return api;

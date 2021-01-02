@@ -47,7 +47,7 @@ Midterm.loader = (function() {
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/mouse-input', 'systems/collision'],
+            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/mouse-input', 'systems/keyboard-input','systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
@@ -121,11 +121,194 @@ Midterm.loader = (function() {
             key: 'tile128-14',
             source: 'assets/images/tile128-14.png'
         }, {
-            key: 'tile128-1',
-            source: 'assets/images/tile128-1.png'
+            key: 'tile64-0',
+            source: 'assets/images/tile64-0.png'
         }, {
-            key: 'tile128-1',
-            source: 'assets/images/tile128-1.png'
+            key: 'tile64-1',
+            source: 'assets/images/tile64-1.png'
+        }, {
+            key: 'tile64-2',
+            source: 'assets/images/tile64-2.png'
+        }, {
+            key: 'tile64-3',
+            source: 'assets/images/tile64-3.png'
+        }, {
+            key: 'tile64-4',
+            source: 'assets/images/tile64-4.png'
+        }, {
+            key: 'tile64-5',
+            source: 'assets/images/tile64-5.png'
+        }, {
+            key: 'tile64-6',
+            source: 'assets/images/tile64-6.png'
+        }, {
+            key: 'tile64-7',
+            source: 'assets/images/tile64-7.png'
+        }, {
+            key: 'tile64-8',
+            source: 'assets/images/tile64-8.png'
+        }, {
+            key: 'tile64-9',
+            source: 'assets/images/tile64-9.png'
+        }, {
+            key: 'tile64-10',
+            source: 'assets/images/tile64-10.png'
+        }, {
+            key: 'tile64-11',
+            source: 'assets/images/tile64-11.png'
+        }, {
+            key: 'tile64-12',
+            source: 'assets/images/tile64-12.png'
+        }, {
+            key: 'tile64-13',
+            source: 'assets/images/tile64-13.png'
+        }, {
+            key: 'tile64-14',
+            source: 'assets/images/tile64-14.png'
+        }, {
+            key: 'tile64-15',
+            source: 'assets/images/tile64-15.png'
+        }, {
+            key: 'tile64-16',
+            source: 'assets/images/tile64-16.png'
+        }, {
+            key: 'tile64-17',
+            source: 'assets/images/tile64-17.png'
+        }, {
+            key: 'tile64-18',
+            source: 'assets/images/tile64-18.png'
+        }, {
+            key: 'tile64-19',
+            source: 'assets/images/tile64-19.png'
+        }, {
+            key: 'tile64-20',
+            source: 'assets/images/tile64-20.png'
+        }, {
+            key: 'tile64-21',
+            source: 'assets/images/tile64-21.png'
+        }, {
+            key: 'tile64-22',
+            source: 'assets/images/tile64-22.png'
+        }, {
+            key: 'tile64-23',
+            source: 'assets/images/tile64-23.png'
+        }, {
+            key: 'tile64-24',
+            source: 'assets/images/tile64-24.png'
+        }, {
+            key: 'tile64-25',
+            source: 'assets/images/tile64-25.png'
+        }, {
+            key: 'tile64-26',
+            source: 'assets/images/tile64-26.png'
+        }, {
+            key: 'tile64-27',
+            source: 'assets/images/tile64-27.png'
+        }, {
+            key: 'tile64-28',
+            source: 'assets/images/tile64-28.png'
+        }, {
+            key: 'tile64-29',
+            source: 'assets/images/tile64-29.png'
+        }, {
+            key: 'tile64-30',
+            source: 'assets/images/tile64-30.png'
+        }, {
+            key: 'tile64-31',
+            source: 'assets/images/tile64-31.png'
+        }, {
+            key: 'tile64-32',
+            source: 'assets/images/tile64-32.png'
+        }, {
+            key: 'tile64-33',
+            source: 'assets/images/tile64-33.png'
+        }, {
+            key: 'tile64-34',
+            source: 'assets/images/tile64-34.png'
+        }, {
+            key: 'tile64-35',
+            source: 'assets/images/tile64-35.png'
+        }, {
+            key: 'tile64-36',
+            source: 'assets/images/tile64-36.png'
+        }, {
+            key: 'tile64-37',
+            source: 'assets/images/tile64-37.png'
+        }, {
+            key: 'tile64-38',
+            source: 'assets/images/tile64-38.png'
+        }, {
+            key: 'tile64-39',
+            source: 'assets/images/tile64-39.png'
+        }, {
+            key: 'tile64-40',
+            source: 'assets/images/tile64-40.png'
+        }, {
+            key: 'tile64-41',
+            source: 'assets/images/tile64-41.png'
+        }, {
+            key: 'tile64-42',
+            source: 'assets/images/tile64-42.png'
+        }, {
+            key: 'tile64-43',
+            source: 'assets/images/tile64-43.png'
+        }, {
+            key: 'tile64-44',
+            source: 'assets/images/tile64-44.png'
+        }, {
+            key: 'tile64-45',
+            source: 'assets/images/tile64-45.png'
+        }, {
+            key: 'tile64-46',
+            source: 'assets/images/tile64-46.png'
+        }, {
+            key: 'tile64-47',
+            source: 'assets/images/tile64-47.png'
+        }, {
+            key: 'tile64-48',
+            source: 'assets/images/tile64-48.png'
+        }, {
+            key: 'tile64-49',
+            source: 'assets/images/tile64-49.png'
+        }, {
+            key: 'tile64-50',
+            source: 'assets/images/tile64-50.png'
+        }, {
+            key: 'tile64-51',
+            source: 'assets/images/tile64-51.png'
+        }, {
+            key: 'tile64-52',
+            source: 'assets/images/tile64-52.png'
+        }, {
+            key: 'tile64-53',
+            source: 'assets/images/tile64-53.png'
+        }, {
+            key: 'tile64-54',
+            source: 'assets/images/tile64-54.png'
+        }, {
+            key: 'tile64-55',
+            source: 'assets/images/tile64-55.png'
+        }, {
+            key: 'tile64-56',
+            source: 'assets/images/tile64-56.png'
+        }, {
+            key: 'tile64-57',
+            source: 'assets/images/tile64-57.png'
+        }, {
+            key: 'tile64-58',
+            source: 'assets/images/tile64-58.png'
+        }, {
+            key: 'tile64-59',
+            source: 'assets/images/tile64-59.png'
+        }, {
+            key: 'tile64-60',
+            source: 'assets/images/tile64-60.png'
+        }, {
+            key: 'tile64-61',
+            source: 'assets/images/tile64-61.png'
+        }, {
+            key: 'tile64-62',
+            source: 'assets/images/tile64-62.png'
         }
     ];
 
@@ -264,6 +447,9 @@ Midterm.loader = (function() {
         function(source, asset) {    // Store it on success
             if(asset.alt == 'tile128'){
                 Midterm.assets128[asset.id] = source;
+            }
+            else if(asset.alt == 'tile64'){
+                Midterm.assets64[asset.id] = source;
             }
             Midterm.assets[source.key] = asset;
         },

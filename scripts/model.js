@@ -3,7 +3,7 @@
 // This namespace holds the rotate to point demo model.
 //
 // ------------------------------------------------------------------
-Midterm.model = (function(components, graphics, assets) {
+Midterm.model = (function(components, graphics, assets, systems) {
     'use strict';
     let that = {};
     let entities = {};  // key is 'id', value is an Entity
@@ -11,10 +11,6 @@ Midterm.model = (function(components, graphics, assets) {
     let tile = null;
     let world = graphics.core.getWorldSize();
     let inputSpec = { keys: {
-        'ArrowLeft': Midterm.enums.Direction.Left,
-        'ArrowRight': Midterm.enums.Direction.Right,
-        'ArrowUp': Midterm.enums.Direction.Up,
-        'ArrowDown': Midterm.enums.Direction.Down,
         'Escape': Midterm.enums.Direction.Stopped
     }};
 
@@ -49,17 +45,18 @@ Midterm.model = (function(components, graphics, assets) {
     }
 
     function getTile(x, y){
-        let currTileId = 0;
+        // return the id of the tile that was clicked on (at position x, y)
+        let currTileId = null;
         world = graphics.core.getWorldSize();
         Object.keys(entities).forEach(key => {
             let entity = entities[key].components.image;
             let ent = entities[key];
-            let xRange = [entity.x * world.size + world.left, entity.x * world.size + world.left + entity.spriteWidth];
-            let yRange = [entity.y * world.size+world.top, entity.y * world.size + entity.spriteHeight+world.top];
+            let xRange = [entity.x, entity.x + entity.width];
+            let yRange = [entity.y, entity.y + entity.height];
 
             if (x < xRange[1] && x > xRange[0] && y < yRange[1] && y > yRange[0]){
-                console.log('clicked on: ', ent.id);
                 currTileId = ent.id
+                return currTileId;
             }
         });
 
@@ -69,11 +66,36 @@ Midterm.model = (function(components, graphics, assets) {
     that.moveTile = function(x, y){
         let currTileId = getTile(x, y);
         let clickedEntity = entities[currTileId];
-        
-        console.log('moveTile: ', clickedEntity);
+        if (clickedEntity!=null){// hasn't clicked on the blank square
+            // can only move the tile if there is not a tile in one spot (of 4 possible)
+            // check if there is a blank square adjacent
+            let right = x + clickedEntity.components.image.width;
+            let left = x - clickedEntity.components.image.width;
+            let up = y - clickedEntity.components.image.height;
+            let down = y + clickedEntity.components.image.height;
 
-        // empty square does not report a clicked on
+            let checkRightId = getTile(right, y);
+            let checkLeftId = getTile(left, y);
+            let checkUpId = getTile(x, up);
+            let checkDownId = getTile(x, down);
 
+            if (checkRightId == null && right < 1){
+                clickedEntity.components.image.direction = Midterm.enums.Direction.Right;
+                totalMoves++;
+            }
+            if (checkLeftId == null && left >= 0){
+                clickedEntity.components.image.direction = Midterm.enums.Direction.Left;
+                totalMoves++;
+            }
+            if (checkUpId == null && up >= 0){
+                clickedEntity.components.image.direction = Midterm.enums.Direction.Up;
+                totalMoves++;
+            }
+            if (checkDownId == null && down < 1){
+                clickedEntity.components.image.direction = Midterm.enums.Direction.Down;
+                totalMoves++;
+            }
+        }
     }
 
     // ------------------------------------------------------------------
@@ -86,7 +108,7 @@ Midterm.model = (function(components, graphics, assets) {
         }
     }
 
-    function shuffle(sourceArray) {
+    function shuffle(sourceArray) { // shuffle the array of images, make sure no dupes
         for (var i = 0; i < sourceArray.length - 1; i++) {
             var j = i + Math.floor(Math.random() * (sourceArray.length - i));
     
@@ -104,13 +126,14 @@ Midterm.model = (function(components, graphics, assets) {
         }
         return sourceArray;
     }
-    
 
+    // initialize main game objects, tiles
     that.initialize = function(type) {
         let count = 0;
 
         if (type == 'easy'){
             let keys = shuffle(Object.keys(Midterm.assets128));
+            //let keys = Object.keys(Midterm.assets128);
             let numTiles = 15;
             while(count < numTiles){
                 let key = keys[count];
@@ -121,15 +144,22 @@ Midterm.model = (function(components, graphics, assets) {
             }
             // an easy game is tile128 image array, randomized with bottom right empty
         }
-        else if(type == 'hard'){
-            Object.keys(Midterm.assets64).forEach(key => {
-                tile = createTileEntity(key, Midterm.assets64[key], 8)
+
+        else if(type == 'hard'){ // will implement when tile64  images loaded in assets
+            let keys = shuffle(Object.keys(Midterm.assets64));
+            //let keys = Object.keys(Midterm.assets64);
+            let numTiles = 63;
+            while(count < numTiles){
+                let key = keys[count];
+
+                tile = createTileEntity(key, Midterm.assets64[key], 8, count)
                 entities[tile.id] = tile;
-            });
+                count++;
+            }
         }
     };
 
-    that.reset = function(){
+    that.reset = function(){ // re-initialize tile positions, restart time/score
         console.log('reset model');
     }
 
@@ -145,4 +175,4 @@ Midterm.model = (function(components, graphics, assets) {
 
     return that;
 
-}(Midterm.components, Midterm.graphics, Midterm.assets));
+}(Midterm.components, Midterm.graphics, Midterm.assets, Midterm.systems));

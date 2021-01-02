@@ -15,13 +15,14 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
     function update(elapsedTime, totalTime) {
         if(!Midterm.systems.mouseInput.cancelNextRequest){
             model.update(elapsedTime, totalTime);
-            myMouse.update(elapsedTime)
+            //myMouse.update(elapsedTime)
         }
         else if (Midterm.systems.mouseInput.cancelNextRequest){
             model.update(elapsedTime, 0);
             // Then, return to the main menu
             game.showScreen('main-menu');
             model.reset(totalTime);
+            
         }
     }
 
@@ -73,16 +74,19 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
     function initialize() {
         graphics.core.initialize();
 
-        myMouse.registerHandler(function(event) {
-            let pressedX = event.clientX;
-            let pressedY = event.clientY
-            model.moveTile(pressedX, pressedY);
-        },
-        myMouse.EventMouseDown
-    );
+        if(!Midterm.systems.mouseInput.cancelNextRequest){
+            myMouse.registerHandler(function(event) {
+                let pressed = graphics.core.clientToWorld(event.clientX,  event.clientY);
+                //console.log('pressed: ', pressed);
+
+                model.moveTile(pressed.x, pressed.y);
+                },myMouse.EventMouseDown
+            );
+        }
     }
 
     function run(type) {
+        
         model.initialize(type);
         lastTimeStamp = performance.now();
         Midterm.systems.mouseInput.cancelNextRequest = false;

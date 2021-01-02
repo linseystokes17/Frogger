@@ -13,5 +13,6 @@ Midterm.enums.Event = Object.freeze({
 });
 
 Midterm.enums.Input = Object.freeze({
-    Mouse: 'mouse'
+    Mouse: 'mouse',
+    Keyboard: 'keyboard'
 });
