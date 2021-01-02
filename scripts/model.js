@@ -3,7 +3,7 @@
 // This namespace holds the rotate to point demo model.
 //
 // ------------------------------------------------------------------
-Frogger.model = (function(components, graphics, assets) {
+Frogger.model = (function(components, graphics, assets, systems) {
     'use strict';
     let that = {};
 
@@ -11,7 +11,7 @@ Frogger.model = (function(components, graphics, assets) {
     const WORLD_SIZE =  graphics.core.getWorldSize();
     const BLOCK_SIZE = WORLD_SIZE / GRID_SIZE;
     const SECOND_INTERVAL = 20; // 1 = 1 second
-    const FROG_MOVE_INTERVAL = 150;
+    //const FROG_MOVE_INTERVAL = 150;
 
     let entities = {};  // key is 'id', value is an Entity
     let frog = null;
@@ -25,7 +25,13 @@ Frogger.model = (function(components, graphics, assets) {
     let turtle2 = null;
     let turtle3 = null;
     let initPos = null;
-    let numLifes = 5;
+    let numLives = 5;
+    let numHomes = 0;
+    
+    let inputSpecification = { keys: systems.keyboardInput.getKeys()};
+
+    let score = 0;
+    let totalScore = 0;
 
     // --------------------------------------------------------------
     // Defining each of the entity as entities that have position,
@@ -47,7 +53,7 @@ Frogger.model = (function(components, graphics, assets) {
         }));
         home.addComponent(components.Position({ x: x, y: 1}));
         home.addComponent(components.Collision({alive: false}));
-        home.addComponent(components.Home());
+        home.addComponent(components.Home({changeInterval: x}));
 
         return home;
     }
@@ -208,17 +214,10 @@ Frogger.model = (function(components, graphics, assets) {
             directionElapsedInterval : 0,
             direction: Frogger.enums.Direction.Stopped, 
             facing: Frogger.enums.Direction.Stopped, 
-            moveInterval: FROG_MOVE_INTERVAL }));
+            moveInterval: SECOND_INTERVAL/2,
+            animationInterval: 500 }));
         frog.addComponent(components.Collision({alive: true, killed: false,riding: false}));
-        frog.addComponent(components.Frog());
-
-        let inputSpecification = { keys: {
-            'ArrowLeft': Frogger.enums.Direction.Left,
-            'ArrowRight': Frogger.enums.Direction.Right,
-            'ArrowUp': Frogger.enums.Direction.Up,
-            'ArrowDown': Frogger.enums.Direction.Down,
-            'Escape': Frogger.enums.Direction.Stopped
-        }};
+        frog.addComponent(components.Frog({totalTime: 0, numLives: 5}));
         frog.addComponent(components.Keyboard(inputSpecification));
 
         return frog;
@@ -231,30 +230,55 @@ Frogger.model = (function(components, graphics, assets) {
     function reportEvent(info) {
         switch (info.type) {
             case Frogger.enums.Event.ReachHome:
-                info.hitEntity.components.appearance.sprite = 2;
-                info.entity.components.collision.home = true;
+                
+                if(info.hitEntity.components.appearance.sprite==1){ // gator
+                    info.entity.components.collision.killed = true;
+                }
+                else if(info.hitEntity.components.appearance.sprite==0){ // bonus
+                    totalScore -= 100;
+                    info.hitEntity.components.appearance.sprite = 2;
+                    info.entity.components.collision.home = true;
+                    numHomes++;
+                    totalScore += info.totalTime;
+                }
+                else{
+                    info.hitEntity.components.appearance.sprite = 2;
+                    info.entity.components.collision.home = true;
+                    numHomes++;
+                    totalScore += info.totalTime;
+                }
+
+                if(numHomes == 5){
+                    Frogger.systems.Highscores.add(Math.round(totalScore/100));
+                    Frogger.systems.keyboardInput.cancelNextRequest = true;
+                } 
                 break;
 
             case Frogger.enums.Event.HitSomething:
                 info.entity.components.collision.killed = true;
+
                 break;
 
             case Frogger.enums.Event.Ride:
                 info.entity.components.collision.riding = true;
+                info.entity.components.collision.objectRiding = info.hitEntity;
                 info.entity.components.movable.direction = info.hitEntity.components.movable.facing;
                 info.entity.components.movable.directionInterval = info.hitEntity.components.movable.moveInterval;
                 info.entity.components.movable.directionElapsedInterval = info.hitEntity.components.movable.elapsedInterval;
 
-                if (info.hitEntity.components.turtle){
-                    if (info.hitEntity.components.sprite==3){
-                        info.entity.components.collision.killed = true;
-                    }
+                if (info.hitEntity.components.turtle && info.hitEntity.components.appearance.sprite==3){
+                    info.entity.components.collision.killed = true;
+                    info.entity.components.collision.riding = false;
                 }
                 else if(info.hitEntity.components.alligator){
-                    if (info.hitEntity.components.sprite==1){
+                    let frogSquare = Math.round(info.entity.components.position.x);
+                    let mouthPos = Math.round(info.hitEntity.components.position.x) + (info.hitEntity.components.appearance.width*15)/2;
+                    if (info.hitEntity.components.appearance.sprite==1 && mouthPos == frogSquare){
                         info.entity.components.collision.killed = true;
+                        info.entity.components.collision.riding = false;
                     }
                 }
+
                 break;
         }
     }
@@ -266,28 +290,33 @@ Frogger.model = (function(components, graphics, assets) {
     // ------------------------------------------------------------------
     that.initialize = function() {
         // All road entities
-        for (var i=0; i<3; i++){
-            car = createCarEntity((6*i)+1, 12, Frogger.enums.Direction.Left, 0, SECOND_INTERVAL*1.2);
+        for (var i=0; i<5; i++){
+            let spriteWidth = 1+3;
+            car = createCarEntity((spriteWidth*i), 12, Frogger.enums.Direction.Left, 0, SECOND_INTERVAL*1.2);
             entities[car.id] = car;
-        }
-
-        for (var i=0; i<2; i++){
-            truck = createTruckEntity((8*i)+2*i, 11, SECOND_INTERVAL*1.5);
-            entities[truck.id] = truck;
         }
 
         for (var i=0; i<4; i++){
-            car = createCarEntity((4*i)+4, 10, Frogger.enums.Direction.Left, 1, SECOND_INTERVAL*.7);
+            let spriteWidth = 2+8;
+            truck = createTruckEntity((spriteWidth*i), 11, SECOND_INTERVAL*1.5);
+            entities[truck.id] = truck;
+        }
+
+        for (var i=0; i<6; i++){
+            let spriteWidth = 1+4;
+            car = createCarEntity((spriteWidth*i), 10, Frogger.enums.Direction.Left, 1, SECOND_INTERVAL*.7);
             entities[car.id] = car;
         }
 
-        for (var i=0; i<2; i++){
-            car = createCarEntity((13*i), 9, Frogger.enums.Direction.Right, 2, SECOND_INTERVAL*.4);
+        for (var i=0; i<4; i++){
+            let spriteWidth = 1+7;
+            car = createCarEntity((spriteWidth*i), 9, Frogger.enums.Direction.Right, 2, SECOND_INTERVAL*.4);
             entities[car.id] = car;
         }
 
-        for (var i=0; i<3; i++){
-            car = createCarEntity((5*i)+5, 8, Frogger.enums.Direction.Left, 3, SECOND_INTERVAL);
+        for (var i=0; i<5; i++){
+            let spriteWidth = 1+3;
+            car = createCarEntity((spriteWidth*i)+2, 8, Frogger.enums.Direction.Left, 3, SECOND_INTERVAL);
             entities[car.id] = car;
         }
 
@@ -297,31 +326,41 @@ Frogger.model = (function(components, graphics, assets) {
             entities[home.id] = home;
         }
 
-        for(var i=0; i<3; i++){
-            logM = createLogEntity((i*5)+4, 2, SECOND_INTERVAL*.7, Frogger.enums.Direction.Right, Frogger.assets.tree3, 3);
-            entities[logM.id] = logM;
+        for(var i=0; i<6; i++){ // create 3 logs, 3 alligators
+            let spriteWidth = 3+1;
+            // if i%2!=0
+            if(i%3 != 0){
+                logM = createLogEntity((i*spriteWidth), 2, SECOND_INTERVAL*.7, Frogger.enums.Direction.Right, Frogger.assets.tree3, 3);
+                entities[logM.id] = logM;
+            }
+            else{
+                alligator = createAlligatorEntity((i*spriteWidth), 2, SECOND_INTERVAL*.7);
+                entities[alligator.id] = alligator;
+            }
         }
 
-        alligator = createAlligatorEntity(0, 2, SECOND_INTERVAL*.7);
-        entities[alligator.id] = alligator;
-
-        for(var i=0; i<5; i++){
-            turtle2 = createTurtleEntity((i*4), 3, SECOND_INTERVAL, Frogger.enums.Direction.Left, Frogger.assets.turtle2, 2);
+        for(var i=0; i<6; i++){
+            let spriteWidth = 2+2;
+            turtle2 = createTurtleEntity((i*spriteWidth), 3, SECOND_INTERVAL, Frogger.enums.Direction.Left, Frogger.assets.turtle2, 2);
             entities[turtle2.id] = turtle2;
         }
 
-        for(var i=0; i<2; i++){
-            logL = createLogEntity((i*9)+1, 4, SECOND_INTERVAL*1.2, Frogger.enums.Direction.Right, Frogger.assets.tree2, 5);
+        for(var i=0; i<4; i++){
+            let spriteWidth = 5+1;
+
+            logL = createLogEntity((i*spriteWidth), 4, SECOND_INTERVAL*1.2, Frogger.enums.Direction.Right, Frogger.assets.tree2, 5);
             entities[logL.id] = logL;
         }
 
-        for(var i=0; i<3; i++){
-            logS = createLogEntity((i*6)+1, 5, SECOND_INTERVAL*.5, Frogger.enums.Direction.Right, Frogger.assets.tree1, 2);
+        for(var i=0; i<6; i++){
+            let spriteWidth = 2+2;
+            logS = createLogEntity((i*spriteWidth), 5, SECOND_INTERVAL*.5, Frogger.enums.Direction.Right, Frogger.assets.tree1, 2);
             entities[logS.id] = logS;
         }
 
-        for(var i=0; i<3; i++){
-            turtle3 = createTurtleEntity((i*6)+2, 6, SECOND_INTERVAL*.7, Frogger.enums.Direction.Left, Frogger.assets.turtle3, 3);
+        for(var i=0; i<5; i++){
+            let spriteWidth = 3+2;
+            turtle3 = createTurtleEntity((i*spriteWidth), 6, SECOND_INTERVAL*.7, Frogger.enums.Direction.Left, Frogger.assets.turtle3, 3);
             entities[turtle3.id] = turtle3;
         }
 
@@ -329,9 +368,14 @@ Frogger.model = (function(components, graphics, assets) {
         frog = createFrogEntity();
         entities[frog.id] = frog;
 
+        components.ParticleSystem.createEffectExplosion({
+            center: { x: 0.5, y: 0.5 },
+            howMany: 300
+        });
     };
 
     that.reset = function(){
+        Frogger.assets.music.pause();
         frog = null;
         car = null;
         truck = null;
@@ -343,9 +387,16 @@ Frogger.model = (function(components, graphics, assets) {
         turtle2 = null;
         turtle3 = null;
 
+        numLives = 5;
+        numHomes = 0;
+
+        score = 0;
+        totalScore = 0;
+
         entities = {};
         Frogger.Entity.nextId = 1;
-        this.initialize();
+        Frogger.assets.music.play();
+
     }
 
     // ------------------------------------------------------------------
@@ -353,13 +404,17 @@ Frogger.model = (function(components, graphics, assets) {
     // This function is used to update the state of the demo model.
     //
     // ------------------------------------------------------------------
-    that.update = function(elapsedTime) {
-        Frogger.systems.keyboardInput.update(elapsedTime, entities);
-        Frogger.systems.movement.update(elapsedTime, entities, GRID_SIZE);
-        Frogger.systems.collision.update(elapsedTime, entities, reportEvent);
-        Frogger.systems.render.update(elapsedTime, entities, GRID_SIZE);
+    that.update = function(elapsedTime, totalTime) {
+        if(numLives == 0){
+            Frogger.systems.keyboardInput.cancelNextRequest = true;
+        }
+        inputSpecification = { keys: systems.keyboardInput.getKeys()};
+        systems.keyboardInput.update(elapsedTime, entities);
+        systems.movement.update(elapsedTime, entities, GRID_SIZE);
+        systems.collision.update(elapsedTime, totalTime, entities, reportEvent);
+        systems.render.update(elapsedTime, totalScore, totalTime, entities, GRID_SIZE);
     };
 
     return that;
 
-}(Frogger.components, Frogger.graphics, Frogger.assets));
+}(Frogger.components, Frogger.graphics, Frogger.assets, Frogger.systems));

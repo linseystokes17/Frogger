@@ -1,13 +1,15 @@
-Frogger.graphics.Frog = (function (graphics) {
+Frogger.graphics.Frog = (function (graphics, render) {
     'use strict';
     let that = {};
     let index = 8;
 
     that.render = function(frog) {
-        let numLives = frog.collision.numLives;
-
+        if(frog.collision.numLives < 0){
+            Frogger.systems.keyboardInput.cancelNextRequest = true;
+        }
         if(frog.position.y > 6){
             frog.collision.riding = false;
+            frog.collision.objectRiding = null;
             frog.movable.direction = Frogger.enums.Direction.Stopped;
             frog.movable.directionInterval = 0;
             frog.movable.directionElapsedInterval = 0;
@@ -34,25 +36,25 @@ Frogger.graphics.Frog = (function (graphics) {
                 frog.collision.killed = false;
                 frog.position.x = 15/2;
                 frog.position.y = 13;
-                frog.appearance.sprite = 0;
                 index = 8;
                 frog.movable.canMove = true;
+                frog.collision.numLives--;
             }
-
-            numLives--;
-            frog.collision.numLives = numLives;
         }
         
         else if (frog.collision.home){
+            frog.movable.canMove = false;
             Frogger.assets.extra.play();
             frog.position.x = 15/2;
             frog.position.y = 13;
             frog.appearance.sprite = 0;
             frog.appearance.facing = Frogger.enums.Direction.Stopped;
             frog.collision.home = false;
+            frog.movable.canMove = true;
+
         }
         
-        else{
+        else if(frog.movable.canMove){
             switch (frog.movable.facing) {
                 case Frogger.enums.Direction.Up:
                     frog.appearance.sprite = 0;
@@ -81,4 +83,4 @@ Frogger.graphics.Frog = (function (graphics) {
 
     return that;
         
-}(Frogger.graphics));
+}(Frogger.graphics, Frogger.render));

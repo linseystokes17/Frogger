@@ -37,23 +37,23 @@ Frogger.loader = (function() {
             message: 'Text component loaded',
             onComplete: null
         }, {
-            scripts: ['components/frog', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
+            scripts: ['components/frog', 'components/ParticleSystem', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
             message: 'Object components loaded',
             onComplete: null
         }, {
-            scripts: ['render/core'],
+            scripts: ['render/core', 'components/EffectExplosion'],
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/image', 'render/frog', 'render/river'],
+            scripts: ['render/background', 'render/particlesystem',  'render/border', 'render/image', 'render/frog', 'render/river'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render',  'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
-            scripts: ['render/text'],
+            scripts: ['render/text', 'render/status'],
             message: 'Text rendering component loaded',
             onComplete: null
         }, {
@@ -108,6 +108,9 @@ Frogger.loader = (function() {
                 key: 'bonus',
                 source: 'assets/images/bonus_sprites.png'
             }, {
+                key: 'splash',
+                source: 'assets/images/splash.png'
+            }, {
                 key: 'hop',
                 source: 'assets/sounds/hop.wav'
             }, {
@@ -116,6 +119,9 @@ Frogger.loader = (function() {
             }, {
                 key: 'squash',
                 source: 'assets/sounds/squash.wav'
+            }, {
+                key: 'splat',
+                source: 'assets/images/splat.png'
             }, {
                 key: 'music',
                 source: 'assets/sounds/frogger-music.mp3'

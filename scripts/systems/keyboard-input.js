@@ -10,15 +10,34 @@ Frogger.systems.keyboardInput = (function (components) {
     let keysDown = {};
     let pressed = false;
     let cancelNextRequest = false;
+    let KEYS = {
+        'ArrowLeft': Frogger.enums.Direction.Left,
+        'ArrowRight': Frogger.enums.Direction.Right,
+        'ArrowUp': Frogger.enums.Direction.Up,
+        'ArrowDown': Frogger.enums.Direction.Down,
+        'Escape': Frogger.enums.Direction.Stopped
+    };
 
     function keyPress(e) {
         keysDown[e.key] = e.timeStamp;
         pressed = true;
+        return e.key;
     }
     
     function keyRelease(e) {
         delete keysDown[e.key];
         pressed = false;
+    }
+
+    function getKeys(){
+        return KEYS;
+    }
+
+    function setKey(oldKey, newKey){
+        let newConfig = KEYS[oldKey];
+        KEYS[newKey] = newConfig;
+        //KEYS.oldKey = newKey;
+        delete KEYS[oldKey];
     }
 
     // --------------------------------------------------------------
@@ -51,6 +70,9 @@ Frogger.systems.keyboardInput = (function (components) {
 
     let api = {
         update: update,
+        getKeys: getKeys,
+        setKey: setKey,
+        keyPress: keyPress,
         get cancelNextRequest(){return cancelNextRequest;},
         set cancelNextRequest(value){cancelNextRequest = value;}
     };

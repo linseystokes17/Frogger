@@ -9,6 +9,8 @@ Frogger.systems.movement = (function () {
     let gator = 0;
     let turtle = 0;
     let turtleInc = 200;
+    let count = 0;
+    let nextSprite = 0;
 
     // --------------------------------------------------------------
     //
@@ -17,8 +19,9 @@ Frogger.systems.movement = (function () {
     //
     // --------------------------------------------------------------
     function move(entity, xIncrement, yIncrement) {
-        let numGrids = -2 // 3 'block' buffer on each side
+        let numGrids = -5 // 5 'block' buffer on each side
         let gridSize = 15;
+        let width = entity.components.appearance.width;
        
         if (entity.components.position.x+xIncrement >= gridSize-numGrids){
             entity.components.position.x = numGrids;
@@ -27,6 +30,7 @@ Frogger.systems.movement = (function () {
             entity.components.position.x = gridSize-numGrids;
         }
 
+        // the only part frog should use
         entity.components.position.x += xIncrement;
         entity.components.position.y += yIncrement;
     }
@@ -39,55 +43,118 @@ Frogger.systems.movement = (function () {
     // --------------------------------------------------------------
     function moveFrog(entity, elapsedTime, gridSize){
         let splitSize = 8;
+        let runTime = entity.components.movable.moveInterval+entity.components.movable.animationInterval;
         entity.components.movable.elapsedInterval += elapsedTime;
 
-        if (entity.components.keyboard.keyPressed && entity.components.movable.canMove && entity.components.movable.elapsedInterval >= entity.components.movable.moveInterval){
-            Frogger.assets.hop.play();
-            entity.components.appearance.sprite = entity.components.appearance.sprite + 1;
-            switch (entity.components.movable.facing) {
-                case Frogger.enums.Direction.Up:
-                    move(entity, 0, -1);
-                    break;
-                case Frogger.enums.Direction.Down:
-                    move(entity, 0, 1);
-                    break;
-                case Frogger.enums.Direction.Left:
-                    move(entity, -1, 0);
-                    break;
-                case Frogger.enums.Direction.Right:
-                    move(entity, 1, 0);
-                    break;
-            };
-            entity.components.movable.elapsedInterval = 0;
-        }
+        if(entity.components.movable.canMove){ // if the frog canMove (not dead or in animation)
+            // if keyPressed & elapsedInterval > animationTime
+            // ensure that y is an integer when we want the frog to move
+            entity.components.position.y = Math.round(entity.components.position.y);
 
-        if(entity.components.collision.riding){
-            entity.components.movable.directionElapsedInterval += elapsedTime;
-            if(entity.components.movable.directionElapsedInterval >= entity.components.movable.directionInterval){
-                splitSize = 32;
-                switch (entity.components.movable.direction) {
+            if (entity.components.keyboard.keyPressed && entity.components.movable.elapsedInterval > runTime){
+                Frogger.assets.hop.play();
+                switch (entity.components.movable.facing) {
                     case Frogger.enums.Direction.Up:
+                        entity.components.appearance.sprite = 1;
                         move(entity, 0, -1/splitSize);
                         break;
                     case Frogger.enums.Direction.Down:
+                        entity.components.appearance.sprite = 5;
                         move(entity, 0, 1/splitSize);
                         break;
                     case Frogger.enums.Direction.Left:
+                        entity.components.appearance.sprite = 7;
                         move(entity, -1/splitSize, 0);
                         break;
                     case Frogger.enums.Direction.Right:
-                        move(entity, 1/splitSize, 0,);
+                        entity.components.appearance.sprite = 3;
+                        move(entity, 1/splitSize, 0);
                         break;
                 };
-            } 
-            if (entity.components.keyboard.keyPressed){
-                entity.components.collision.riding = false;
+
+                entity.components.movable.elapsedInterval = 0;
+                entity.components.keyboard.keyPressed = false;
+                entity.components.movable.canMove = false;
+                entity.components.movable.riding = false;
                 entity.components.movable.direction = Frogger.enums.Direction.Stopped;
                 entity.components.movable.directionInterval = 0;
                 entity.components.movable.directionElapsedInterval = 0;
+
+
+                count++;
+            }
+            
+            // if frog is on a log, move with log
+            if(entity.components.collision.riding){
+                entity.components.movable.directionElapsedInterval += elapsedTime;
+                if(entity.components.movable.directionElapsedInterval >= entity.components.movable.directionInterval){
+                    splitSize = 32;
+                    switch (entity.components.movable.direction) {
+                        case Frogger.enums.Direction.Up:
+                            move(entity, 0, -1/splitSize);
+                            break;
+                        case Frogger.enums.Direction.Down:
+                            move(entity, 0, 1/splitSize);
+                            break;
+                        case Frogger.enums.Direction.Left:
+                            move(entity, -1/splitSize, 0);
+                            break;
+                        case Frogger.enums.Direction.Right:
+                            move(entity, 1/splitSize, 0,);
+                            break;
+                    };
+                } 
+                if (entity.components.keyboard.keyPressed){
+                    entity.components.collision.riding = false;
+                    entity.components.collision.objectRiding = null;
+                    entity.components.movable.direction = Frogger.enums.Direction.Stopped;
+                    entity.components.movable.directionInterval = 0;
+                    entity.components.movable.directionElapsedInterval = 0;
+                }
             }
         }
-        
+        else if(entity.components.movable.elapsedInterval < entity.components.movable.animationInterval && !entity.components.movable.canMove){
+            if(count < splitSize && !entity.components.collision.killed){
+                switch (entity.components.movable.facing) {
+                    case Frogger.enums.Direction.Up:
+                        entity.components.appearance.sprite = 1;
+                        move(entity, 0, -1/splitSize);
+                        break;
+                    case Frogger.enums.Direction.Down:
+                        entity.components.appearance.sprite = 5;
+                        move(entity, 0, 1/splitSize);
+                        break;
+                    case Frogger.enums.Direction.Left:
+                        entity.components.appearance.sprite = 7;
+                        move(entity, -1/splitSize, 0);
+                        break;
+                    case Frogger.enums.Direction.Right:
+                        entity.components.appearance.sprite = 3;
+                        move(entity, 1/splitSize, 0);
+                        break;
+                };
+                count++;
+            }
+            else{
+                count = 0;
+                entity.components.movable.canMove = true;
+
+                switch (entity.components.movable.facing) {
+                    case Frogger.enums.Direction.Up:
+                        entity.components.appearance.sprite = 0;
+                        break;
+                    case Frogger.enums.Direction.Down:
+                        entity.components.appearance.sprite = 4;
+                        break;
+                    case Frogger.enums.Direction.Left:
+                        entity.components.appearance.sprite = 6;
+                        break;
+                    case Frogger.enums.Direction.Right:
+                        entity.components.appearance.sprite = 2;
+                        break;
+                };
+            }
+        }
     }
 
     function moveEntity(entity, elapsedTime, gridSize) { 
@@ -100,7 +167,7 @@ Frogger.systems.movement = (function () {
                 if(gator < 20){
                     entity.components.appearance.sprite = 1;
                 }
-                else if(gator < 100){
+                else if(gator < 200){
                     entity.components.appearance.sprite = 0;
                 }
                 else{
@@ -149,10 +216,8 @@ Frogger.systems.movement = (function () {
     }
 
     // --------------------------------------------------------------
-    //
     // Grind through all the entities and move the ones that can move.
-    //
-    // --------------------------------------------------------------
+    // -------------------------------------------------------------
     function update(elapsedTime, entities, gridSize) {
         for (let id in entities) {
             let entity = entities[id];
