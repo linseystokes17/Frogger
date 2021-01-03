@@ -110,11 +110,15 @@ Midterm.model = (function(components, graphics, assets, systems) {
         switch (info.type) {
             case Midterm.enums.Event.GameOver:
                 console.log('Game Over');
-                Midterm.systems.Highscores.addScore(totalMoves);
-                Midterm.systems.Highscores.addTime(elapsed);
-
+                if(elapsed > 1000){
+                    Midterm.systems.Highscores.addScore(totalMoves);
+                    Midterm.systems.Highscores.addTime(elapsed);
+                    //Highscores.clear();
+                }
         }
     }
+
+    
 
     function shuffle(sourceArray) { // shuffle the array of images, make sure no dupes
         for (var i = 0; i < sourceArray.length - 1; i++) {
@@ -140,8 +144,8 @@ Midterm.model = (function(components, graphics, assets, systems) {
         let count = 0;
 
         if (type == 'easy'){
-            //let keys = shuffle(Object.keys(Midterm.assets128));
-            let keys = Object.keys(Midterm.assets128);
+            let keys = shuffle(Object.keys(Midterm.assets128));
+            //let keys = Object.keys(Midterm.assets128);
             let numTiles = 15;
             while(count < numTiles){
                 let key = keys[count];

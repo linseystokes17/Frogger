@@ -2,6 +2,12 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
     'use strict';
     let lastTimeStamp = performance.now();
     let myMouse = systems.mouseInput();
+    let textGameOver = components.Text({
+        text : 'GameOver',
+        font : '32px Arial, sans-serif',
+        fill : 'rgba(50, 10, 50, 1)',
+        position : { x : 0, y : .5 }
+    });
     
     function processInput(elapsedTime) {
         myMouse.update(elapsedTime);
@@ -58,11 +64,22 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
             requestAnimationFrame(gameLoop);
         }
         else{
-            console.log('game over!');
+            renderOver(time);
             setTimeout(function(){
                 game.showScreen('main-menu');
-            }, 3000);
+            }, 5000);
         }
+    }
+
+    function renderOver(time){
+        graphics.core.clearCanvas();
+
+        textGameOver.height = graphics.core.measureTextHeight(textGameOver);
+        textGameOver.width = graphics.core.measureTextWidth(textGameOver);
+
+        textGameOver.text = 'Game Over! ElapsedTime: '+ time/1000;
+
+        graphics.Text.render(textGameOver);
     }
 
     //------------------------------------------------------------------

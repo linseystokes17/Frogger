@@ -101,14 +101,12 @@ Midterm.systems.movement = (function () {
                 moveEntity(entity, elapsedTime);
             }
         }
-        setTimeout(function(){
-            if(checkOrder(entities)){
-                Midterm.systems.mouseInput.cancelNextRequest = true;
-                reportEvent({
-                    type: Midterm.enums.EventGameOver,
-                })
-            }
-        }, 1000);
+        if(checkOrder(entities)){
+            Midterm.systems.mouseInput.cancelNextRequest = true;
+            reportEvent({
+                type: Midterm.enums.EventGameOver,
+            })
+        }
         
     }
 
