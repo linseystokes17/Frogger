@@ -11,17 +11,22 @@ Midterm.systems.render = (function (graphics, render) {
     function renderEntities(entities, totalTime, elapsedTime) {
         for (let id in entities) {
             let entity = entities[id];
-            //console.log('render entity: ', entity.components);
-            graphics.Image.render(entity.components);
+
+            if(entity.components.image.active && entity.components.image.continueActive){
+                graphics.ParticleSystem.render();
+                setTimeout(function(){
+                    entity.components.image.continueActive = false;
+                }, 2000)
+            }
+            graphics.Image.render(entity.components.image);
+
         }
     } 
 
     function update(elapsedTime, totalTime, entities, totalMoves) {
         render.background(graphics);
         renderEntities(entities, totalTime, elapsedTime);
-        //render.border(graphics);
         graphics.Status.render(elapsedTime, totalTime, totalMoves);
-
     }
 
     let api = {

@@ -9,14 +9,22 @@ Midterm.systems.Highscores = (function() {
 
 	var Constants = {
 		get MinScores() { return 5; },
-		get StorageName() { return 'Midterm.systems.highScores'; }
+		get StorageNameScores() { return 'Midterm.systems.highScores'; },
+		get StorageNameTimes() { return 'Midterm.systems.highTimes'; }
+
 	};
 
 	var scores = [],
-		previousScores = localStorage.getItem(Constants.StorageName);
+		previousScores = localStorage.getItem(Constants.StorageNameScores);
+
+	var times = [],
+		previousTimes = localStorage.getItem(Constants.StorageNameTimes);
 
 	if (previousScores !== null) {
 		scores = JSON.parse(previousScores);
+	}
+	if(previousTimes!== null){
+		times = JSON.parse(previousTimes);
 	}
 
 	// ------------------------------------------------------------------
@@ -26,12 +34,12 @@ Midterm.systems.Highscores = (function() {
 	// one of the top scores.
 	//
 	// ------------------------------------------------------------------
-	function add(score) {
+	function addScore(score) {
 		scores.push(score);
 		scores.sort(function(a, b) {
-			if (a < b) {
+			if (a > b) {
 				return -1;
-			} else if (a > b) {
+			} else if (a < b) {
 				return 1;
 			}
 
@@ -44,21 +52,50 @@ Midterm.systems.Highscores = (function() {
 			scores = scores.slice(0, Constants.MinScores);
 		}
 
-		localStorage[Constants.StorageName] = JSON.stringify(scores);
+		localStorage[Constants.StorageNameScores] = JSON.stringify(scores);
+	}
+
+	function addTime(time) {
+		times.push(time);
+		times.sort(function(a, b) {
+			if (a > b) {
+				return -1;
+			} else if (a < b) {
+				return 1;
+			}
+
+			return 0;
+		});
+
+		//
+		// Keep only the best five
+		if (times.length > Constants.MinScores) {
+			times = scores.slice(0, Constants.MinScores);
+		}
+
+		localStorage[Constants.StorageNameTimes] = JSON.stringify(times);
 	}
 
 	function clear(){
 		scores = [];
-		localStorage[Constants.StorageName] = JSON.stringify(scores);
+		times = [];
+		localStorage[Constants.StorageNameScores] = JSON.stringify(scores);
+		localStorage[Constants.StorageNameTimes] = JSON.stringify(times);
+
 	}
 
-	function get() {
+	function getScores() {
 		return scores;
+	}
+	function getTimes() {
+		return times;
 	}
 
 	let api = {
-		add: add,
-		get: get,
+		addScore: addScore,
+		addTime: addTime,
+		getScores: getScores,
+		getTimes: getTimes,
 		clear: clear,
     };
 

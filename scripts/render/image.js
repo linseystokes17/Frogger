@@ -14,15 +14,15 @@ Midterm.graphics.Image = (function (graphics) {
 
     that.render = function(sprite) {        
         graphics.core.drawImage(
-            sprite.image.image,
+            sprite.image,
             0, 0,    // Which sprite to pick out
-            sprite.image.spriteWidth, sprite.image.spriteHeight,    // The size of the sprite in the sprite sheet
-            sprite.image.x,        // Where to draw the sprite
-            sprite.image.y,
-            sprite.image.width, sprite.image.height);
+            sprite.spriteWidth, sprite.spriteHeight,    // The size of the sprite in the sprite sheet
+            sprite.x,        // Where to draw the sprite
+            sprite.y,
+            sprite.width, sprite.height);
         graphics.core.drawSquare(
-            {x: sprite.image.x, y: sprite.image.y},
-            sprite.image.width,
+            {x: sprite.x, y: sprite.y},
+            sprite.width,
             'rgb(0,0,0,0)',
             'rgb(255,255,255)'
         );

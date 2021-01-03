@@ -18,10 +18,8 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
             //myMouse.update(elapsedTime)
         }
         else if (Midterm.systems.mouseInput.cancelNextRequest){
-            model.update(elapsedTime, 0);
             // Then, return to the main menu
             game.showScreen('main-menu');
-            model.reset(totalTime);
             
         }
     }
@@ -60,9 +58,10 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
             requestAnimationFrame(gameLoop);
         }
         else{
-            model.update(elapsedTime, 0);
-            model.reset();
-            game.showScreen('main-menu');
+            console.log('game over!');
+            setTimeout(function(){
+                game.showScreen('main-menu');
+            }, 3000);
         }
     }
 
@@ -86,7 +85,6 @@ Midterm.screens['game-play'] = (function(graphics, components, model, game, syst
     }
 
     function run(type) {
-        
         model.initialize(type);
         lastTimeStamp = performance.now();
         Midterm.systems.mouseInput.cancelNextRequest = false;

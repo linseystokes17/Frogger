@@ -216,18 +216,25 @@ Midterm.graphics.core = (function() {
         context.fill();
     }
 
-    function drawTexture(image, center, rotation, size) {
+    function drawTexture(particles) {
         context.save();
 
-        context.translate(center.x, center.y);
-        context.rotate(rotation);
-        context.translate(-center.x, -center.y);
+        context.translate(particles.x, particles.y);
+        context.rotate(particles.rotation);
+        context.translate(-particles.x, -particles.y);
 
-        context.drawImage(
-            image,
-            center.x - size.x / 2,
-            center.y - size.y / 2,
-            size.x, size.y);
+        // sprite.image.image,
+        // 0, 0,    // Which sprite to pick out
+        // sprite.image.spriteWidth, sprite.image.spriteHeight,    // The size of the sprite in the sprite sheet
+        // sprite.image.x,        // Where to draw the sprite
+        // sprite.image.y,
+        // sprite.image.width, sprite.image.height);
+
+        drawImage(
+            particles.image,
+            particles.x,
+            particles.y,
+            particles.size/4, particles.size/4);
 
         context.restore();
     }

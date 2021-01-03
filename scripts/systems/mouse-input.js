@@ -8,12 +8,16 @@ Midterm.systems.mouseInput = function() {
     let handlersMove = {};
     let nextHandlerId = 0;        // Used to uniquely identify handlers
     let mouseCapture = false;    // Initial state of the mouse capture
+    let cancelNextRequest = false;
+
     let that = {
             //
             // Use these as constants for the mouse event types
             get EventMouseMove() { return 0; },
             get EventMouseUp() { return 1; },
-            get EventMouseDown() { return 2; }
+            get EventMouseDown() { return 2; },
+            get cancelNextRequest(){return cancelNextRequest;},
+            set cancelNextRequest(value) {cancelNextRequest = value;}
         };
 
     // ------------------------------------------------------------------

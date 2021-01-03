@@ -9,7 +9,7 @@ Midterm.screens['high-scores'] = (function(game) {
     }
 
     function displayScores() {
-		var highScores = Midterm.systems.Highscores.get(),
+		var highScores = Midterm.systems.Highscores.getScores(),
 			highScoresHTML = document.getElementById('high-scores-list');
 
 		//
@@ -20,12 +20,27 @@ Midterm.screens['high-scores'] = (function(game) {
 		highScores.forEach(function (score) {
 			highScoresHTML.innerHTML += (score + '<br/>');
 		});
+    }
+    
+    function displayTimes() {
+		var highTimes = Midterm.systems.Highscores.getTimes(),
+			highTimesHTML = document.getElementById('high-times-list');
+
+		//
+		// Clear whatever was already in the display
+		highTimesHTML.innerHTML = '';
+		//
+		// Grab the previously saved high scores and get them displayed
+		highTimes.forEach(function (time) {
+			highTimesHTML.innerHTML += (time + '<br/>');
+		});
 	}
     
     function run() {
         //
         // I know this is empty, there isn't anything to do.
         displayScores();
+        displayTimes();
     }
     
     return {

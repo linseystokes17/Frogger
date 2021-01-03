@@ -20,6 +20,10 @@ Midterm.components.Image = function(spec) {
         set moveInterval(value) { spec.moveInterval = value;},
         get elapsedInterval() { return elapsedInterval; },
         set elapsedInterval(value) { elapsedInterval = value; },
+        get active(){return spec.active;},
+        set active(value){spec.active = value;},
+        get continueActive(){return spec.continueActive;},
+        set continueActive(value){spec.continueActive = value;},
         
     };
 

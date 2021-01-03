@@ -8,7 +8,7 @@ Midterm.Entity = (function() {
     'use strict';
     let nextId = 1;
 
-    function createEntity(id) {
+    function createEntity(id, position) {
         let components = {};
 
         function addComponent(c) {
@@ -21,6 +21,7 @@ Midterm.Entity = (function() {
 
         return {
             id: id,
+            position: position,
             addComponent: addComponent,
             removeComponent: removeComponent,
             get components() { return components; },
@@ -31,6 +32,8 @@ Midterm.Entity = (function() {
     let api = {
         get nextId() { return nextId; },
         set nextId(value) {nextId = value;},
+        get position(){return this.position; },
+        set position(value){this.position = value;},
         createEntity: createEntity,
     };
 

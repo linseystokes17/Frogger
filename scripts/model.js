@@ -10,19 +10,23 @@ Midterm.model = (function(components, graphics, assets, systems) {
     let totalMoves = 0;
     let tile = null;
     let world = graphics.core.getWorldSize();
+    let position = 0;
     let inputSpec = { keys: {
         'Escape': Midterm.enums.Direction.Stopped
     }};
+    let elapsed = 0;
 
     const MOVE_INTERVAL = 500; // half second to move
 
     function createTileEntity(index, tiles, numTiles, count) {
+        // createTileEntity(key, Midterm.assets128[key], 4, count)
         let curr = Midterm.assets[tiles.key];
         let id = curr.id;
 
         let x = (count % numTiles);
         let y = Math.floor(count / numTiles);
-        tile = Midterm.Entity.createEntity(id);
+        tile = Midterm.Entity.createEntity(id, position);
+        position++;
         
         // image, width, height, x, y, direction, moveInterval, elapsedInterval
         tile.addComponent(components.Image({
@@ -36,8 +40,9 @@ Midterm.model = (function(components, graphics, assets, systems) {
             direction: Midterm.enums.Direction.Stopped, 
             moveInterval: MOVE_INTERVAL,
             elapsedInterval: 0, 
-        }))
-        // blankAdjacent
+            active: false,
+        }));
+
         tile.addComponent(components.Collision({blankAdjacent: false}));
         tile.addComponent(components.mouseInput(inputSpec));
         
@@ -103,8 +108,11 @@ Midterm.model = (function(components, graphics, assets, systems) {
     // ------------------------------------------------------------------
     function reportEvent(info) {
         switch (info.type) {
-            case Midterm.enums.Event.ReachHome:
-                console.log('Reach Home');
+            case Midterm.enums.Event.GameOver:
+                console.log('Game Over');
+                Midterm.systems.Highscores.addScore(totalMoves);
+                Midterm.systems.Highscores.addTime(elapsed);
+
         }
     }
 
@@ -132,8 +140,8 @@ Midterm.model = (function(components, graphics, assets, systems) {
         let count = 0;
 
         if (type == 'easy'){
-            let keys = shuffle(Object.keys(Midterm.assets128));
-            //let keys = Object.keys(Midterm.assets128);
+            //let keys = shuffle(Object.keys(Midterm.assets128));
+            let keys = Object.keys(Midterm.assets128);
             let numTiles = 15;
             while(count < numTiles){
                 let key = keys[count];
@@ -168,8 +176,10 @@ Midterm.model = (function(components, graphics, assets, systems) {
     // ------------------------------------------------------------------
     that.update = function(elapsedTime, totalTime) {
         //Midterm.systems.mouseInput.update(elapsedTime, entities);
-        Midterm.systems.movement.update(elapsedTime, entities);
+        elapsed = elapsedTime;
+        Midterm.systems.movement.update(elapsedTime, entities, reportEvent);
         Midterm.systems.collision.update(elapsedTime, totalTime, entities, reportEvent);
+        Midterm.systems.ParticleSystem.update(elapsedTime, entities);
         Midterm.systems.render.update(elapsedTime, totalTime, entities, totalMoves);
     };
 

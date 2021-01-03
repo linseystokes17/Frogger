@@ -31,7 +31,7 @@ Midterm.loader = (function() {
             message: 'Entity factory loaded',
             onComplete: null
         }, {
-            scripts: ['components/image', 'components/particles', 'components/collision', 'components/mouse'],
+            scripts: ['components/image',  'components/collision', 'components/mouse'],
             message: 'Components loaded',
             onComplete: null
         }, {
@@ -43,15 +43,15 @@ Midterm.loader = (function() {
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/border', 'render/image'],
+            scripts: ['render/background', 'render/border', 'render/particle-system','render/image'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render','systems/highscores', 'systems/movement', 'systems/mouse-input', 'systems/keyboard-input','systems/collision'],
+            scripts: ['systems/render', 'systems/particle-system', 'systems/highscores', 'systems/movement', 'systems/mouse-input', 'systems/keyboard-input','systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {
-            scripts: ['render/text', 'render/status', 'render/particles'],
+            scripts: ['render/text', 'render/status'],
             message: 'Text rendering component loaded',
             onComplete: null
         }, {
@@ -75,6 +75,9 @@ Midterm.loader = (function() {
         {
             key: 'whole',
             source: 'assets/images/OldMainFire.png'
+        }, {
+            key: 'imageFire',
+            source: 'assets/images/fire.png'
         }, {
             key: 'tile128-0',
             source: 'assets/images/tile128-0.png'
