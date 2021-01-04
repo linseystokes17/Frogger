@@ -37,19 +37,19 @@ Frogger.loader = (function() {
             message: 'Text component loaded',
             onComplete: null
         }, {
-            scripts: ['components/frog', 'components/ParticleSystem', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
+            scripts: ['components/frog', 'components/car', 'components/log', 'components/alligator', 'components/turtle', 'components/home'],
             message: 'Object components loaded',
             onComplete: null
         }, {
-            scripts: ['render/core', 'components/EffectExplosion'],
+            scripts: ['render/core', 'render/particle-system'],
             message: 'Rendering core loaded',
             onComplete: null
         }, {
-            scripts: ['render/background', 'render/particlesystem',  'render/border', 'render/image', 'render/frog', 'render/river'],
+            scripts: ['render/background', 'render/border', 'render/image', 'render/frog', 'render/river'],
             message: 'Rendering components loaded',
             onComplete: null
         }, {
-            scripts: ['systems/render',  'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
+            scripts: ['systems/render', 'systems/particle-system',  'systems/highscores', 'systems/movement', 'systems/keyboard-input', 'systems/collision'],
             message: 'Systems loaded',
             onComplete: null
         }, {

@@ -18,7 +18,10 @@ Frogger.systems.render = (function (graphics, render, systems) {
                 frog = entity.components;
                 numLives = entity.components.collision.numLives;
                 graphics.Frog.render(frog);
-                graphics.ParticleSystem.render(Frogger.components.ParticleSystem);
+                if(frog.collision.killed){
+                    console.log('frog is killed');
+                    graphics.ParticleSystem.render();
+                }
             }
             if (entity.components.home && entity.components.appearance.sprite!=2){
                 let time = Math.round(totalTime/1000)%15;
@@ -42,7 +45,7 @@ Frogger.systems.render = (function (graphics, render, systems) {
         render.background(graphics, gridSize);
         graphics.River.render(gridSize);
         renderEntities(entities, totalTime, elapsedTime);
-        render.border(graphics, gridSize);
+        //render.border(graphics, gridSize);
         graphics.Status.render(elapsedTime, totalScore, totalTime, numLives);
     }
 

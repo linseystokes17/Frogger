@@ -27,7 +27,7 @@ Frogger.graphics.Frog = (function (graphics, render) {
             }
             frog.appearance.facing = Frogger.enums.Direction.Stopped;
             frog.appearance.sprite = index;
-            if (frog.movable.elapsedInterval > 500){
+            if (frog.movable.elapsedInterval > 1000){
                 index++;
                 frog.movable.elapsedInterval = 0;
             }

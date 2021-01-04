@@ -38,7 +38,7 @@ let Random = (function() {
     //
     // ------------------------------------------------------------------
     function nextCircleVector() {
-        let angle = Math.random() * 2 * Math.PI;
+        let angle = (Math.random() * 2 * Math.PI);
 
         return {
             x: Math.cos(angle),

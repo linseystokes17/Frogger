@@ -367,11 +367,6 @@ Frogger.model = (function(components, graphics, assets, systems) {
         console.log('initializing frog starting position...');
         frog = createFrogEntity();
         entities[frog.id] = frog;
-
-        components.ParticleSystem.createEffectExplosion({
-            center: { x: 0.5, y: 0.5 },
-            howMany: 300
-        });
     };
 
     that.reset = function(){
@@ -412,6 +407,7 @@ Frogger.model = (function(components, graphics, assets, systems) {
         systems.keyboardInput.update(elapsedTime, entities);
         systems.movement.update(elapsedTime, entities, GRID_SIZE);
         systems.collision.update(elapsedTime, totalTime, entities, reportEvent);
+        systems.ParticleSystem.update(elapsedTime, entities);
         systems.render.update(elapsedTime, totalScore, totalTime, entities, GRID_SIZE);
     };
 
